@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCareApp", "HomeCareApp\HomeCareApp.csproj", "{1C253D18-71E9-4A4F-ADEC-94AF8B52285E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCare.Web", "HomeCare.Web\HomeCare.Web.csproj", "{14E391F7-177C-4B99-948C-237596C96728}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,18 +15,18 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1C253D18-71E9-4A4F-ADEC-94AF8B52285E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C253D18-71E9-4A4F-ADEC-94AF8B52285E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C253D18-71E9-4A4F-ADEC-94AF8B52285E}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{1C253D18-71E9-4A4F-ADEC-94AF8B52285E}.Debug|x64.Build.0 = Debug|Any CPU
-		{1C253D18-71E9-4A4F-ADEC-94AF8B52285E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{1C253D18-71E9-4A4F-ADEC-94AF8B52285E}.Debug|x86.Build.0 = Debug|Any CPU
-		{1C253D18-71E9-4A4F-ADEC-94AF8B52285E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C253D18-71E9-4A4F-ADEC-94AF8B52285E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1C253D18-71E9-4A4F-ADEC-94AF8B52285E}.Release|x64.ActiveCfg = Release|Any CPU
-		{1C253D18-71E9-4A4F-ADEC-94AF8B52285E}.Release|x64.Build.0 = Release|Any CPU
-		{1C253D18-71E9-4A4F-ADEC-94AF8B52285E}.Release|x86.ActiveCfg = Release|Any CPU
-		{1C253D18-71E9-4A4F-ADEC-94AF8B52285E}.Release|x86.Build.0 = Release|Any CPU
+		{14E391F7-177C-4B99-948C-237596C96728}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14E391F7-177C-4B99-948C-237596C96728}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14E391F7-177C-4B99-948C-237596C96728}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{14E391F7-177C-4B99-948C-237596C96728}.Debug|x64.Build.0 = Debug|Any CPU
+		{14E391F7-177C-4B99-948C-237596C96728}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{14E391F7-177C-4B99-948C-237596C96728}.Debug|x86.Build.0 = Debug|Any CPU
+		{14E391F7-177C-4B99-948C-237596C96728}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14E391F7-177C-4B99-948C-237596C96728}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14E391F7-177C-4B99-948C-237596C96728}.Release|x64.ActiveCfg = Release|Any CPU
+		{14E391F7-177C-4B99-948C-237596C96728}.Release|x64.Build.0 = Release|Any CPU
+		{14E391F7-177C-4B99-948C-237596C96728}.Release|x86.ActiveCfg = Release|Any CPU
+		{14E391F7-177C-4B99-948C-237596C96728}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
