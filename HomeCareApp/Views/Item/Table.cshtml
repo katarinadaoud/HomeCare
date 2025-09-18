@@ -1,0 +1,32 @@
+@model IEnumerable<HomeCareApp.Models.Item>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIFELINK</title>
+</head>
+<body>
+    <div class="container">
+        <h1>@ViewBag.CurrentViewName</h1>
+        <table class='table table-striped'>">
+    
+                <tr><th>Fullname</th><th>Description</t>h><th>Price</th></tr></tr>
+            
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.FullName</td>
+                       <td>@item.Description</td>
+                        
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+</body>
+</html>

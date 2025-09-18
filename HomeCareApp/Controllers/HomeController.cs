@@ -1,4 +1,7 @@
-using System.Diagnostics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using HomeCareApp.Models;
 
@@ -6,26 +9,17 @@ namespace HomeCareApp.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    public IActionResult Table()
     {
-        _logger = logger;
-    }
-
-    public IActionResult Index()
-    {
-        return View();
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        var item = new List<Item>();
+        var item1 = new Item();
+        item1.FullName = "John Doe";
+        item1.Description = "This is a sample item description.";
+    
+        
+        item.Add(item1);
+        
+        ViewBag.CurrentViewName = "List of Items";  
+        return View(item);
     }
 }
