@@ -13,9 +13,11 @@ public class PatientController : Controller
         _appDbContext = appDbContext;
     }
 
-     public IActionResult Patient()
+     public IActionResult Index()
     {
-        return View();
+        var employees = _appDbContext.Employees.ToList();
+        ViewBag.CurrentViewName = "Employee List";
+        return View(employees);
     }
 
     /*
