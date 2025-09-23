@@ -8,7 +8,7 @@ namespace HomeCareApp.Models
         public DateTime Time { get; set; }
         public String Status { get; set; } = string.Empty;
     
-        public int Personnel_id { get; set; } //FK to personnel, handled by
+        public int Employee_id { get; set; } //FK to personnel, handled by
 
          
     }

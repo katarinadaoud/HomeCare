@@ -15,11 +15,11 @@ public class HomeController : Controller
         var user1 = new User();
         user1.Name = "John Doe";
         user1.Phone = "12345678";
-    
-        
+
+
         user.Add(user1);
-        
-        ViewBag.CurrentViewName = "List of Users";  
+
+        ViewBag.CurrentViewName = "List of Users";
         return View(user);
     }
 }
