@@ -12,4 +12,6 @@ namespace HomeCareApp.Models
         public TimeSpan EndTime { get; set; }
         public String Status { get; set; } = string.Empty;
     }
+
+    //vi må ha navigation properties til fk
 }

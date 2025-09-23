@@ -23,7 +23,7 @@ public class EmployeeController : Controller
     public IActionResult Grid()
     {
         List<Employee> employees = _appDbContext.Employees.ToList();
-        var employeesViewModel = new EmployeesViewModel(employees, "Table");
+        var employeesViewModel = new EmployeesViewModel(employees, "Grid");
         return View(employeesViewModel);
     }
     
