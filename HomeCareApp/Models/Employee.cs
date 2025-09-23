@@ -3,11 +3,18 @@ namespace HomeCareApp.Models
 {
     public class Employee
     {
-        public int User_id { get; set; } //FK to User
-        public int Employee_id { get; set; }
+        public int EmployeeId { get; set; } //PK
         public String Specialty { get; set; } = string.Empty;
         public String Availability { get; set; } = string.Empty;
         public String Work_area { get; set; } = string.Empty;
+
+        public int UserId { get; set; } //FK to User
+
+        //navigation properties
+        public User User { get; set; }
+        public ICollection<Appointment> Appointments { get; set; }
+        public ICollection<AvailableDay> AvailableDays { get; set; }
+        public ICollection<EmergencyCall> EmergencyCalls { get; set; }
          
     }
 }

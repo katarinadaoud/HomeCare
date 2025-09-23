@@ -6,6 +6,10 @@
     <h1 class="display-4">Welcome to LifeLink!</h1>
     <h2>Choose your role</h2>
 
-<a href="/Views/Patient">I am a patient</a>
-<a href="/Views/Employee">I am health personnel</a>
+<!--<a href="/Patient">I am a patient</a>
+<a href="/Employee">I am health personnel</a>-->
+
+
+    <a asp-controller="Patient" asp-action="Index">I am a patient</a>
+    <a asp-controller="Employee" asp-action="Index">I am health personnel</a>
 </div>

@@ -3,12 +3,16 @@ namespace HomeCareApp.Models
 {
     public class EmergencyCall
     {
-        public int Emergency_id { get; set; }
-        public int Patient_id { get; set; } //FK to patient
+        public int EmergencyId { get; set; } //PK
         public DateTime Time { get; set; }
         public String Status { get; set; } = string.Empty;
-    
-        public int Employee_id { get; set; } //FK to personnel, handled by
+
+        public int EmployeeId { get; set; } //FK to personnel, handled by
+        public int PatientId { get; set; } //FK to patient
+
+        //navigation properties
+        public Employee Employee { get; set; }
+        public Patient Patient { get; set; }
 
          
     }

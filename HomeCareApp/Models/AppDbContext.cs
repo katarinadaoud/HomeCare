@@ -16,7 +16,7 @@ public class AppDbContext : DbContext
 	public DbSet<AdminLog> AdminLogs { get; set; }
 	public DbSet<Appointment> Appointments { get; set; }
 	public DbSet<Task> Tasks { get; set; }
-	public DbSet<AvailableDays> AvailableDays { get; set; }
+	public DbSet<AvailableDay> AvailableDays { get; set; }
 	public DbSet<EmergencyContact> EmergencyContacts { get; set; }
 	public DbSet<EmergencyCall> EmergencyCalls { get; set; }
 	

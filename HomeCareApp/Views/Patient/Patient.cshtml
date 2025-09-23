@@ -1,0 +1,42 @@
+@model IEnumerable<HomeCareApp.Models.Patient>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIFELINK</title>
+</head>
+<body>
+    <div class="container">
+        <h1>@ViewBag.CurrentViewName</h1>
+        <table class='table table-striped'>">
+    
+                <tr><th>Appointments</th></tr>
+            
+                @foreach (var patient in Model)
+                {
+                    <tr>
+                       <td>
+                           @if (patient.Appointments != null)
+                           {
+                               foreach (var appointment in patient.Appointments)
+                               {
+                                   <div>@appointment.ToString()</div>
+                               }
+                           }
+                           else
+                           {
+                               <span>No appointments</span>
+                           }
+                       </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+</body>
+</html>

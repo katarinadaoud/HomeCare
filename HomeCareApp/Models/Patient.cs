@@ -3,11 +3,21 @@ namespace HomeCareApp.Models
 {
     public class Patient
     {
-        public int User_id { get; set; } //FK to User
-        public int Patient_id { get; set; }
+
+        public int PatientId { get; set; } //PK
         public String Address { get; set; } = string.Empty;
-        public String EmergencyContact_info { get; set; } = string.Empty; //FK to Emergency contact
         public String HelthRelated_info { get; set; } = string.Empty;
+
+        public int UserId { get; set; } //FK to User
+        public String EmergencyContact_info { get; set; } = string.Empty; //FK to Emergency contact
+
+        //navigation properties
+        public User User { get; set; }
+        public EmergencyContact EmergencyContact { get; set; }
+        public ICollection<Appointment> Appointments { get; set; }
+        public ICollection<EmergencyCall> EmergencyCalls { get; set; }
+        public ICollection<EmergencyContact> EmergencyContacts { get; set; }
+        
         
     }
 }

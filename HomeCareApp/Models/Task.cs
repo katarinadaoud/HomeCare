@@ -3,10 +3,14 @@ namespace HomeCareApp.Models
 {
     public class Task
     {
-        public int Task_id { get; set; }
+        public int TaskId { get; set; } //PK
         public String Description { get; set; } = string.Empty;
         public String Status { get; set; } = string.Empty;
-        public int Appointment_id { get; set; } //FK to appointment
+
+        public int AppointmentId { get; set; } //FK to appointment
+
+        //navigation properties
+        public Appointment Appointment { get; set; }
          
     }
 }

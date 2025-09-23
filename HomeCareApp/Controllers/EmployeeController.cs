@@ -13,6 +13,12 @@ public class EmployeeController : Controller
         _appDbContext = appDbContext;
     }
 
+     public IActionResult Employee()
+    {
+        return View();
+    }
+
+/*
     public IActionResult Table()
     {
         List<Employee> employees = _appDbContext.Employees.ToList();
@@ -34,5 +40,5 @@ public class EmployeeController : Controller
         if (employee == null)
             return NotFound();
         return View(employee);
-    }
+    } */
 }

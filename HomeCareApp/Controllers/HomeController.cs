@@ -9,6 +9,12 @@ namespace HomeCareApp.Controllers;
 
 public class HomeController : Controller
 {
+    public IActionResult Index()
+    {
+        return View();
+    }
+
+    /*
     public IActionResult Table()
     {
         var user = new List<User>();
@@ -21,5 +27,5 @@ public class HomeController : Controller
 
         ViewBag.CurrentViewName = "List of Users";
         return View(user);
-    }
+    } */
 }

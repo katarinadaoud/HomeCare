@@ -13,6 +13,13 @@ public class PatientController : Controller
         _appDbContext = appDbContext;
     }
 
+     public IActionResult Patient()
+    {
+        return View();
+    }
+
+    /*
+
     public IActionResult Table()
     {
         List<Patient> patients = _appDbContext.Patients.ToList();
@@ -34,5 +41,5 @@ public class PatientController : Controller
         if (patient == null)
             return NotFound();
         return View(patient);
-    }
+    } */
 }

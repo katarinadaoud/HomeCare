@@ -3,9 +3,14 @@ namespace HomeCareApp.Models
 {
     public class Admin
     {
-        public int Admin_id { get; set; }
-        public int User_id { get; set; } //FK to user
-        public String Accesses { get; set; } = string.Empty; //vet ikke 
-         
+        public int Adminid { get; set; } //PK
+        public String Accesses { get; set; } = string.Empty;
+
+        public int Userid { get; set; } //FK to user
+
+        //navigation propeties
+        public User User { get; set; }
+        public ICollection<AdminLog> AdminLogs { get; set; }
+
     }
 }
