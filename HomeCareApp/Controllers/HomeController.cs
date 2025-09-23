@@ -11,15 +11,15 @@ public class HomeController : Controller
 {
     public IActionResult Table()
     {
-        var item = new List<Item>();
-        var item1 = new Item();
-        item1.FullName = "John Doe";
-        item1.Description = "This is a sample item description.";
+        var user = new List<User>();
+        var user1 = new User();
+        user1.Name = "John Doe";
+        user1.Phone = "12345678";
     
         
-        item.Add(item1);
+        user.Add(user1);
         
-        ViewBag.CurrentViewName = "List of Items";  
-        return View(item);
+        ViewBag.CurrentViewName = "List of Users";  
+        return View(user);
     }
 }

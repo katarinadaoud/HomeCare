@@ -5,9 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<UserDbContext>(options => {
+builder.Services.AddDbContext<AppDbContext>(options => {
     options.UseSqlite(
-        builder.Configuration["ConnectionStrings:UserDbContextConnection"]);
+        builder.Configuration["ConnectionStrings:AppDbContextConnection"]);
 });
 
 var app = builder.Build();
