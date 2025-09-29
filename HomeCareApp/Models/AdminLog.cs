@@ -3,7 +3,7 @@ namespace HomeCareApp.Models
 {
     public class AdminLog
     {
-        public int LogId { get; set; } //PK
+        public int AdminLogId { get; set; } //PK
         public String Action { get; set; } = string.Empty;
         public DateTime Time { get; set; }
 

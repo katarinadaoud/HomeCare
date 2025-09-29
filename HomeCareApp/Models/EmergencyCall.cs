@@ -3,7 +3,7 @@ namespace HomeCareApp.Models
 {
     public class EmergencyCall
     {
-        public int EmergencyId { get; set; } //PK
+        public int EmergencyCallId { get; set; } //PK
         public DateTime Time { get; set; }
         public String Status { get; set; } = string.Empty;
 

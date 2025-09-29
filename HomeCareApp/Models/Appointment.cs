@@ -19,7 +19,9 @@ namespace HomeCareApp.Models
         //navigation keys
         public Patient Patient { get; set; } //we will not set it as non-nullable because we need these for an apoointment
         public Employee Employee { get; set; }
-        public ICollection<Appointment> Appointments { get; set; }
+
+        // slett fordi appointment har mange appointments? 
+        // public ICollection<Appointment> Appointments { get; set; }
     }
 
    

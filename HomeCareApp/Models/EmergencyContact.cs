@@ -3,7 +3,7 @@ namespace HomeCareApp.Models
 {
     public class EmergencyContact
     {
-        public int ContactId { get; set; } //PK
+        public int EmergencyContactId { get; set; } //PK
         public String Name { get; set; } = string.Empty;
         public String Phone { get; set; } = string.Empty;
         public String Email { get; set; } = string.Empty;

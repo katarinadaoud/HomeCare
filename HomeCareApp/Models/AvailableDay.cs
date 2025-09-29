@@ -3,7 +3,7 @@ namespace HomeCareApp.Models
 {
     public class AvailableDay
     {
-        public int DayId { get; set; } //PK
+        public int AvailableDayId { get; set; } //PK
         public DateTime Date { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }

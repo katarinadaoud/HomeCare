@@ -16,5 +16,6 @@ namespace HomeCareApp.Models
         public ICollection<AvailableDay> AvailableDays { get; set; }
         public ICollection<EmergencyCall> EmergencyCalls { get; set; }
          
+    
     }
 }
