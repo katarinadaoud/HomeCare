@@ -20,14 +20,14 @@ public class EmployeeController : Controller
         return View("Employee", employees);
     }
 
-
+/*
     public IActionResult Table()
     {
         List<Employee> employees = _appDbContext.Employees.ToList();
         var employeesViewModel = new EmployeesViewModel(employees, "Table");
         return View(employeesViewModel);
     }
-    /*
+
 
     public IActionResult Grid()
     {

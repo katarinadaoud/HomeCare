@@ -21,14 +21,14 @@ public class PatientController : Controller
     }
 
     
-
+/*
     public IActionResult Table()
     {
         List<Patient> patients = _appDbContext.Patients.ToList();
         var patientsViewModel = new PatientsViewModel(patients, "Table");
         return View(patientsViewModel);
     }
-/*
+
     public IActionResult Grid()
     {
         List<Patient> patients = _appDbContext.Patients.ToList();
