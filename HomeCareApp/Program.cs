@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using HomeCareApp.Models;
+using Microsoft.EntityFrameworkCore.Internal;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
+    DBInit.Seed(app);
 }
 
 app.UseStaticFiles();
