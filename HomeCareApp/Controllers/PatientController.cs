@@ -15,12 +15,12 @@ public class PatientController : Controller
 
      public IActionResult Index()
     {
-        var employees = _appDbContext.Employees.ToList();
-        ViewBag.CurrentViewName = "Employee List";
-        return View(employees);
+        var patients = _appDbContext.Patients.ToList();
+        ViewBag.CurrentViewName = "Patients List";
+        return View(patients);
     }
 
-    /*
+    
 
     public IActionResult Table()
     {
@@ -28,7 +28,7 @@ public class PatientController : Controller
         var patientsViewModel = new PatientsViewModel(patients, "Table");
         return View(patientsViewModel);
     }
-
+/*
     public IActionResult Grid()
     {
         List<Patient> patients = _appDbContext.Patients.ToList();
