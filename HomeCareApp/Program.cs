@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using HomeCareApp.Models;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("AppDbContextConnection") ?? throw new InvalidOperationException("Connection string 'AppDbContextConnection' not found.");
 
 builder.Services.AddControllersWithViews();
 
@@ -10,6 +12,8 @@ builder.Services.AddDbContext<AppDbContext>(options => {
     options.UseSqlite(
         builder.Configuration["ConnectionStrings:AppDbContextConnection"]);
 });
+
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AppDbContext>();
 
 var app = builder.Build();
 
