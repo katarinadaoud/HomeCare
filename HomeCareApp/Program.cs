@@ -13,7 +13,10 @@ builder.Services.AddDbContext<AppDbContext>(options => {
         builder.Configuration["ConnectionStrings:AppDbContextConnection"]);
 });
 
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddDefaultIdentity<User>().AddEntityFrameworkStores<AppDbContext>();
+
+builder.Services.AddRazorPages(); //order of adding services does not matter
+builder.Services.AddSession(); //add session services
 
 var app = builder.Build();
 
@@ -27,6 +30,10 @@ app.UseStaticFiles();
 
 app.UseAuthentication();
 
+app.UseAuthorization();
+
 app.MapDefaultControllerRoute();
+
+app.MapRazorPages();
 
 app.Run();
