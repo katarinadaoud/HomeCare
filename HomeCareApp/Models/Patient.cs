@@ -6,10 +6,10 @@ namespace HomeCareApp.Models
 
         public int PatientId { get; set; } //PK
         public String Address { get; set; } = string.Empty;
-        public String HelthRelated_info { get; set; } = string.Empty;
+        public String HealthRelated_info { get; set; } = string.Empty;
 
         public int UserId { get; set; } //FK to User
-        public String EmergencyContact_Id { get; set; } = string.Empty; //FK to Emergency contact
+        public int EmergencyContactId { get; set; } //FK to Emergency contact
 
         //navigation properties
         public User User { get; set; }
