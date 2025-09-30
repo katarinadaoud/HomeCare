@@ -17,7 +17,7 @@ public class EmployeeController : Controller
     {
         var employees = _appDbContext.Employees.ToList();
         ViewBag.CurrentViewName = "Employee List";
-        return View(employees);
+        return View("Employee", employees);
     }
 
 

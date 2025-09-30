@@ -17,7 +17,7 @@ public class PatientController : Controller
     {
         var patients = _appDbContext.Patients.ToList();
         ViewBag.CurrentViewName = "Patients List";
-        return View(patients);
+        return View("Patient", patients);
     }
 
     
