@@ -17,11 +17,9 @@ namespace HomeCareApp.Models
         public int EmployeeId { get; set; } //FK to employee
 
         //navigation keys
-        public Patient Patient { get; set; } //we will not set it as non-nullable because we need these for an apoointment
+        public Patient Patient { get; set; } //we will not set it as non-nullable because we need these for an appointment
         public Employee Employee { get; set; }
 
-        // slett fordi appointment har mange appointments? 
-        // public ICollection<Appointment> Appointments { get; set; }
     }
 
    
