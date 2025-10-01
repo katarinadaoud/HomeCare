@@ -14,11 +14,11 @@ public class PatientController : Controller
         _patientRepository = patientRepository;
     }
 
-     public async Task<IActionResult> Patient()
+     public async Task<IActionResult> Index()
     {
         var patients = await _patientRepository.GetAll();
-        var patientsViewModel = new PatientsViewModel(patients, "Patient");
-        return View(patientsViewModel);
+        ViewBag.CurrentViewName = "Patients List";
+        return View("Patient", patients);
     }
 
     [HttpGet]

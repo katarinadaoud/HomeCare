@@ -15,11 +15,11 @@ public class EmployeeController : Controller
         _employeeRepository = employeeRepository;
     }
 
-    public async Task<IActionResult> Employee()
+    public async Task<IActionResult> Index()
     {
         var employees = await _employeeRepository.GetAll();
-        var employeesViewModel = new EmployeesViewModel(employees, "Employee");
-        return View(employeesViewModel);
+        ViewBag.CurrentViewName = "Employees List";
+        return View("Employee", employees);
     }
 
     [HttpGet]
