@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Identity;
     public class User : IdentityUser
     {
         public int UserId { get; set; } //PK
-        public String Username { get; set; } = string.Empty;
-        public String Passwordhash { get; set; } = string.Empty;
+        //public String Username { get; set; } = string.Empty; Dont need this bc of identityuser inheritance
+       // public String Passwordhash { get; set; } = string.Empty;
 
         public String Name { get; set; } = string.Empty;
         public String Phone { get; set; } = string.Empty;

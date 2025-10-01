@@ -9,6 +9,8 @@ var connectionString = builder.Configuration.GetConnectionString("AppDbContextCo
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddRazorPages();
+
 builder.Services.AddDbContext<AppDbContext>(options => {
     options.UseSqlite(
         builder.Configuration["ConnectionStrings:AppDbContextConnection"]);
