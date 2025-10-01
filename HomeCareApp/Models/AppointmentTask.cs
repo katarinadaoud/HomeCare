@@ -1,7 +1,7 @@
 using System;
 namespace HomeCareApp.Models
 {
-    public class Task
+    public class AppointmentTask
     {
         public int TaskId { get; set; } //PK
         public String Description { get; set; } = string.Empty;

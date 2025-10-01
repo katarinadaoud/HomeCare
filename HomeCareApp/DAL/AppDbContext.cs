@@ -17,7 +17,7 @@ public class AppDbContext : IdentityDbContext
 	public DbSet<Admin> Admins { get; set; }
 	public DbSet<AdminLog> AdminLogs { get; set; }
 	public DbSet<Appointment> Appointments { get; set; }
-	public DbSet<HomeCareApp.Models.Task> Tasks { get; set; }
+	public DbSet<HomeCareApp.Models.AppointmentTask> Tasks { get; set; }
 	public DbSet<AvailableDay> AvailableDays { get; set; }
 	public DbSet<EmergencyContact> EmergencyContacts { get; set; }
 	public DbSet<EmergencyCall> EmergencyCalls { get; set; }

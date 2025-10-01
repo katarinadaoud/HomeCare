@@ -22,13 +22,13 @@ public class PatientRepository : IPatientRepository
         return await _db.Patients.FindAsync(id);
     }
 
-    public async System.Threading.Tasks.Task Create(Patient patient)
+    public async Task Create(Patient patient)
     {
         _db.Patients.Add(patient);
         await _db.SaveChangesAsync();
     }
 
-    public async System.Threading.Tasks.Task Update(Patient patient)
+    public async Task Update(Patient patient)
     {
         _db.Patients.Update(patient);
         await _db.SaveChangesAsync();

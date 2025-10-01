@@ -22,13 +22,13 @@ public class EmployeeRepository : IEmployeeRepository
         return await _db.Employees.FindAsync(id);
     }
 
-    public async System.Threading.Tasks.Task Create(Employee employee)
+    public async Task Create(Employee employee)
     {
         _db.Employees.Add(employee);
         await _db.SaveChangesAsync();
     }
 
-    public async System.Threading.Tasks.Task Update(Employee employee)
+    public async Task Update(Employee employee)
     {
         _db.Employees.Update(employee);
         await _db.SaveChangesAsync();
