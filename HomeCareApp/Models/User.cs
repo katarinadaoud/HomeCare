@@ -1,7 +1,7 @@
 using System;
-namespace HomeCareApp.Models
-{
-    public class User
+namespace HomeCareApp.Models;
+using Microsoft.AspNetCore.Identity;
+    public class User : IdentityUser
     {
         public int UserId { get; set; } //PK
         public String Username { get; set; } = string.Empty;
@@ -18,4 +18,3 @@ namespace HomeCareApp.Models
         public ICollection<Patient> Patients { get; set; }
          
     }
-}
