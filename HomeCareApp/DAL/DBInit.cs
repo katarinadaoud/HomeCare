@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using HomeCareApp.Models;
 
-namespace HomeCareApp.Models;
+namespace HomeCareApp.DAL;
 
 public static class DBInit
 {

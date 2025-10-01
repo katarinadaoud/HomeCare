@@ -1,47 +1,84 @@
 using Microsoft.AspNetCore.Mvc;
 using HomeCareApp.Models;
 using HomeCareApp.ViewModels;
+using HomeCareApp.DAL;
+using System.Threading.Tasks;
 
 namespace HomeCareApp.Controllers;
 
 public class EmployeeController : Controller
 {
-    private readonly AppDbContext _appDbContext;
+    private readonly IEmployeeRepository _employeeRepository;
 
-    public EmployeeController(AppDbContext appDbContext)
+    public EmployeeController(IEmployeeRepository employeeRepository)
     {
-        _appDbContext = appDbContext;
+        _employeeRepository = employeeRepository;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Employee()
     {
-        var employees = _appDbContext.Employees.ToList();
-        ViewBag.CurrentViewName = "Employee List";
-        return View("Employee", employees);
-    }
-
-/*
-    public IActionResult Table()
-    {
-        List<Employee> employees = _appDbContext.Employees.ToList();
-        var employeesViewModel = new EmployeesViewModel(employees, "Table");
+        var employees = await _employeeRepository.GetAll();
+        var employeesViewModel = new EmployeesViewModel(employees, "Employee");
         return View(employeesViewModel);
     }
 
-
-    public IActionResult Grid()
+    [HttpGet]
+    public IActionResult Create()
     {
-        List<Employee> employees = _appDbContext.Employees.ToList();
-        var employeesViewModel = new EmployeesViewModel(employees, "Grid");
-        return View(employeesViewModel);
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(Employee employee)
+    {
+        if (ModelState.IsValid)
+        {
+            await _employeeRepository.Create(employee);
+            return RedirectToAction(nameof(Employee));
+        }
+        return View(employee);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Update(int id)
+    {
+        var employee = await _employeeRepository.GetItemById(id);
+        if (employee == null)
+        {
+            return NotFound();
+        }
+        return View(employee);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Update(Employee employee)
+    {
+        if (ModelState.IsValid)
+        {
+            await _employeeRepository.Update(employee);
+            return RedirectToAction(nameof(Employee));
+        }
+
+        return View(employee);
     }
     
-    public IActionResult Details(int id)
+    [HttpGet]
+    public async Task<IActionResult> Delete(int id)
     {
-        List<Employee> employees = _appDbContext.Employees.ToList();
-        var employee = employees.FirstOrDefault(i => i.Employee_id == id);
+        var employee = await _employeeRepository.GetItemById(id);
         if (employee == null)
+        {
             return NotFound();
+        }
         return View(employee);
-    } */
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        await _employeeRepository.Delete(id);
+        return RedirectToAction(nameof(Employee));
+    }
+
+    
 }
