@@ -22,10 +22,9 @@ public class PatientController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Create()
+    public IActionResult Create()
     {
-        var patients = await _patientRepository.GetAll();
-        return View(patients);
+        return View();
     }
 
     [HttpPost]
