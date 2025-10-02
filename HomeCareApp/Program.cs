@@ -27,6 +27,9 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
     DBInit.Seed(app);
 }
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.UseStaticFiles();
 

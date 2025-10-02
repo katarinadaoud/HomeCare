@@ -23,13 +23,13 @@ public class EmployeeController : Controller
     }
 
     [HttpGet]
-    public IActionResult Create()
+    public IActionResult CreateEmployee()
     {
         return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Employee employee)
+    public async Task<IActionResult> CreateEmployee(Employee employee)
     {
         if (ModelState.IsValid)
         {
@@ -40,7 +40,7 @@ public class EmployeeController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Update(int id)
+    public async Task<IActionResult> UpdateEmployee(int id)
     {
         var employee = await _employeeRepository.GetItemById(id);
         if (employee == null)
@@ -51,7 +51,7 @@ public class EmployeeController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Update(Employee employee)
+    public async Task<IActionResult> UpdateEmployee(Employee employee)
     {
         if (ModelState.IsValid)
         {
@@ -63,7 +63,7 @@ public class EmployeeController : Controller
     }
     
     [HttpGet]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> DeleteEmployee(int id)
     {
         var employee = await _employeeRepository.GetItemById(id);
         if (employee == null)
@@ -74,7 +74,7 @@ public class EmployeeController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> DeleteConfirmed(int id)
+    public async Task<IActionResult> DeleteEmployeeConfirmed(int id)
     {
         await _employeeRepository.Delete(id);
         return RedirectToAction(nameof(Employee));

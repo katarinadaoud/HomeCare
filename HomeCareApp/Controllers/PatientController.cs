@@ -18,13 +18,14 @@ public class PatientController : Controller
     {
         var patients = await _patientRepository.GetAll();
         ViewBag.CurrentViewName = "Patients List";
-        return View("Patient", patients);
+        return View(patients);
     }
 
     [HttpGet]
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
-        return View();
+        var patients = await _patientRepository.GetAll();
+        return View(patients);
     }
 
     [HttpPost]
@@ -33,7 +34,7 @@ public class PatientController : Controller
         if (ModelState.IsValid)
         {
             await _patientRepository.Create(patient);
-            return RedirectToAction(nameof(Patient));
+            return RedirectToAction(nameof(Index));
         }
         return View(patient);
     }
