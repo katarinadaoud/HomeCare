@@ -1,0 +1,36 @@
+/* Overordnet layout, navbar, containere, visninger */
+.app-container { padding-top: var(--container-pt); }
+.app-view[hidden] { display: none !important; }
+
+.navbar {
+  height: 64px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+
+.brand { text-decoration: none; }
+.brand-icon { color: var(--brand); display: inline-block; }
+.brand-text{
+  color: var(--brand);
+  font-weight: 800;
+  letter-spacing: .1px;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+.brand-L{ color: var(--brand-dark); font-weight: 900; }
+@media (min-width: 992px){ .brand-text{ font-size:1.35rem; } }
+
+.topnav .nav-link{
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text) !important;
+  padding: .5rem .75rem;
+  border-radius: 999px;
+  line-height: 1.25;
+}
+.topnav .nav-link:hover,
+.topnav .nav-link:focus { text-decoration: underline; }
+.topnav .nav-link[aria-current="page"]{
+  background: var(--active-bg);
+  color: var(--brand-dark) !important;
+  text-decoration: none;
+}

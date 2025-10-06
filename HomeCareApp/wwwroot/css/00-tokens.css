@@ -1,0 +1,30 @@
+/* Design tokens: farger, typografi, spacing, skygger */
+:root{
+  /* Brand */
+  --brand: #2F6CAB;
+  --brand-dark: #1F4E80;
+  --brand-focus: #D5E8FF;
+  --brand-accent: #7FB8E6;
+
+  /* States */
+  --alert: #D92D20;
+  --alert-dark: #B71613;
+  --alert-focus: #FFD1D1;
+
+  /* Base */
+  --text: #111827;
+  --muted: #4B5563;
+  --bg: #f8f9fa;
+  --shadow: rgba(0,0,0,.12);
+
+  /* Calendar accents */
+  --today-ring: #2F6CAB;
+  --selected-bg: #E7F1FB;
+
+  /* Layout */
+  --container-pt: 88px;
+  --max-calendar-width: 980px;
+
+  /* Effects */
+  --active-bg: color-mix(in srgb, var(--brand) 12%, transparent);
+}

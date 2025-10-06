@@ -1,0 +1,109 @@
+/* Kalender-spesifikk stil og FullCalendar overrides */
+
+/* Wrapper */
+#kalWrap { max-width: var(--max-calendar-width); margin: 24px auto; }
+
+/* Header med kontroller og visnings-toggle */
+#kalHeader{
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px; margin-bottom: 12px;
+}
+#kalHeader .title{ font-weight: 900; font-size: 1.45rem; text-align: center; }
+@media (min-width: 992px){ #kalHeader .title{ font-size: 1.6rem; } }
+
+.kal-controls{ display: inline-flex; align-items: center; gap: 8px; }
+.kal-btn{
+  border: 1px solid rgba(17,24,39,.14);
+  background: #fff; color: var(--text);
+  padding: .45rem .7rem; border-radius: 9999px;
+  font-weight: 700;
+}
+.kal-btn:hover{ background: #f3f4f6; }
+.kal-btn:focus-visible{ outline: 4px solid var(--brand-focus); outline-offset: 3px; }
+.kal-date{
+  border: 1px solid rgba(17,24,39,.14);
+  background: #fff; color: var(--text);
+  padding: .45rem .6rem; border-radius: 9999px;
+  font-weight: 600;
+}
+
+.view-toggle{ justify-self: end; display: inline-flex; align-items: center; gap: 8px; }
+.view-toggle .toggle{
+  border: 1px solid rgba(17,24,39,.14);
+  background: #fff; color: var(--text);
+  padding: .45rem .7rem; border-radius: 9999px;
+  font-weight: 700;
+}
+.view-toggle .toggle[aria-pressed="true"]{ background: var(--active-bg); color: var(--brand-dark); }
+
+/* FullCalendar kort/ramme */
+.fc{
+  color: var(--text);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 22px var(--shadow);
+  background: #fff;
+  border: 1px solid rgba(17,24,39,.06);
+}
+.fc a { color: var(--text); text-decoration: none; }
+.fc a:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+/* Grid-linjer + helgedager */
+.fc-theme-standard td, .fc-theme-standard th, .fc-theme-standard .fc-scrollgrid { border-color: rgba(17,24,39,.08); }
+.fc .fc-day-sat, .fc .fc-day-sun { background-color: rgba(47,108,171,0.05); }
+
+/* Uke-nummerkolonne */
+.fc .fc-week-number,
+.fc .fc-daygrid-week-number {
+  width: 56px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+/* Datoer (tappflate) */
+.fc .fc-daygrid-day-number{
+  font-weight: 800;
+  min-width: 44px; min-height: 44px;
+  display: inline-grid; place-items: center;
+  border-radius: 8px;
+}
+.fc .fc-daygrid-day:hover { background-color: rgba(17,24,39,.035); }
+
+/* I dag */
+.fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number{
+  position: relative; z-index: 1; color: var(--brand-dark);
+}
+.fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number::before{
+  content: ""; position: absolute; inset: -2px;
+  border: 3px solid var(--today-ring);
+  border-radius: 10px; box-sizing: border-box; pointer-events: none;
+  background-color: color-mix(in srgb, var(--today-ring) 10%, transparent);
+}
+
+/* Valgt dag (settes via JS: .is-selected) */
+.fc .is-selected .fc-daygrid-day-number{
+  background: var(--selected-bg);
+  box-shadow: inset 0 0 0 2px var(--brand);
+  color: var(--brand-dark);
+}
+
+/* Prikk-indikator (1–3) */
+.fc .fc-daygrid-day-frame{ position: relative; }
+.fc .dot-wrap{ position:absolute; top:6px; right:6px; display:flex; gap:4px; }
+.fc .dot{ width:6px; height:6px; border-radius:50%; background: var(--brand-dark); opacity:.8; }
+
+/* ListView lesbarhet */
+.fc-list{ font-size: 1rem; }
+.fc-list-day-cushion{ font-weight: 800; }
+.fc-list-event:hover{ background: #f3f4f6; }
+
+/* Tom-tilstand for måned */
+.empty-state{
+  margin-top: 16px;
+  display: none;
+  align-items: center; gap: 12px;
+  color: var(--muted);
+}
+.empty-state.show{ display: inline-flex; }
