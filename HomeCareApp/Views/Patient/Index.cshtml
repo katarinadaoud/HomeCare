@@ -1,3 +1,128 @@
-@model IEnumerable<Patient>
+@{
+    ViewData["Title"] = "Avtalene mine";
+    Layout = "_Layout";
+}
 
-<partial name="_PatientTable" model="Model"/>
+<!-- Toppmeny -->
+<nav class="navbar bg-white fixed-top" role="navigation" aria-label="Hovedmeny">
+  <div class="container-fluid topnav">
+    <a class="navbar-brand d-flex align-items-center gap-2 brand" href="#mine-timeavtaler" aria-label="Hjem">
+      <svg class="brand-icon" width="28" height="28" viewBox="0 0 24 24" role="img" aria-hidden="true">
+        <path d="M12 4c2-2.5 6-2.7 8.2-.6 2.9 2.5 3.2 7 .6 9.6-2.3 2.5-6.9 6-8.5 7.1-.2.1-.5.1-.7 0-1.6-1.1-6.2-4.6-8.5-7.1-2.6-2.6-2.3-7.1.6-9.6C6 1.3 10 1.5 12 4Z"
+              fill="none" stroke="var(--brand-accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+              transform="translate(12 12) scale(1.12) translate(-12 -12)" />
+        <path d="M5.2 11.2 12 5.8l6.8 5.4v5.9c0 .5-.4.9-.9.9h-4.2a.6.6 0 0 1-.6-.6v-2.6a2 2 0 0 0-2-2h-1.2a2 2 0 0 0-2 2v2.6a.6.6 0 0 1-.6.6H6.1a.9.9 0 0 1-.9-.9z"
+              fill="currentColor" opacity="0.96"/>
+      </svg>
+      <span class="brand-text"><span class="brand-L">L</span>ife<span class="brand-L">L</span>ink</span>
+    </a>
+
+    <ul class="nav ms-2" role="list">
+      <li class="nav-item"><a class="nav-link" href="#mine-timeavtaler" aria-current="page">Mine timeavtaler</a></li>
+      <li class="nav-item"><a class="nav-link" href="#mine-medisiner">Mine medisiner</a></li>
+    </ul>
+
+    <div class="ms-auto d-flex align-items-center gap-3">
+      <a href="#book-time" class="btn-cta">Bestill time</a>
+
+      <button class="icon-btn" id="notifBtn" type="button" aria-label="Varsler">
+        <span aria-hidden="true">🔔</span>
+        <span class="badge" id="notifBadge">2</span>
+      </button>
+
+      <span class="toolbar-sep" aria-hidden="true"></span>
+
+      <button class="icon-btn sos-btn" id="sosBtn" type="button" aria-label="Nød: ring hjemmetjenesten">
+        <svg width="22" height="22" viewBox="0 0 24 24" role="img" aria-hidden="true">
+          <path fill="currentColor"
+            d="M6.62 10.79a15.46 15.46 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1C11.85 21 3 12.15 3 1a1 1 0 011-1h3.49a1 1 0 011 1c0 1.24.19 2.45.57 3.57a1 1 0 01-.24 1.02l-2.2 2.2z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Innhold -->
+<main id="main" class="container app-container" tabindex="-1">
+  <section id="view-mine-timeavtaler" class="app-view" aria-labelledby="mt-heading" hidden>
+    <header class="mb-2"><h1 id="mt-heading" class="h4 fw-bold mb-0">Avtalene mine</h1></header>
+
+    <div id="kalWrap">
+      <div id="kalHeader" aria-live="polite">
+        <div class="kal-controls" role="group" aria-label="Månedsnavigasjon">
+          <button class="kal-btn" type="button" id="btnPrev" aria-label="Forrige måned">‹</button>
+          <button class="kal-btn" type="button" id="btnToday" aria-label="Gå til i dag">I dag</button>
+          <button class="kal-btn" type="button" id="btnNext" aria-label="Neste måned">›</button>
+          <input type="date" id="jumpDate" class="kal-date" aria-label="Hopp til dato">
+        </div>
+
+        <div class="title" id="kalTittel"></div>
+
+        <div class="view-toggle" role="group" aria-label="Visning">
+          <button class="toggle" id="btnViewMonth" type="button" aria-pressed="true" aria-label="Kalendervisning">Kalender</button>
+          <button class="toggle" id="btnViewList" type="button" aria-pressed="false" aria-label="Listevisning">Liste</button>
+        </div>
+      </div>
+
+      <div id="kal" role="region" aria-label="Kalender"></div>
+
+      <div class="empty-state" id="emptyState" aria-live="polite">
+        <span>Ingen avtaler i denne perioden.</span>
+        <a class="btn btn-sm btn-outline-primary" href="#book-time">Bestill time</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Placeholders -->
+  <section id="view-book-time" class="app-view" aria-labelledby="bt-heading" hidden>
+    <header class="mb-2"><h1 id="bt-heading" class="h4 fw-bold mb-0">Bestill time</h1></header>
+    <p>(Kommer senere.) Her kan du også plassere valg av behandler.</p>
+  </section>
+
+  <section id="view-mine-medisiner" class="app-view" aria-labelledby="mm-heading" hidden>
+    <header class="mb-2"><h1 id="mm-heading" class="h4 fw-bold mb-0">Mine medisiner</h1></header>
+    <p>(Kommer senere.)</p>
+  </section>
+</main>
+
+<!-- SOS-bekreftelse -->
+<div class="modal fade" id="sosConfirmModal" tabindex="-1" aria-labelledby="sosConfirmTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title fs-5" id="sosConfirmTitle">Ring hjemmetjenesten?</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Lukk"></button>
+      </div>
+      <div class="modal-body">Er du sikker på at du vil ringe hjemmetjenesten nå?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Avbryt</button>
+        <button type="button" class="btn btn-danger" id="sosConfirmCallBtn" aria-label="Ring nå">Ring</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toasts -->
+<div class="toast-container position-fixed top-0 end-0 p-3">
+  <div id="alarmToast" class="toast align-items-center text-bg-danger border-0" role="status" aria-live="polite" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">Ringer hjemmetjenesten …</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Lukk"></button>
+    </div>
+  </div>
+  <div id="notifToast" class="toast align-items-center text-bg-primary border-0" role="status" aria-live="polite" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">Du har 2 nye varsler.</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Lukk"></button>
+    </div>
+  </div>
+  <div id="deskToast" class="toast align-items-center text-bg-light border" role="status" aria-live="polite" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        Nummer til hjemmetjenesten: <strong id="deskPhoneText"></strong>
+        <button class="btn btn-sm btn-outline-secondary ms-2" id="copyBtn">Kopier</button>
+      </div>
+      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Lukk"></button>
+    </div>
+  </div>
+</div>
