@@ -1,0 +1,25 @@
+<div class="toast-container position-fixed top-0 end-0 p-3">
+  <div id="alarmToast" class="toast align-items-center text-bg-danger border-0" role="status" aria-live="polite" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">Calling the home-care service…</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+
+  <div id="notifToast" class="toast align-items-center text-bg-primary border-0" role="status" aria-live="polite" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">You have 2 new notifications.</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+
+  <div id="deskToast" class="toast align-items-center text-bg-light border" role="status" aria-live="polite" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        Phone number to home-care service: <strong id="deskPhoneText"></strong>
+        <button class="btn btn-sm btn-outline-secondary ms-2" id="copyBtn">Copy</button>
+      </div>
+      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>

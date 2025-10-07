@@ -14,16 +14,30 @@ public class PatientController : Controller
         _patientRepository = patientRepository;
     }
 
-     public async Task<IActionResult> Index()
+    // CHANGED: Index er nå pasientportalen (kalender-UI), ingen modell lastes her
+    public IActionResult Index()
+    {
+        ViewBag.Role = "patient";               // NEW: sørger for pasient-topnav + SOS i layout
+        ViewBag.ActiveTab = "appointments";     // NEW: marker riktig fane i pasient-UI
+        return View();                          // viser Views/Patient/Index.cshtml
+    }
+    
+// NEW: egen action for liste over pasienter (tidligere lå i Index)
+    public async Task<IActionResult> Patients()
     {
         var patients = await _patientRepository.GetAll();
         ViewBag.CurrentViewName = "Patients List";
-        return View(patients);
+        ViewBag.Role = "employee";                 // NEW: endre til "patient" hvis lista skal vises i pasientflaten
+        ViewBag.ActiveTab = "patients";         // NEW: valgfritt, for å markere fane i staff-topnav
+        return View("Patient", patients);       
     }
+    
 
     [HttpGet]
     public IActionResult Create()
     {
+        ViewBag.Role = "employee";            // CHANGED
+        ViewBag.ActiveTab = "patients";
         return View();
     }
 
@@ -33,8 +47,10 @@ public class PatientController : Controller
         if (ModelState.IsValid)
         {
             await _patientRepository.Create(patient);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Patients));
         }
+        ViewBag.Role = "employee";            // CHANGED
+        ViewBag.ActiveTab = "patients";
         return View(patient);
     }
 
