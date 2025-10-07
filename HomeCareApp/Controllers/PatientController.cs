@@ -38,44 +38,4 @@ public class PatientController : Controller
         return View(patient);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> Update(int id)
-    {
-        var patient = await _patientRepository.GetItemById(id);
-        if (patient == null)
-        {
-            return NotFound();
-        }
-        return View(patient);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Update(Patient patient)
-    {
-        if (ModelState.IsValid)
-        {
-            await _patientRepository.Update(patient);
-            return RedirectToAction(nameof(Patient));
-        }
-
-        return View(patient);
-    }
-    
-    [HttpGet]
-    public async Task<IActionResult> Delete(int id)
-    {
-        var patient = await _patientRepository.GetItemById(id);
-        if (patient == null)
-        {
-            return NotFound();
-        }
-        return View(patient);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    {
-        await _patientRepository.Delete(id);
-        return RedirectToAction(nameof(Patient));
-    }
 }

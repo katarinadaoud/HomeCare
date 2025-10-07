@@ -9,8 +9,11 @@ namespace HomeCareApp.Models
 
 
         public DateTime Date { get; set; }
-        public TimeSpan StartTime { get; set; }
-        public TimeSpan EndTime { get; set; }
+
+        // Endrer fra Timespan StartTime og EndTime til DateTime StartTime og EndTime. 
+        // Timespan lagrer kun tid, og er ikke knyttet til en spesifikk dato.
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
         public String Status { get; set; } = string.Empty;
 
         public int PatientId { get; set; } //FK to patient
