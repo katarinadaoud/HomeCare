@@ -1,0 +1,21 @@
+@model HomeCareApp.Models.Appointment
+
+<h2>Bestill time</h2>
+
+<form asp-action="Book" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label asp-for="Date"></label>
+        <input asp-for="Date" class="form-control" />
+
+        <label asp-for="StartTime"></label>
+        <textarea asp-for="StartTime" class="form-control"></textarea>
+
+        <label asp-for="Status"></label>
+        <input asp-for="Status" type="date" class="form-control" />
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">Send bestilling</button>
+</form>
