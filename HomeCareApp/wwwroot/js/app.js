@@ -25,7 +25,7 @@ function isLikelyMobile() {
   return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
-/* --- Routing / Views ---------------------------------------------------- */
+/* --- Routing / Views (pasient) ----------------------------------------- */
 
 function showView(id) {
   document.querySelectorAll('.app-view').forEach(sec => (sec.hidden = true));
@@ -75,11 +75,11 @@ function initCalendarOnce() {
     initialView: savedView,
     height: 'auto',
     firstDay: 1,
-    locale: 'en',                 // ← English month/day names
+    locale: 'en',                 // English month/day names
     headerToolbar: false,
     weekNumbers: true,
     weekNumberCalculation: 'local',
-    // Show U instead of W (kept as you wanted earlier)
+    // Show U instead of W
     weekNumberContent: (arg) => ({ html: `<span class="badge bg-light text-dark fw-bold">U${arg.num}</span>` }),
     events: demoEvents,
 
@@ -95,8 +95,9 @@ function initCalendarOnce() {
 
   function oppdaterTittel() {
     const d = calendar.view.currentStart;
-    const txt = d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }); // ← English title
-    document.getElementById('kalTittel').textContent = txt;
+    const txt = d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    const tittelEl = document.getElementById('kalTittel');
+    if (tittelEl) tittelEl.textContent = txt;
     oppdaterTomTilstand();
   }
   oppdaterTittel();
@@ -107,7 +108,7 @@ function initCalendarOnce() {
   document.getElementById('btnNext')?.addEventListener('click', () => calendar.next());
   document.getElementById('btnToday')?.addEventListener('click', () => calendar.today());
 
-  /* Jump-to-date (input + change for Edge/Chromium) */
+  /* Jump-to-date */
   const jumpDate = document.getElementById('jumpDate');
   if (jumpDate) {
     if (!jumpDate.value) jumpDate.value = todayISO;
@@ -119,18 +120,9 @@ function initCalendarOnce() {
       calendar.gotoDate(d);
     };
 
-    jumpDate.addEventListener('input', goTo);   // picker interaction
-    jumpDate.addEventListener('change', goTo);  // blur/enter
+    jumpDate.addEventListener('input', goTo);
+    jumpDate.addEventListener('change', goTo);
   }
-
-  /* Keyboard: ←/→, T, L */
-  document.addEventListener('keydown', e => {
-    if (window.location.hash !== '#mine-timeavtaler') return;
-    if (e.key === 'ArrowLeft')         calendar.prev();
-    else if (e.key === 'ArrowRight')   calendar.next();
-    else if (e.key.toLowerCase() === 't') calendar.today();
-    else if (e.key.toLowerCase() === 'l') toggleView();
-  });
 
   /* View toggle + persist */
   const btnMonth = document.getElementById('btnViewMonth');
@@ -151,6 +143,18 @@ function initCalendarOnce() {
   btnList ?.addEventListener('click', () => { calendar.changeView('listMonth');   setPressed(false); });
   setPressed(calendar.view.type === 'dayGridMonth');
   calendar.on('viewDidMount', (arg) => localStorage.setItem('kalView', arg.view.type));
+
+  /* Keyboard: ←/→, T, L */
+  document.addEventListener('keydown', e => {
+    // Pasient: kun når "#mine-timeavtaler" vises. Ansatt: alltid når kalender finnes.
+    if (window.AppRole === 'patient' && window.location.hash !== '#mine-timeavtaler') return;
+    if (!calendarInited) return;
+
+    if (e.key === 'ArrowLeft')         calendar.prev();
+    else if (e.key === 'ArrowRight')   calendar.next();
+    else if (e.key.toLowerCase() === 't') calendar.today();
+    else if (e.key.toLowerCase() === 'l') toggleView();
+  });
 
   /* Dot indicators */
   calendar.on('eventsSet', tegnPrikker);
@@ -184,10 +188,11 @@ function initCalendarOnce() {
   /* Empty state */
   function oppdaterTomTilstand(){
     const empty = document.getElementById('emptyState');
+    if (!empty) return;
     const rangeStart = calendar.view.currentStart;
     const rangeEnd   = calendar.view.currentEnd;
     const hasEvents = calendar.getEvents().some(e => e.start >= rangeStart && e.start < rangeEnd);
-    empty?.classList.toggle('show', !hasEvents);
+    empty.classList.toggle('show', !hasEvents);
   }
 
   /* UI: notifications + SOS */
@@ -240,6 +245,16 @@ function initCalendarOnce() {
 
 /* --- Bootstrap ---------------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
-  route();
-  window.addEventListener('hashchange', route);
+  if (window.AppRole === 'patient') {
+    // Pasient: hash-routing mellom seksjonene
+    route();
+    window.addEventListener('hashchange', route);
+  } else {
+    // Ansatt: initier kalender direkte hvis den finnes på siden
+    if (document.getElementById('kal')) {
+      loadCssOnce('css/page-calendar.css');   // ← lagt til for employee
+      initCalendarOnce();
+      setTimeout(() => calendar && calendar.updateSize(), 0);
+    }
+  }
 });

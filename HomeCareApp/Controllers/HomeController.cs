@@ -11,6 +11,7 @@ public class HomeController : Controller
 {
     public IActionResult Index()
     {
+        ViewBag.Role = "public"; // forsiden: ingen topnav/SOS
         return View();
     }
 

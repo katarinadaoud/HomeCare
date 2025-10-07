@@ -1,14 +1,13 @@
 @{
-    ViewData["Title"] = "My appointments";
-    ViewBag.Role = "patient";
-    ViewBag.ActiveTab = "appointments";
-    Layout = "_Layout";
+    ViewData["Title"] = "Team schedule";
+    Layout = "_Layout"; // rolle/fane settes i EmployeeController.Schedule()
 }
 
-<!-- Content -->
 <main id="main" class="container app-container" tabindex="-1">
-  <section id="view-mine-timeavtaler" class="app-view" aria-labelledby="mt-heading" hidden>
-    <header class="mb-2"><h1 id="mt-heading" class="h4 fw-bold mb-0">My appointments</h1></header>
+  <section aria-labelledby="kal-heading" class="mt-4 pt-4">
+    <header class="mb-2">
+      <h1 id="kal-heading" class="h4 fw-bold mb-0">Team schedule</h1>
+    </header>
 
     <div id="kalWrap">
       <div id="kalHeader" aria-live="polite">
@@ -16,7 +15,7 @@
           <button class="kal-btn" type="button" id="btnPrev" aria-label="Previous month">‹</button>
           <button class="kal-btn" type="button" id="btnToday" aria-label="Go to today">Today</button>
           <button class="kal-btn" type="button" id="btnNext" aria-label="Next month">›</button>
-          <input type="date" id="jumpDate" class="kal-date" aria-label="Jump to date">
+          <input type="date" id="jumpDate" class="kal-date" aria-label="Jump to date" />
         </div>
 
         <div class="title" id="kalTittel"></div>
@@ -30,20 +29,9 @@
       <div id="kal" role="region" aria-label="Calendar"></div>
 
       <div class="empty-state" id="emptyState" aria-live="polite">
-        <span>No appointments in this period.</span>
-        <a class="btn btn-sm btn-outline-primary" href="#book-time">Book appointment</a>
+        <span>No shifts/visits in this period.</span>
+        <a class="btn btn-sm btn-outline-primary" asp-controller="Employee" asp-action="CreateEmployee">Assign task</a>
       </div>
     </div>
-  </section>
-
-  <!-- Placeholders -->
-  <section id="view-book-time" class="app-view" aria-labelledby="bt-heading" hidden>
-    <header class="mb-2"><h1 id="bt-heading" class="h4 fw-bold mb-0">Book appointment</h1></header>
-    <p>(Coming soon.) You can also choose provider here.</p>
-  </section>
-
-  <section id="view-mine-medisiner" class="app-view" aria-labelledby="mm-heading" hidden>
-    <header class="mb-2"><h1 id="mm-heading" class="h4 fw-bold mb-0">My medications</h1></header>
-    <p>(Coming soon.)</p>
   </section>
 </main>

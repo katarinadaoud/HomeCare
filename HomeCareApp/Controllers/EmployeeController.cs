@@ -15,16 +15,39 @@ public class EmployeeController : Controller
         _employeeRepository = employeeRepository;
     }
 
-    public async Task<IActionResult> Index()
+    // CHANGE: /Employee -> redirect til kalender
+    public IActionResult Index()
+    {
+        return RedirectToAction(nameof(Schedule)); // ←
+    }
+
+    // NEW: egen action for listevisning (tidl. i Index)
+    public async Task<IActionResult> EmployeesList()
     {
         var employees = await _employeeRepository.GetAll();
         ViewBag.CurrentViewName = "Employees List";
+        ViewBag.Role = "employee";
+        ViewBag.ActiveTab = "patients";
         return View("Employee", employees);
     }
+
+    // Kalenderdashboard for ansatte (viser Views/Employee/Index.cshtml)
+    public IActionResult Schedule()
+    {
+        ViewBag.Role = "employee";       // sørger for riktig topnav/branding
+    ViewData["Role"] = "employee";   // ekstra sikkerhet for layout
+    ViewBag.ActiveTab = "schedule";
+    return View("Index");            // viser Views/Employee/Index.cshtml
+    }
+
+    // CHANGE: behold alias som tidligere ble brukt, men redirect nå til lista
+    public IActionResult Employee() => RedirectToAction(nameof(EmployeesList)); // ←
 
     [HttpGet]
     public IActionResult CreateEmployee()
     {
+        ViewBag.Role = "employee";
+        ViewBag.ActiveTab = "patients";
         return View();
     }
 
@@ -34,8 +57,10 @@ public class EmployeeController : Controller
         if (ModelState.IsValid)
         {
             await _employeeRepository.Create(employee);
-            return RedirectToAction(nameof(Employee));
+            return RedirectToAction(nameof(EmployeesList)); // ← CHANGE
         }
+        ViewBag.Role = "employee";
+        ViewBag.ActiveTab = "patients";
         return View(employee);
     }
 
@@ -43,10 +68,10 @@ public class EmployeeController : Controller
     public async Task<IActionResult> UpdateEmployee(int id)
     {
         var employee = await _employeeRepository.GetItemById(id);
-        if (employee == null)
-        {
-            return NotFound();
-        }
+        if (employee == null) return NotFound();
+
+        ViewBag.Role = "employee";      // NEW
+        ViewBag.ActiveTab = "patients"; // NEW
         return View(employee);
     }
 
@@ -56,20 +81,21 @@ public class EmployeeController : Controller
         if (ModelState.IsValid)
         {
             await _employeeRepository.Update(employee);
-            return RedirectToAction(nameof(Employee));
+            return RedirectToAction(nameof(EmployeesList)); // ← CHANGE
         }
-
+        ViewBag.Role = "employee";
+        ViewBag.ActiveTab = "patients";
         return View(employee);
     }
-    
+
     [HttpGet]
     public async Task<IActionResult> DeleteEmployee(int id)
     {
         var employee = await _employeeRepository.GetItemById(id);
-        if (employee == null)
-        {
-            return NotFound();
-        }
+        if (employee == null) return NotFound();
+
+        ViewBag.Role = "employee";      // NEW
+        ViewBag.ActiveTab = "patients"; // NEW
         return View(employee);
     }
 
@@ -77,8 +103,15 @@ public class EmployeeController : Controller
     public async Task<IActionResult> DeleteEmployeeConfirmed(int id)
     {
         await _employeeRepository.Delete(id);
-        return RedirectToAction(nameof(Employee));
+        return RedirectToAction(nameof(EmployeesList)); // ← CHANGE
     }
 
-    
+    // NEW: stub for "Today’s visits" slik at TopNav-lenken ikke 404'er
+    [HttpGet]
+    public IActionResult Visits() // ← NEW
+    {
+        ViewBag.Role = "employee";      // NEW
+        ViewBag.ActiveTab = "visits";   // NEW
+        return View();                  // forventer Views/Employee/Visits.cshtml (kan være en enkel placeholder)
+    }
 }
