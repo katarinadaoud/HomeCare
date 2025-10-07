@@ -15,7 +15,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         builder.Configuration["ConnectionStrings:AppDbContextConnection"]);
 });
 
-builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddDefaultIdentity<User>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddRazorPages();
 builder.Services.AddSession();
