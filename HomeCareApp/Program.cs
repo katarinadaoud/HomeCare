@@ -9,13 +9,16 @@ var connectionString = builder.Configuration.GetConnectionString("AppDbContextCo
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddRazorPages();
-
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlite(
         builder.Configuration["ConnectionStrings:AppDbContextConnection"]);
 });
+
+builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<AppDbContext>();
+
+builder.Services.AddRazorPages();
+builder.Services.AddSession();
 
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
