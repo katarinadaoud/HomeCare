@@ -1,0 +1,37 @@
+@using Microsoft.AspNetCore.Authorization
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpCtx
+
+@{
+    var user = HttpCtx?.HttpContext?.User;
+    bool isStaff = user?.IsInRole("Staff") ?? false;
+    bool isPatient = user?.IsInRole("Patient") ?? false;
+}
+
+<ul class="navbar-nav flex-grow-1">
+    @* Felles lenker *@
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
+    </li>
+
+    @* Pasient-portal *@
+    @if (isPatient)
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Patient" asp-action="Index">My appointments</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Patient" asp-action="Medications">My medications</a>
+        </li>
+    }
+
+    @* Ansatt-portal *@
+    @if (isStaff)
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Employee" asp-action="Index">Schedule</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Employee" asp-action="Patients">Patients</a>
+        </li>
+    }
+</ul>

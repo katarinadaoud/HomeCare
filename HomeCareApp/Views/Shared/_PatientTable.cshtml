@@ -1,57 +1,36 @@
 @model IEnumerable<HomeCareApp.Models.Patient>
 
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Patient Id</th>
+            <th>Address</th>
+            <th>Health Related Info</th>
+            <th>User Id</th>
+            <th>Emergency Contact Id</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var patient in Model)
+    {
+        <tr>
+            <td>@patient.PatientId</td>
+            <td>@patient.Address</td>
+            <td>@patient.HealthRelated_info</td>
+            <td>@patient.UserId</td>
+            <td>@patient.EmergencyContactId</td>
+            <td class="text-nowrap">
+                <a asp-action="Update" asp-route-id="@patient.PatientId" class="me-2">Update</a>
+                <a asp-action="Delete" asp-route-id="@patient.PatientId">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
 
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LIFELINK</title>
-</head>
-<body>
-    <div class="container">
-        <h1>@ViewBag.CurrentViewName</h1>
-        <table class='table table-striped'>
-            <thead>
-                <tr>
-                <th>Patient Id</th>
-                <th>Address</th>
-                <th>Health Related Info</th>
-                <th>User Id</th>
-                <th>Emergency Contact Id</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var patient in Model)
-                {
-                <tr>
-                    <td>@patient.PatientId</td>
-                    <td>
-                        <!--<a asp-controller="Item"
-                            asp-action="Details"
-                            asp-route-id="@patient.PatientId">@patient.PatientId</a>
-                    </td>-->
-                    <td>@patient.Address</td>
-                    <td>@patient.HealthRelated_info</td>
-                    <td>@patient.UserId</td>
-                    <td>@patient.EmergencyContactId</td>
-                    <td>
-                        <a asp-action="Update" asp-route-id="@patient.PatientId">Update</a>
-                        <a asp-action="Delete" asp-route-id="@patient.PatientId">Delete</a>
-                    </td>
-                </tr>
-                }
-            </tbody>
-        </table>
-
-         <p>
-        <a class="btn btn-secondary"
-           asp-controller="Patient"
-           asp-action="Create">Create New Patient</a>
-    </p>  
-
-    </div>
-    
-</body>
-</html>
+<p class="mt-3">
+    <a class="btn btn-secondary"
+       asp-controller="Patient"
+       asp-action="Create">Create New Patient</a>
+</p>
