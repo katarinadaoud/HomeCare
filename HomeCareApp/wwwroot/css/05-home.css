@@ -1,0 +1,48 @@
+/* === Home / Role chooser (kun forsiden) === */
+.role-chooser { padding-bottom: 2rem; }
+.role-chooser .title   { margin-bottom: .25rem; }
+.role-chooser .subtitle{ margin-bottom: 1.5rem; color: #64748b; }
+
+/* Pilleknapper – stor treffsone, tydelig hover/focus */
+.role-chooser .btn-role{
+  border-radius: 9999px;
+  padding: 1.1rem 2rem;
+  font-weight: 700;
+  letter-spacing: .2px;
+  box-shadow: 0 6px 18px rgba(2,12,27,.06);
+  transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease;
+  color: #fff;
+  border: 1px solid transparent;
+}
+.role-chooser .btn-role:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(2,12,27,.10);
+}
+.role-chooser .btn-role:focus-visible{
+  outline: 4px solid #93c5fd;   /* tydelig tastaturfokus */
+  outline-offset: 3px;
+}
+
+/* Farger (AA-kontrast) */
+/* Pasient = LifeLink-blå */
+.role-chooser .btn-patient{
+  background-color: #2F6FB1; border-color: #2F6FB1;
+}
+.role-chooser .btn-patient:hover,
+.role-chooser .btn-patient:focus{
+  background-color: #235A92; border-color: #235A92;
+}
+
+/* Helsepersonell = dyp lilla (skiller seg fra blå) */
+.role-chooser .btn-staff{
+  background-color: #6A3AA8; border-color: #6A3AA8; /* aubergine */
+}
+.role-chooser .btn-staff:hover,
+.role-chooser .btn-staff:focus{
+  background-color: #562F8A; border-color: #562F8A;
+}
+
+/* Mobil: fyll bredden */
+@media (max-width: 576px){
+  .role-chooser .btn-role{ width: 100%; }
+}

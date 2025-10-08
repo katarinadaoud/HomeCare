@@ -25,6 +25,11 @@ function isLikelyMobile() {
   return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
+/** Find the calendar container (supports both patient/employer/booking) */
+function getCalendarElement() {
+  return document.getElementById('kal') || document.getElementById('bookingCal');
+}
+
 /* --- Routing / Views (pasient) ----------------------------------------- */
 
 function showView(id) {
@@ -60,8 +65,8 @@ function route() {
 function initCalendarOnce() {
   if (calendarInited) return;
 
-  const el = document.getElementById('kal');
-  if (!el) return;
+  const el = getCalendarElement();
+  if (!el || typeof FullCalendar === 'undefined') return;
 
   const todayISO = new Date().toISOString().slice(0, 10);
   const demoEvents = [
@@ -84,15 +89,23 @@ function initCalendarOnce() {
     events: demoEvents,
 
     dateClick: (info) => {
+      // Mark selected cell
       if (selectedCell) selectedCell.classList.remove('is-selected');
       selectedCell = info.dayEl;
       selectedCell.classList.add('is-selected');
 
-      const hiddenInput = document.getElementById('SelectedDate'); //A hiddeninput for choosing dates when booking
-      if(hiddenInput) {
-        hiddenInput.value = info.datestr;
-        alert("You chose: " + info.datestr)
-      }
+      // IMPORTANT: FullCalendar v6 uses dateStr (camelCase)
+      const val = info.dateStr;
+
+      // Write to hidden input if present (supports both id and name w/ prefix)
+      const hiddenById   = document.getElementById('SelectedDate');
+      const hiddenByName = document.querySelector('input[name="Appointment.Date"]');
+
+      if (hiddenById)   hiddenById.value   = val;
+      if (hiddenByName) hiddenByName.value = val;
+
+      // Optional: quick feedback on booking page
+      // if (hiddenById || hiddenByName) alert("You chose: " + val);
     },
   });
 
@@ -152,14 +165,14 @@ function initCalendarOnce() {
 
   /* Keyboard: ←/→, T, L */
   document.addEventListener('keydown', e => {
-    // Pasient: kun når "#mine-timeavtaler" vises. Ansatt: alltid når kalender finnes.
+    // Pasient: kun når "#mine-timeavtaler" vises. Ansatt/booking: alltid når kalender finnes.
     if (window.AppRole === 'patient' && window.location.hash !== '#mine-timeavtaler') return;
     if (!calendarInited) return;
 
     if (e.key === 'ArrowLeft')         calendar.prev();
     else if (e.key === 'ArrowRight')   calendar.next();
-    //else if (e.key.toLowerCase() === 't') calendar.today(); måtte kmt ut disse for å booke appointment uten forstyrrelser
-    //else if (e.key.toLowerCase() === 'l') toggleView();
+    // else if (e.key.toLowerCase() === 't') calendar.today();
+    // else if (e.key.toLowerCase() === 'l') toggleView();
   });
 
   /* Dot indicators */
@@ -204,6 +217,7 @@ function initCalendarOnce() {
   /* UI: notifications + SOS */
   document.getElementById('notifBtn')?.addEventListener('click', () => {
     const toastEl = document.getElementById('notifToast');
+    if (!toastEl || !window.bootstrap?.Toast) return;
     new bootstrap.Toast(toastEl, { delay: 2500 }).show();
   });
 
@@ -212,7 +226,7 @@ function initCalendarOnce() {
   const sosConfirmBtn = document.getElementById('sosConfirmCallBtn');
   const sosModalEl = document.getElementById('sosConfirmModal');
 
-  if (sosBtn && sosConfirmBtn && sosModalEl) {
+  if (sosBtn && sosConfirmBtn && sosModalEl && window.bootstrap?.Modal && window.bootstrap?.Toast) {
     const sosModal = new bootstrap.Modal(sosModalEl);
 
     sosBtn.addEventListener('click', () => { sosModal.show(); });
@@ -229,21 +243,27 @@ function initCalendarOnce() {
 
       // Desktop fallback
       if (!mobile) {
-        document.getElementById('deskPhoneText').textContent = PHONE_SOS;
-        const deskT = new bootstrap.Toast(document.getElementById('deskToast'), { delay: 6000 });
-        deskT.show();
+        const deskPhoneText = document.getElementById('deskPhoneText');
+        const deskToastEl   = document.getElementById('deskToast');
+        if (deskPhoneText && deskToastEl) {
+          deskPhoneText.textContent = PHONE_SOS;
+          const deskT = new bootstrap.Toast(deskToastEl, { delay: 6000 });
+          deskT.show();
 
-        const copyBtn = document.getElementById('copyBtn');
-        copyBtn.onclick = async () => {
-          try {
-            await navigator.clipboard.writeText(PHONE_SOS);
-            copyBtn.textContent = "Copied!";
-            setTimeout(()=> copyBtn.textContent = "Copy", 1500);
-          } catch {
-            copyBtn.textContent = "Copy failed";
-            setTimeout(()=> copyBtn.textContent = "Copy", 1500);
+          const copyBtn = document.getElementById('copyBtn');
+          if (copyBtn) {
+            copyBtn.onclick = async () => {
+              try {
+                await navigator.clipboard.writeText(PHONE_SOS);
+                copyBtn.textContent = "Copied!";
+                setTimeout(()=> copyBtn.textContent = "Copy", 1500);
+              } catch {
+                copyBtn.textContent = "Copy failed";
+                setTimeout(()=> copyBtn.textContent = "Copy", 1500);
+              }
+            };
           }
-        };
+        }
       }
     });
   }
@@ -251,16 +271,22 @@ function initCalendarOnce() {
 
 /* --- Bootstrap ---------------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
+  const hasBookingHidden =
+    document.getElementById('SelectedDate') ||
+    document.querySelector('input[name="Appointment.Date"]');
+
+  const hasCalendarEl = !!getCalendarElement();
+
+  // Init kalender direkte hvis den finnes (booking/employee/patient)
+  if (hasCalendarEl && !calendarInited) {
+    loadCssOnce('css/page-calendar.css');
+    initCalendarOnce();
+    setTimeout(() => calendar && calendar.updateSize(), 0);
+  }
+
+  // Pasient: behold hash-routing mellom seksjonene
   if (window.AppRole === 'patient') {
-    // Pasient: hash-routing mellom seksjonene
     route();
     window.addEventListener('hashchange', route);
-  } else {
-    // Ansatt: initier kalender direkte hvis den finnes på siden
-    if (document.getElementById('kal')) {
-      loadCssOnce('css/page-calendar.css');   // ← lagt til for employee
-      initCalendarOnce();
-      setTimeout(() => calendar && calendar.updateSize(), 0);
-    }
   }
 });
