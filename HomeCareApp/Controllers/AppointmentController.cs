@@ -15,9 +15,14 @@ public class AppointmentController : Controller
     }
 
     [HttpGet]
-    public IActionResult Book()
+    public async Task<IActionResult> Book()
     {
-        return View(); // Book.cshtml
+        var availableDays = await _appointmentRepository.GetAvailableDays();
+        return View(new AppointmentBookViewModel
+        {
+            Appointment = new Appointment(),
+            AvailableDays = availableDays
+        });
     }
 
     [HttpPost]
@@ -25,12 +30,20 @@ public class AppointmentController : Controller
     public async Task<IActionResult> Book(Appointment appointment)
     {
         if (!ModelState.IsValid)
-            return View(appointment);
+        {
+            var vm = new AppointmentBookViewModel
+            {
+                Appointment = appointment,
+                AvailableDays = await _appointmentRepository.GetAvailableDays()
+            };
+            return View(vm);
+        }
 
         await _appointmentRepository.Create(appointment);
-        TempData["Success"] = "Timebestilling sendt!";
-        return RedirectToAction("Confirmation");
+        TempData["Success"] = "Success!";
+        return RedirectToAction(nameof(Confirmation));
     }
+
 
     public IActionResult Confirmation()
     {

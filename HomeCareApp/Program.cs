@@ -24,6 +24,7 @@ builder.Services.AddSession();
 
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 
 var app = builder.Build();
 

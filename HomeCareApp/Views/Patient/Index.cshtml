@@ -10,31 +10,17 @@
   <section id="view-mine-timeavtaler" class="app-view" aria-labelledby="mt-heading" hidden>
     <header class="mb-2"><h1 id="mt-heading" class="h4 fw-bold mb-0">My appointments</h1></header>
 
-    <div id="kalWrap">
-      <div id="kalHeader" aria-live="polite">
-        <div class="kal-controls" role="group" aria-label="Month navigation">
-          <button class="kal-btn" type="button" id="btnPrev" aria-label="Previous month">‹</button>
-          <button class="kal-btn" type="button" id="btnToday" aria-label="Go to today">Today</button>
-          <button class="kal-btn" type="button" id="btnNext" aria-label="Next month">›</button>
-          <input type="date" id="jumpDate" class="kal-date" aria-label="Jump to date">
-        </div>
-
-        <div class="title" id="kalTittel"></div>
-
-        <div class="view-toggle" role="group" aria-label="View mode">
-          <button class="toggle" id="btnViewMonth" type="button" aria-pressed="true" aria-label="Calendar view">Calendar</button>
-          <button class="toggle" id="btnViewList" type="button" aria-pressed="false" aria-label="List view">List</button>
-        </div>
-      </div>
-
-      <div id="kal" role="region" aria-label="Calendar"></div>
+  
 
       <div class="empty-state" id="emptyState" aria-live="polite">
         <span>No appointments in this period.</span>
-        <a class="btn btn-sm btn-outline-primary" href="#book-time">Book appointment</a>
+        <a class="btn btn-sm btn-outline-primary" asp-controller="Appointment" asp-action="Book">Book appointment</a>
       </div>
     </div>
   </section>
+
+  <partial name="_Calendar" model="Model" />
+
 
   <!-- Placeholders -->
   <section id="view-book-time" class="app-view" aria-labelledby="bt-heading" hidden>

@@ -1,0 +1,18 @@
+<div id="kalWrap">
+      <div id="kalHeader" aria-live="polite">
+        <div class="kal-controls" role="group" aria-label="Month navigation">
+          <button class="kal-btn" type="button" id="btnPrev" aria-label="Previous month">‹</button>
+          <button class="kal-btn" type="button" id="btnToday" aria-label="Go to today">Today</button>
+          <button class="kal-btn" type="button" id="btnNext" aria-label="Next month">›</button>
+          <input type="date" id="jumpDate" class="kal-date" aria-label="Jump to date">
+        </div>
+
+        <div class="title" id="kalTittel"></div>
+
+        <div class="view-toggle" role="group" aria-label="View mode">
+          <button class="toggle" id="btnViewMonth" type="button" aria-pressed="true" aria-label="Calendar view">Calendar</button>
+          <button class="toggle" id="btnViewList" type="button" aria-pressed="false" aria-label="List view">List</button>
+        </div>
+      </div>
+
+      <div id="kal" role="region" aria-label="Calendar"></div>

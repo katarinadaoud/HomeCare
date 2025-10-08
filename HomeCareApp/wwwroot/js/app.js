@@ -152,8 +152,8 @@ function initCalendarOnce() {
 
     if (e.key === 'ArrowLeft')         calendar.prev();
     else if (e.key === 'ArrowRight')   calendar.next();
-    else if (e.key.toLowerCase() === 't') calendar.today();
-    else if (e.key.toLowerCase() === 'l') toggleView();
+    //else if (e.key.toLowerCase() === 't') calendar.today(); måtte kmt ut disse for å booke appointment uten forstyrrelser
+    //else if (e.key.toLowerCase() === 'l') toggleView();
   });
 
   /* Dot indicators */

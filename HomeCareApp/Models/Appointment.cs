@@ -1,20 +1,23 @@
 using System;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Net.Http.Headers;
+using System.ComponentModel.DataAnnotations;       // for [Required], [Display], [DataType], osv.
+using System.ComponentModel.DataAnnotations.Schema; // for [Column], [ForeignKey], osv.
 namespace HomeCareApp.Models
 {
     public class Appointment
     {
         public int AppointmentId { get; set; } //PK
 
+        [Required]
+        public string Subject { get; set; }
 
-        public DateTime Date { get; set; }
+        [Required]
+        public string Description { get; set; }
 
-        // Endrer fra Timespan StartTime og EndTime til DateTime StartTime og EndTime. 
-        // Timespan lagrer kun tid, og er ikke knyttet til en spesifikk dato.
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public String Status { get; set; } = string.Empty;
+        [Required]
+        [Column(TypeName = "date")]   // lagres som DATE i SQL
+        public DateTime Date { get; set; }   // Valgt dag
 
         public int PatientId { get; set; } //FK to patient
         public int EmployeeId { get; set; } //FK to employee
