@@ -87,6 +87,12 @@ function initCalendarOnce() {
       if (selectedCell) selectedCell.classList.remove('is-selected');
       selectedCell = info.dayEl;
       selectedCell.classList.add('is-selected');
+
+      const hiddenInput = document.getElementById('SelectedDate'); //A hiddeninput for choosing dates when booking
+      if(hiddenInput) {
+        hiddenInput.value = info.datestr;
+        alert("You chose: " + info.datestr)
+      }
     },
   });
 

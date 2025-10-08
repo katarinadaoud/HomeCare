@@ -15,13 +15,15 @@
         <textarea asp-for="Appointment.Description" class="form-control"></textarea>
     </div>
 
-    <!-- Calendar partial view -->
-    <partial name="_Calendar" model="Model.AvailableDays" />
+    <input type="hidden" asp-for="Appointment.Date" id="SelectedDate" />
     
-    @if (!ViewData.ModelState.IsValid)
+     @if (!ViewData.ModelState.IsValid)
 {
     <div class="alert alert-warning">Please fill out all required fields.</div>
 }
+
+    <!-- Calendar partial view -->
+    <partial name="_Calendar" model="Model.AvailableDays" />
 
 
     <button type="submit" class="btn btn-primary mt-3">Confirm appointment</button>
