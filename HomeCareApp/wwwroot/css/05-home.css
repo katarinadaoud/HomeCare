@@ -1,50 +1,31 @@
 /* === Home / Role chooser (kun forsiden) === */
 .role-chooser { padding-bottom: 2rem; }
-.role-chooser .title   { margin-bottom: .25rem; }
-.role-chooser .subtitle{ margin-bottom: 1.5rem; color: #64748b; }
 
-/* Inline-logo + wordmark i hero-tittel */
-.role-chooser h1 .brand-inline{
-  display: inline-flex;
-  align-items: center;
-  gap: .6rem;                  /* litt mer luft når logo/tekst er større */
-  vertical-align: middle;
-  white-space: nowrap;         /* unngå linjebrudd mellom ikon og tekst */
+/* Brand-kicker over headingen (liten og diskret) */
+.brand-kicker{ margin-bottom: .5rem; opacity: .95; }
+.brand-kicker .brand-inline{
+  display: inline-flex; align-items: center; gap: .45rem; white-space: nowrap;
 }
-.role-chooser h1 .brand-inline .brand-icon{
-  /* Responsiv ikonstørrelse: 36px → 56px */
-  width: clamp(36px, 4.2vw, 56px);
-  height: clamp(36px, 4.2vw, 56px);
-  flex: 0 0 auto;
-  transform: translateY(.06em); /* pen baseline */
+.brand-kicker .brand-icon{
+  width: clamp(24px, 2.6vw, 32px);
+  height: clamp(24px, 2.6vw, 32px);
+  transform: translateY(.04em);
 }
-.role-chooser h1 .brand-inline .brand-text{
-  /* Større, responsiv wordmark for å matche ikon/h1 */
-  font-size: clamp(28px, 3.0vw, 48px);
-  line-height: 1;              /* strammere vertikal justering */
-  font-weight: 900;            /* tyngre i hero enn global brand */
+.brand-kicker .brand-text{
+  font-size: clamp(18px, 2.1vw, 24px);
+  line-height: 1; font-weight: 800;
 }
-.role-chooser h1 .brand-inline .brand-L{ font-weight: 900; }
 
-/* --- SMÅ, TRYGGE FINPUSSER PÅ HEROEN --- */
-/* Softere og litt mindre "Welcome to" (ikke wordmarken) */
-.role-chooser h1.title{
-  font-size: clamp(28px, 3.9vw, 46px);   /* mindre topp-tak */
-  line-height: 1.12;
+/* H1 – handlingsorientert og rolig */
+.role-chooser .title{
+  font-size: clamp(28px, 3.8vw, 44px);
+  line-height: 1.18;
   letter-spacing: -0.003em;
-  font-weight: 800;                      /* roligere enn 900 */
-  color: #1f2937;                        /* myk mørk blågrå */
-  margin-bottom: .5rem;
+  color: #1f2937; /* mørk blågrå */
+  margin-bottom: 1.25rem;
 }
 
-/* Undertittel: litt lysere og mer luft før knappene */
-.role-chooser .subtitle{
-  color: #6b7280;
-  margin-top: .25rem;
-  margin-bottom: 2rem;
-}
-
-/* Pilleknapper – stor treffsone, tydelig hover/focus */
+/* Knapper */
 .role-chooser .btn-role{
   border-radius: 9999px;
   padding: 1.1rem 2rem;
@@ -52,16 +33,15 @@
   letter-spacing: .2px;
   box-shadow: 0 6px 18px rgba(2,12,27,.06);
   transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease;
-  color: #fff;
-  border: 1px solid transparent;
-  font-size: clamp(16px, 1.4vw, 20px);   /* svakt responsiv knappetekst */
+  color: #fff; border: 1px solid transparent;
+  font-size: clamp(16px, 1.4vw, 20px);
 }
 .role-chooser .btn-role:hover{
   transform: translateY(-1px);
   box-shadow: 0 10px 24px rgba(2,12,27,.10);
 }
 .role-chooser .btn-role:focus-visible{
-  outline: 3px solid rgba(47,108,171,.35);  /* myk brandet fokusring */
+  outline: 3px solid rgba(47,108,171,.35);
   outline-offset: 3px;
 }
 
@@ -84,9 +64,4 @@
 /* Mobil: fyll bredden */
 @media (max-width: 576px){
   .role-chooser .btn-role{ width: 100%; }
-}
-
-/* Litt mer luft mellom ikon og wordmark på store skjermer */
-@media (min-width: 992px){
-  .role-chooser h1 .brand-inline{ gap: .7rem; }
 }
