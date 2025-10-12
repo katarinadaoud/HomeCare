@@ -8,7 +8,7 @@ namespace HomeCareApp.Models
         public String Availability { get; set; } = string.Empty;
         public String Work_area { get; set; } = string.Empty;
 
-        public int UserId { get; set; } //FK to User
+        public String UserId { get; set; } //FK to User
 
         //navigation properties
         public User User { get; set; }
