@@ -39,13 +39,17 @@
   transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease;
   color: #fff;
   border: 1px solid transparent;
+
+  /* SVAKT responsiv størrelse for bedre lesbarhet på store skjermer */
+  font-size: clamp(16px, 1.4vw, 20px);
 }
 .role-chooser .btn-role:hover{
   transform: translateY(-1px);
   box-shadow: 0 10px 24px rgba(2,12,27,.10);
 }
 .role-chooser .btn-role:focus-visible{
-  outline: 4px solid #93c5fd;
+  /* tydelig, men myk fokusring (tilgjengelighet) */
+  outline: 3px solid rgba(47,108,171,.35);
   outline-offset: 3px;
 }
 
@@ -70,19 +74,24 @@
   .role-chooser .btn-role{ width: 100%; }
 }
 
-/* --- LITEN, TRYGG JUSTERING AV HERO-HEADINGEN --- */
-/* Gjør "Welcome to" litt mindre og mykere i fargen,
+/* --- SMÅ, TRYGG JUSTERING AV HERO-HEADINGEN --- */
+/* Gjør "Welcome to" litt mindre og i en mykere mørk blågrå,
    uten å påvirke logo/wordmark som allerede skaleres. */
 .role-chooser h1.title{
-  font-size: clamp(34px, 5.2vw, 58px);  /* ~10% ned fra standard display-4 */
+  font-size: clamp(32px, 4.8vw, 56px);
   line-height: 1.12;
   letter-spacing: -0.005em;
-  color: #0f172a;                        /* mørk blågrå – mindre hardt enn svart */
+  color: #0f172a;     /* mørk blågrå – mindre hard enn svart */
   margin-bottom: .5rem;
 }
 
-/* Litt mer rytme før knappene */
+/* Undertittel: litt mer rytme før knappene */
 .role-chooser .subtitle{
   margin-top: .25rem;
   margin-bottom: 1.75rem;
+}
+
+/* Litt mer luft mellom ikon og wordmark på store skjermer */
+@media (min-width: 992px){
+  .role-chooser h1 .brand-inline{ gap: .7rem; }
 }
