@@ -1,0 +1,16 @@
+@model HomeCareApp.Models.Notification
+@{
+    ViewData["Title"] = "New notification";
+}
+<h2>New notification</h2>
+<form method="post">
+    <div class="mb-3">
+        <label class="form-label">PatientId</label>
+        <input asp-for="PatientId" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Message</label>
+        <input asp-for="Message" class="form-control" />
+    </div>
+    <button class="btn btn-success" type="submit">Save</button>
+</form>

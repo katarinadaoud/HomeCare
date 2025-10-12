@@ -6,7 +6,7 @@ namespace HomeCareApp.Models
         public int AdminId { get; set; } //PK
         public String Accesses { get; set; } = string.Empty;
 
-        public int UserId { get; set; } //FK to user
+        public String UserId { get; set; } //FK to user
 
         //navigation propeties
         public User User { get; set; }

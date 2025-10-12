@@ -1,0 +1,21 @@
+@model IEnumerable<HomeCareApp.Models.Notification>
+@{
+    ViewData["Title"] = "Notifications";
+}
+<h2>Notifications</h2>
+<p><a class="btn btn-primary" href="/Notifications/Create">New</a></p>
+<table class="table">
+    <thead><tr><th>Id</th><th>PatientId</th><th>Message</th><th>Created</th><th>Read</th></tr></thead>
+    <tbody>
+    @foreach (var n in Model)
+    {
+        <tr>
+            <td>@n.NotificationId</td>
+            <td>@n.PatientId</td>
+            <td>@n.Message</td>
+            <td>@n.CreatedAt</td>
+            <td>@n.IsRead</td>
+        </tr>
+    }
+    </tbody>
+</table>
