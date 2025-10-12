@@ -1,8 +1,14 @@
 ﻿@{
-    // Les rolle fra både ViewBag og ViewData (belt & bukseseler)
+    // Rolle
     var role = (string?) (ViewBag.Role ?? ViewData["Role"]) ?? "public"; // public | patient | employee
     var showSOS = role == "patient";
     var showToasts = role != "public";
+
+    // Hvor er vi? (skjul public-topnav på forsiden)
+    var ctrl = (string?)ViewContext.RouteData.Values["Controller"];
+    var act  = (string?)ViewContext.RouteData.Values["Action"];
+    var isHome = string.Equals(ctrl, "Home", StringComparison.OrdinalIgnoreCase)
+                 && string.Equals(act,  "Index", StringComparison.OrdinalIgnoreCase);
 }
 
 <!doctype html>
@@ -31,10 +37,10 @@
     <link rel="stylesheet" href="~/css/04-utilities.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/page-calendar.css" asp-append-version="true" />
 
-    @RenderSection("Styles", required: false)  <!-- ← FLYTTET HIT -->
+    @RenderSection("Styles", required: false)
 </head>
 <body class="bg-light" data-role="@role">
-    @* Topplinje styres av rolle *@
+    @* Topplinje styres av rolle. For public: vis IKKE på Home/Index *@
     @if (role == "patient")
     {
         @await Html.PartialAsync("TopNav/_Patient")
@@ -43,9 +49,9 @@
     {
         @await Html.PartialAsync("TopNav/_Employee")
     }
-    else
+    else if (!isHome)
     {
-        @await Html.PartialAsync("TopNav/_Public")   @* vis logo for public/forside *@
+        @await Html.PartialAsync("TopNav/_Public")
     }
 
     @RenderBody()
@@ -78,3 +84,4 @@
     <partial name="_LoginPartial" />
 </body>
 </html>
+
