@@ -7,17 +7,19 @@
 .role-chooser h1 .brand-inline{
   display: inline-flex;
   align-items: center;
-  gap: .5rem;
+  gap: .6rem;                 /* litt mer luft når logoen er større */
   vertical-align: middle;
-  white-space: nowrap; /* unngå linjebrudd mellom ikon og tekst */
+  white-space: nowrap;        /* unngå linjebrudd mellom ikon og tekst */
 }
 .role-chooser h1 .brand-inline .brand-icon{
-  width: 44px;
-  height: 44px;
+  /* Responsiv størrelse: 36px (mobil) → ~56px (desktop) */
+  width: clamp(36px, 4.2vw, 56px);
+  height: clamp(36px, 4.2vw, 56px);
   flex: 0 0 auto;
+  transform: translateY(.06em); /* penere baseline mot teksten */
 }
 .role-chooser h1 .brand-inline .brand-text{
-  line-height: 1; /* strammere vertikal justering i heading */
+  line-height: 1;             /* strammere vertikal justering i heading */
 }
 .role-chooser h1 .brand-inline .brand-L{
   /* farge/vekt arves fra layoutens .brand-L; bevar konsistens */
@@ -62,8 +64,7 @@
   background-color: #562F8A; border-color: #562F8A;
 }
 
-/* Mobil: fyll bredden og skaler logo litt ned */
+/* Mobil: fyll bredden (logo skaleres allerede via clamp) */
 @media (max-width: 576px){
   .role-chooser .btn-role{ width: 100%; }
-  .role-chooser h1 .brand-inline .brand-icon{ width: 32px; height: 32px; }
 }
