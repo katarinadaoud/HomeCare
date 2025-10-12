@@ -3,6 +3,32 @@
 .role-chooser .title   { margin-bottom: .25rem; }
 .role-chooser .subtitle{ margin-bottom: 1.5rem; color: #64748b; }
 
+/* Inline-logo + wordmark i hero-tittel */
+.role-chooser h1 .brand-inline{
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;                  /* litt mer luft når logo/tekst er større */
+  vertical-align: middle;
+  white-space: nowrap;         /* unngå linjebrudd mellom ikon og tekst */
+}
+.role-chooser h1 .brand-inline .brand-icon{
+  /* Responsiv ikonstørrelse: 36px → 56px */
+  width: clamp(36px, 4.2vw, 56px);
+  height: clamp(36px, 4.2vw, 56px);
+  flex: 0 0 auto;
+  transform: translateY(.06em); /* pen baseline */
+}
+.role-chooser h1 .brand-inline .brand-text{
+  /* Større, responsiv wordmark for å matche ikon/h1 */
+  font-size: clamp(28px, 3.0vw, 48px);
+  line-height: 1;              /* strammere vertikal justering */
+  font-weight: 900;            /* tyngre i hero enn global brand */
+}
+.role-chooser h1 .brand-inline .brand-L{
+  /* beholder fargen/vekten fra layout; 900 for konsistens */
+  font-weight: 900;
+}
+
 /* Pilleknapper – stor treffsone, tydelig hover/focus */
 .role-chooser .btn-role{
   border-radius: 9999px;
@@ -19,12 +45,11 @@
   box-shadow: 0 10px 24px rgba(2,12,27,.10);
 }
 .role-chooser .btn-role:focus-visible{
-  outline: 4px solid #93c5fd;   /* tydelig tastaturfokus */
+  outline: 4px solid #93c5fd;
   outline-offset: 3px;
 }
 
 /* Farger (AA-kontrast) */
-/* Pasient = LifeLink-blå */
 .role-chooser .btn-patient{
   background-color: #2F6FB1; border-color: #2F6FB1;
 }
@@ -32,10 +57,8 @@
 .role-chooser .btn-patient:focus{
   background-color: #235A92; border-color: #235A92;
 }
-
-/* Helsepersonell = dyp lilla (skiller seg fra blå) */
 .role-chooser .btn-staff{
-  background-color: #6A3AA8; border-color: #6A3AA8; /* aubergine */
+  background-color: #6A3AA8; border-color: #6A3AA8;
 }
 .role-chooser .btn-staff:hover,
 .role-chooser .btn-staff:focus{
