@@ -290,3 +290,36 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('hashchange', route);
   }
 });
+
+/*NOTIFICATIONS CONTROLLER*/
+(function () {
+  const pid = window.AppPatientId;
+  const btn = document.getElementById('notifBtn'); // bjelleknapp som viser badge
+  const badge = document.getElementById('notifBadge'); // selve tallet
+
+  if (!btn || !badge || !pid) return; // sjekekr at alt er der, hvis pasient, bjelle eller tall mangler = feil
+
+  // Henter antall uleste notifikasjoner og oppdaterer UI
+  async function refreshBadge() {
+
+    try { // Henter fra server
+      // cache: 'no-store' for å unngå caching i dev (kan fjernes i prod)
+      const res = await fetch(`/Notifications/UnreadCount?patientId=${pid}`, { cache: 'no-store' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const count = await res.json();
+
+      // Oppdater tall og skjuler hvis 0
+      badge.textContent = count;
+      badge.style.display = count > 0 ? '' : 'none';
+
+      // Setter teksten som vises ved hover
+      btn.title = count === 1 ? 'You have 1 notification' : `You have ${count} notifications`;
+    } catch (e) {
+     
+    }
+  }
+
+  // Kjører første gang og så hvert 10. sekund
+  refreshBadge();
+  setInterval(refreshBadge, 5000);
+})();

@@ -69,6 +69,15 @@
     <!-- App-rolle tilgjengelig for JS før app.js lastes -->
     <script>window.AppRole = "@role";</script>
 
+    <!--Notifications-->
+    @{
+    var pid = ViewBag.PatientId as int?; // henter pasientId hvis pasient
+    }
+    @if (role == "patient" && pid.HasValue) //sjekker at det er pasient og at pid finnes
+    {
+    <script>window.AppPatientId = @pid.Value;</script> //setter pasientId i JS
+    }
+
     <!-- Vår app -->
     <script src="~/js/app.js" asp-append-version="true"></script>
 
