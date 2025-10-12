@@ -40,7 +40,7 @@
   color: #fff;
   border: 1px solid transparent;
 
-  /* SVAKT responsiv størrelse for bedre lesbarhet på store skjermer */
+  /* svakt responsiv tekststørrelse for store skjermer */
   font-size: clamp(16px, 1.4vw, 20px);
 }
 .role-chooser .btn-role:hover{
@@ -74,21 +74,22 @@
   .role-chooser .btn-role{ width: 100%; }
 }
 
-/* --- SMÅ, TRYGG JUSTERING AV HERO-HEADINGEN --- */
-/* Gjør "Welcome to" litt mindre og i en mykere mørk blågrå,
-   uten å påvirke logo/wordmark som allerede skaleres. */
+/* --- SMÅ, TRYGGE FINPUSSER PÅ HEROEN --- */
+/* Softere og litt mindre "Welcome to" (påvirker ikke LifeLink-wordmark) */
 .role-chooser h1.title{
-  font-size: clamp(32px, 4.8vw, 56px);
+  font-size: clamp(30px, 4.2vw, 50px);
   line-height: 1.12;
-  letter-spacing: -0.005em;
-  color: #0f172a;     /* mørk blågrå – mindre hard enn svart */
+  letter-spacing: -0.003em;
+  font-weight: 800;           /* roligere enn 900 */
+  color: #1f2937;             /* myk mørk blågrå */
   margin-bottom: .5rem;
 }
 
-/* Undertittel: litt mer rytme før knappene */
+/* Undertittel: litt lysere og mer luft */
 .role-chooser .subtitle{
+  color: #6b7280;
   margin-top: .25rem;
-  margin-bottom: 1.75rem;
+  margin-bottom: 2rem;
 }
 
 /* Litt mer luft mellom ikon og wordmark på store skjermer */
