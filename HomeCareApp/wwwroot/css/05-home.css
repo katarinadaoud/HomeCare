@@ -1,31 +1,37 @@
 /* === Home / Role chooser (kun forsiden) === */
 .role-chooser { padding-bottom: 2rem; }
 
-/* Brand-kicker over headingen (liten og diskret) */
-.brand-kicker{ margin-bottom: .5rem; opacity: .95; }
+/* Brand-kicker: STØRRE logo + wordmark over headingen */
+.brand-kicker{ margin-bottom: .75rem; opacity: .98; }
 .brand-kicker .brand-inline{
-  display: inline-flex; align-items: center; gap: .45rem; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: .6rem; white-space: nowrap;
 }
 .brand-kicker .brand-icon{
-  width: clamp(24px, 2.6vw, 32px);
-  height: clamp(24px, 2.6vw, 32px);
+  /* Stor, men responsiv: 40 → 64 px */
+  width: clamp(40px, 6vw, 64px);
+  height: clamp(40px, 6vw, 64px);
   transform: translateY(.04em);
 }
 .brand-kicker .brand-text{
-  font-size: clamp(18px, 2.1vw, 24px);
-  line-height: 1; font-weight: 800;
+  /* Wordmark større for å matche ikonet */
+  font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: clamp(28px, 4vw, 48px);
+  line-height: 1;
+  font-weight: 900;
 }
 
-/* H1 – handlingsorientert og rolig */
+/* H1 – mindre, mykere og i systemfont for roligere uttrykk */
 .role-chooser .title{
-  font-size: clamp(28px, 3.8vw, 44px);
-  line-height: 1.18;
-  letter-spacing: -0.003em;
-  color: #1f2937; /* mørk blågrå */
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: clamp(22px, 3.4vw, 36px);   /* tydelig mindre enn før */
+  line-height: 1.2;
+  font-weight: 700;                      /* mykere enn 800/900 */
+  letter-spacing: 0;
+  color: #334155;                        /* myk mørk blågrå */
   margin-bottom: 1.25rem;
 }
 
-/* Knapper */
+/* Knapper – som før, med svakt responsiv tekst */
 .role-chooser .btn-role{
   border-radius: 9999px;
   padding: 1.1rem 2rem;
@@ -41,7 +47,7 @@
   box-shadow: 0 10px 24px rgba(2,12,27,.10);
 }
 .role-chooser .btn-role:focus-visible{
-  outline: 3px solid rgba(47,108,171,.35);
+  outline: 3px solid rgba(47,108,171,.35);  /* myk brandet fokusring */
   outline-offset: 3px;
 }
 
