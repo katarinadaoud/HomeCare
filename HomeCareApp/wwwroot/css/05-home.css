@@ -3,6 +3,26 @@
 .role-chooser .title   { margin-bottom: .25rem; }
 .role-chooser .subtitle{ margin-bottom: 1.5rem; color: #64748b; }
 
+/* Inline-logo i hero-tittel (spesifikk for h1 for å slå Bootstrap) */
+.role-chooser h1 .brand-inline{
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  vertical-align: middle;
+  white-space: nowrap; /* unngå linjebrudd mellom ikon og tekst */
+}
+.role-chooser h1 .brand-inline .brand-icon{
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+}
+.role-chooser h1 .brand-inline .brand-text{
+  line-height: 1; /* strammere vertikal justering i heading */
+}
+.role-chooser h1 .brand-inline .brand-L{
+  /* farge/vekt arves fra layoutens .brand-L; bevar konsistens */
+}
+
 /* Pilleknapper – stor treffsone, tydelig hover/focus */
 .role-chooser .btn-role{
   border-radius: 9999px;
@@ -19,7 +39,7 @@
   box-shadow: 0 10px 24px rgba(2,12,27,.10);
 }
 .role-chooser .btn-role:focus-visible{
-  outline: 4px solid #93c5fd;   /* tydelig tastaturfokus */
+  outline: 4px solid #93c5fd;
   outline-offset: 3px;
 }
 
@@ -33,16 +53,17 @@
   background-color: #235A92; border-color: #235A92;
 }
 
-/* Helsepersonell = dyp lilla (skiller seg fra blå) */
+/* Helsepersonell = dyp lilla (skiller fra blå) */
 .role-chooser .btn-staff{
-  background-color: #6A3AA8; border-color: #6A3AA8; /* aubergine */
+  background-color: #6A3AA8; border-color: #6A3AA8;
 }
 .role-chooser .btn-staff:hover,
 .role-chooser .btn-staff:focus{
   background-color: #562F8A; border-color: #562F8A;
 }
 
-/* Mobil: fyll bredden */
+/* Mobil: fyll bredden og skaler logo litt ned */
 @media (max-width: 576px){
   .role-chooser .btn-role{ width: 100%; }
+  .role-chooser h1 .brand-inline .brand-icon{ width: 32px; height: 32px; }
 }
