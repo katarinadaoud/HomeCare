@@ -21,12 +21,11 @@ namespace HomeCareApp.Models
 
         public int PatientId { get; set; } //FK to patient
         public int EmployeeId { get; set; } //FK to employee
-        public int TaskId { get; set; } //FK to AppointmentTask
 
         //navigation keys
         public Patient Patient { get; set; } //we will not set it as non-nullable because we need these for an appointment
         public Employee Employee { get; set; }
-        public AppointmentTask AppointmentTask { get; set;}
+        public ICollection<AppointmentTask> AppointmentTasks { get; set;}
 
     }
 

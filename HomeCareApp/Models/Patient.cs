@@ -5,6 +5,7 @@ namespace HomeCareApp.Models
     {
 
         public int PatientId { get; set; } //PK
+         public String FullName { get; set; } = string.Empty;
         public String Address { get; set; } = string.Empty;
         public String HealthRelated_info { get; set; } = string.Empty;
 
@@ -13,9 +14,10 @@ namespace HomeCareApp.Models
 
         //navigation properties
         public User User { get; set; } //we will not set it as non-nullable because we need these for a patient
+        public EmergencyContact EmergencyContact { get; set; }
+
         public ICollection<Appointment> Appointments { get; set; }
         public ICollection<EmergencyCall> EmergencyCalls { get; set; }
-        public ICollection<EmergencyContact> EmergencyContacts { get; set; }
         
         
     }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using HomeCareApp.Models;
 using HomeCareApp.ViewModels;
 using HomeCareApp.DAL;
+using System.Drawing.Printing;
 
 namespace HomeCareApp.Controllers;
 
@@ -15,14 +16,9 @@ public class AppointmentController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Book()
+    public IActionResult Book()
     {
-        var availableDays = await _appointmentRepository.GetAvailableDays();
-        return View(new AppointmentBookViewModel
-        {
-            Appointment = new Appointment(),
-            AvailableDays = availableDays
-        });
+        return View();
     }
 
     [HttpPost]
@@ -31,19 +27,11 @@ public class AppointmentController : Controller
     {
         if (!ModelState.IsValid)
         {
-            var vm = new AppointmentBookViewModel
-            {
-                Appointment = appointment,
-                AvailableDays = await _appointmentRepository.GetAvailableDays()
-            };
-            return View(vm);
+            await _appointmentRepository.Create(appointment);
+            return RedirectToAction(nameof(Confirmation));
         }
-
-        await _appointmentRepository.Create(appointment);
-        TempData["Success"] = "Success!";
-        return RedirectToAction(nameof(Confirmation));
+        return BadRequest("Did not succeed");
     }
-
 
     public IActionResult Confirmation()
     {

@@ -9,10 +9,9 @@ namespace HomeCareApp.Models
         public String Email { get; set; } = string.Empty;
         public String PatientRelation { get; set; } = string.Empty;
 
-        public int PatientId { get; set; } //FK to patient
 
         //navigation properties
-        public Patient Patient { get; set; }
+        public Patient Patient { get; set; } //we dont need an FK to one-to-one in patient
          
     }
 }
