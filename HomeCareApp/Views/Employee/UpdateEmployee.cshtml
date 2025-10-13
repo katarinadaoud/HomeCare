@@ -9,30 +9,23 @@
         <input asp-for="EmployeeId" class="form-control" />
         <span asp-validation-for="EmployeeId" class="text-danger"></span>
     </div>
-    
+
+   <div class="form-group">
+        <label asp-for="FullName"></label><span class="text-danger">*</span>
+        <input asp-for="FullName" class="form-control" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
+    </div>
     <div class="form-group">
-        <label asp-for="Specialty"></label>
-        <input asp-for="Specialty" class="form-control" />
-        <span asp-validation-for="Specialty" class="text-danger"></span>
+        <label asp-for="Address"></label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Department"></label>
+        <input asp-for="Department" class="form-control" />
+        <span asp-validation-for="Department" class="text-danger"></span>
     </div>
 
-      <div class="form-group">
-        <label asp-for="Availability"></label>
-        <input asp-for="Availability" class="form-control" />
-        <span asp-validation-for="Availability" class="text-danger"></span>
-    </div>
-    
-    <div class="form-group">
-        <label asp-for="Work_area"></label>
-        <input asp-for="Work_area" class="form-control" />
-        <span asp-validation-for="Work_area" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="UserId"></label>
-        <input asp-for="UserId" class="form-control" />
-        <span asp-validation-for="UserId" class="text-danger"></span>
-    </div>
     <button type="submit" class="btn btn-primary">Save Changes</button>
     <a asp-action="Employee" class="btn btn-secondary">Cancel</a>
 </form>
