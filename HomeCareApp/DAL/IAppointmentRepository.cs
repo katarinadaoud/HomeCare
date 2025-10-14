@@ -2,13 +2,11 @@ using System.Threading.Tasks;
 using HomeCareApp.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace HomeCareApp.DAL
-{
-    public class AppointmentRepository : IAppointmentRepository
-    {
-        private readonly AppDbContext _db;
+namespace HomeCareApp.DAL;
 
-        public AppointmentRepository(AppDbContext db)
+    
+
+       /* public AppointmentRepository(AppDbContext db)
         {
             _db = db;
         }
@@ -32,6 +30,16 @@ namespace HomeCareApp.DAL
             // Hvis du i fremtiden poster tasks samtidig: sørg for at AppointmentId settes etter SaveChanges.
             _db.Appointments.Add(appointment);
             await _db.SaveChangesAsync();
-        }
+        }*/
+       public interface IAppointmentRepository
+    {
+        Task Create(Appointment appointment);
+        Task<Appointment?> Get(int id);
+        Task<List<Appointment>> GetForPatient(int patientId);
+        Task<List<Appointment>> GetForEmployee(int employeeId);
+        Task<List<DateTime>> GetAvailableDays(int daysAhead = 30);
+   
+        // legg til flere metoder hvis du har behov
     }
-}
+    
+
