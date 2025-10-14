@@ -20,7 +20,7 @@ namespace HomeCareApp.Models
 
         //navigation properties
         public User User { get; set; }
-        public ICollection<Appointment> Appointments { get; set; }
+        //public ICollection<Appointment> Appointments { get; set; }
         public ICollection<AvailableDay> AvailableDays { get; set; }
         public ICollection<EmergencyCall> EmergencyCalls { get; set; }
 

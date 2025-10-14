@@ -75,7 +75,7 @@ namespace HomeCareApp.Controllers;
                 .Select(e => e.EmployeeId)
                 .SingleOrDefaultAsync();
 
-            if (employeeId == 0)
+            /*if (employeeId == 0)
             {
                 _logger.LogWarning("Book POST: No Employee row found for user {UserId}", user.Id);
                 ModelState.AddModelError(string.Empty, "Ingen ansattprofil knyttet til innlogget bruker.");
@@ -83,7 +83,7 @@ namespace HomeCareApp.Controllers;
             else
             {
                 model.Appointment.EmployeeId = employeeId;
-            }
+            }*/
 
             // Hjelpelogg: hva prøver vi å lagre?
             _logger.LogInformation("Book POST incoming: PatientId={PatientId}, EmployeeId={EmployeeId}, Date={Date}",
