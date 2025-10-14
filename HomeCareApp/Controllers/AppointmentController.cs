@@ -49,6 +49,10 @@ namespace HomeCareApp.Controllers
             _logger.LogInformation("Book GET: Loaded {Count} patients for selection.",
                 vm.PatientOptions?.Count() ?? 0);
 
+                _logger.LogInformation("This is an information message.");
+                _logger.LogWarning("This is a warning message.");
+                _logger.LogError("This is an error message.");
+
             return View(vm);
         }
 

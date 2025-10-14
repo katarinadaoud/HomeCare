@@ -3,6 +3,8 @@ using HomeCareApp.Models;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.AspNetCore.Identity;
 using HomeCareApp.DAL;
+using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("AppDbContextConnection") ?? throw new InvalidOperationException("Connection string 'AppDbContextConnection' not found.");
@@ -61,6 +63,18 @@ builder.Services.AddSession(options =>
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+
+var loggerConfiguration = new LoggerConfiguration()
+    .MinimumLevel.Information() // levels: Trace< Information < Warning < Erorr < Fatal
+    .WriteTo.File($"Logs/app_{DateTime.Now:yyyyMMdd_HHmmss}.log");
+
+    loggerConfiguration.Filter.ByExcluding(e => e.Properties.TryGetValue("SourceContext", out var value) &&
+                            e.Level == LogEventLevel.Information &&
+                            e.MessageTemplate.Text.Contains("Executed DbCommand"));
+
+var logger = loggerConfiguration.CreateLogger();
+builder.Logging.AddSerilog(logger);
+
 
 var app = builder.Build();
 
