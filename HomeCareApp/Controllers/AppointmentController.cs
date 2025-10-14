@@ -1,5 +1,3 @@
-//using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 // Controllers/AppointmentController.cs
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,10 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
 
-namespace HomeCareApp.Controllers;
-
-    //[Authorize] // Sikrer at kun autentiserte brukere kan få tilgang til disse endepunktene
+namespace HomeCareApp.Controllers
+{
+    // [Authorize]  // valgfritt å slå på når du vil
     public class AppointmentController : Controller
     {
         private readonly AppDbContext _db;
@@ -35,7 +34,6 @@ namespace HomeCareApp.Controllers;
             _logger = logger;
         }
 
-        // GET: /Appointment/Book
         [HttpGet]
         public async Task<IActionResult> Book()
         {
@@ -43,25 +41,22 @@ namespace HomeCareApp.Controllers;
             {
                 Appointment = new Appointment
                 {
-                    // Forhåndssett dato (kalenderen kan overstyre via hidden field)
-                    Date = System.DateTime.Today.AddDays(1)
+                    Date = System.DateTime.Today.AddDays(1) // kan overstyres av kalenderen/hidden field
                 },
                 PatientOptions = await BuildPatientOptionsAsync()
             };
 
-            // Hjelpelogg: hvor mange pasienter finnes i dropdown?
             _logger.LogInformation("Book GET: Loaded {Count} patients for selection.",
                 vm.PatientOptions?.Count() ?? 0);
 
             return View(vm);
         }
 
-        // POST: /Appointment/Book
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Book(AppointmentBookViewModel model)
         {
-            // 1) Sjekk innlogget bruker
+            // 1) innlogget bruker?
             var user = await _userManager.GetUserAsync(User);
             if (user is null)
             {
@@ -69,27 +64,23 @@ namespace HomeCareApp.Controllers;
                 return Challenge();
             }
 
-            // 2) Slå opp EmployeeId for innlogget bruker
+            // 2) slå opp EmployeeId for denne brukeren (MÅ settes for å unngå FK-feil)
             var employeeId = await _db.Employees
                 .Where(e => e.UserId == user.Id)
                 .Select(e => e.EmployeeId)
                 .SingleOrDefaultAsync();
 
-            /*if (employeeId == 0)
+            if (employeeId == 0)
             {
                 _logger.LogWarning("Book POST: No Employee row found for user {UserId}", user.Id);
                 ModelState.AddModelError(string.Empty, "Ingen ansattprofil knyttet til innlogget bruker.");
             }
             else
             {
-                model.Appointment.EmployeeId = employeeId;
-            }*/
+                model.Appointment.EmployeeId = employeeId; // ← NØDVENDIG
+            }
 
-            // Hjelpelogg: hva prøver vi å lagre?
-            _logger.LogInformation("Book POST incoming: PatientId={PatientId}, EmployeeId={EmployeeId}, Date={Date}",
-                model.Appointment.PatientId, model.Appointment.EmployeeId, model.Appointment.Date);
-
-            // 3) Valider at valgt pasient finnes (hindrer FK-feil)
+            // 3) valider at valgt pasient finnes
             var patientOk = await _db.Patients
                 .AnyAsync(p => p.PatientId == model.Appointment.PatientId);
 
@@ -99,26 +90,42 @@ namespace HomeCareApp.Controllers;
                 ModelState.AddModelError(nameof(Appointment.PatientId), "Ugyldig pasient valgt.");
             }
 
-            // 4) Hvis validering feiler: repopuler dropdown og returner view
             if (!ModelState.IsValid)
             {
                 model.PatientOptions = await BuildPatientOptionsAsync();
                 return View(model);
             }
 
-            // 5) Lagre (kun FK-verdier; ikke attach nav-objekter)
+            // 4) lagre
             await _appointmentRepository.Create(model.Appointment);
 
             TempData["Success"] = "Appointment booked successfully.";
             return RedirectToAction(nameof(Confirmation));
         }
 
-        public IActionResult Confirmation()
+        public IActionResult Confirmation() => View();
+
+        // === Lite JSON-endepunkt for kalenderen (serverer lagrede avtaler) ===
+        // GET /Appointment/Events?from=2025-10-01&to=2025-10-31
+        [HttpGet("/Appointment/Events")]
+        public async Task<IActionResult> Events(DateTime? from, DateTime? to)
         {
-            return View(); // bruker ditt eksisterende Confirmation-view
+            var q = _db.Appointments.AsQueryable();
+            if (from.HasValue) q = q.Where(a => a.Date >= from.Value.Date);
+            if (to.HasValue)   q = q.Where(a => a.Date <= to.Value.Date);
+
+            var data = await q
+                .Select(a => new
+                {
+                    id    = a.AppointmentId,
+                    title = a.Subject,
+                    start = a.Date.ToString("yyyy-MM-dd")
+                })
+                .ToListAsync();
+
+            return Ok(data);
         }
 
-        // Hjelper: bygg pasient-listen for dropdown
         private async Task<SelectList> BuildPatientOptionsAsync()
         {
             var patients = await _db.Patients
@@ -128,4 +135,4 @@ namespace HomeCareApp.Controllers;
             return new SelectList(patients, "PatientId", "FullName");
         }
     }
-
+}

@@ -69,10 +69,6 @@ function initCalendarOnce() {
   if (!el || typeof FullCalendar === 'undefined') return;
 
   const todayISO = new Date().toISOString().slice(0, 10);
-  const demoEvents = [
-    { title: 'GP',            start: todayISO + 'T10:00:00' },
-    { title: 'Physiotherapy', start: todayISO + 'T15:00:00' },
-  ];
 
   const savedView = localStorage.getItem('kalView') || 'dayGridMonth';
 
@@ -86,7 +82,14 @@ function initCalendarOnce() {
     weekNumberCalculation: 'local',
     // Show U instead of W
     weekNumberContent: (arg) => ({ html: `<span class="badge bg-light text-dark fw-bold">U${arg.num}</span>` }),
-    events: demoEvents,
+
+    // ← Event-kilde: JSON-feed fra backend. FullCalendar sender start/end automatisk.
+    events: {
+      url: '/Appointment/Events',
+      method: 'GET',
+      extraParams: () => ({ _: Date.now() }), // hindrer dev-cache
+      failure: (e) => console.error('Events fetch failed', e)
+    },
 
     dateClick: (info) => {
       // Mark selected cell
@@ -315,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Setter teksten som vises ved hover
       btn.title = count === 1 ? 'You have 1 notification' : `You have ${count} notifications`;
     } catch (e) {
-     
+      // stilletiende i dev
     }
   }
 
@@ -323,3 +326,11 @@ document.addEventListener('DOMContentLoaded', () => {
   refreshBadge();
   setInterval(refreshBadge, 5000);
 })();
+
+/* --- Booking → refetch hook -------------------------------------------- */
+/* Kall `document.dispatchEvent(new Event('booking:saved'));` når backend har lagret avtalen */
+document.addEventListener('booking:saved', () => {
+  if (calendarInited && calendar) calendar.refetchEvents();
+});
+
+/* Hvis du har et konkret form med AJAX kan du manuelt dispatch'e ovenfor når 200/OK */
