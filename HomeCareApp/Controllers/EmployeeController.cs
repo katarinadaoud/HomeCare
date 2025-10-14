@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+//using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using HomeCareApp.Models;
 using HomeCareApp.ViewModels;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HomeCareApp.Controllers;
 
-[Authorize] // Sikrer at kun autentiserte brukere kan få tilgang til disse endepunktene
+//[Authorize] // Sikrer at kun autentiserte brukere kan få tilgang til disse endepunktene
 public class EmployeeController : Controller
 {
     private readonly IEmployeeRepository _employeeRepository;
