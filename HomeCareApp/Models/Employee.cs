@@ -1,9 +1,15 @@
 using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace HomeCareApp.Models
 {
     public class Employee
     {
         public int EmployeeId { get; set; } //PK
+
+        /*Validation på navn*/  
+        [Required, RegularExpression(@"^[A-Za-zÆØÅæøå '\-]{1,50}$", ErrorMessage = "FullName must be 1-50 characters and contain only letters.")]
+
          public String FullName { get; set; } = string.Empty;
         public String Address { get; set; } = string.Empty;
 
@@ -17,7 +23,7 @@ namespace HomeCareApp.Models
         public ICollection<Appointment> Appointments { get; set; }
         public ICollection<AvailableDay> AvailableDays { get; set; }
         public ICollection<EmergencyCall> EmergencyCalls { get; set; }
-         
-    
+
+        
     }
 }
