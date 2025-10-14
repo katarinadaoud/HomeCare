@@ -1,9 +1,21 @@
 using HomeCareApp.Models;
 
-namespace HomeCareApp.ViewModels;
-
-public class AppointmentBookViewModel
+namespace HomeCareApp.ViewModels
 {
-    public Appointment Appointment { get; set; }
-    public IEnumerable<DateTime> AvailableDays { get; set; }
+
+     public class AppointmentBookViewModel
+    {
+        public IEnumerable<Appointment> Appointments;
+        public string? CurrentViewName;
+
+        public Appointment Appointment { get; set; }
+
+    public AppointmentBookViewModel(IEnumerable<Appointment> appointments, string? currentViewName)
+    {
+        Appointments = appointments;
+        CurrentViewName = currentViewName;
+    }
+         
+
+    }
 }
