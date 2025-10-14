@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using HomeCareApp.Models;
 using HomeCareApp.ViewModels;
 using HomeCareApp.DAL;
+using System.Security.Cryptography.X509Certificates;
+using NuGet.Protocol.Core.Types;
 
 namespace HomeCareApp.Controllers;
 
@@ -42,19 +44,29 @@ public class PatientController : Controller
         return View();
     }
 
+<<<<<<< HEAD
 
     [HttpPost]
     [ValidateAntiForgeryToken] //Protects against CSRF attacks
     public async Task<IActionResult> Create(Patient patient)
     {
         if (ModelState.IsValid)
+=======
+        /*Validation*/
+        [HttpPost]
+
+        public async Task<IActionResult> Create(Patient patient)
+>>>>>>> 3775f337161da3b52cd7869a5f6481f84457cb01
         {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Role = "employee";            // CHANGED
+                ViewBag.ActiveTab = "patients";
+                return View("Patient", patient);
+            }
+
             await _patientRepository.Create(patient);
             return RedirectToAction(nameof(Patients));
         }
-        ViewBag.Role = "employee";            // CHANGED
-        ViewBag.ActiveTab = "patients";
-        return View(patient);
     }
 
-}
