@@ -15,7 +15,7 @@ using Microsoft.Extensions.Logging;
 
 namespace HomeCareApp.Controllers;
 
-    [Authorize] // Sikrer at kun autentiserte brukere kan få tilgang til disse endepunktene
+    //[Authorize] // Sikrer at kun autentiserte brukere kan få tilgang til disse endepunktene
     public class AppointmentController : Controller
     {
         private readonly AppDbContext _db;
