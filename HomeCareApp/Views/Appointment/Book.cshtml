@@ -20,7 +20,13 @@
         <span asp-validation-for="Appointment.Description" class="text-danger"></span>
     </div>
 
-    <!-- Velg pasient (setter FK: Appointment.PatientId) -->
+    <div class="form-group mb-3">
+        <label asp-for="Appointment.Date" class="form-label"></label>
+        <input asp-for="Appointment.Date" type="date" class="form-control" />
+        <span asp-validation-for="Appointment.Date" class="text-danger"></span>
+    </div>
+
+    <!-- Velg pasient (setter FK: Appointment.PatientId) 
     <div class="form-group mb-3">
         <label asp-for="Appointment.PatientId" class="form-label">Patient</label>
         <select asp-for="Appointment.PatientId"
@@ -28,14 +34,14 @@
                 class="form-select">
         </select>
         <span asp-validation-for="Appointment.PatientId" class="text-danger"></span>
-    </div>
+    </div> -->
 
     <!-- Dato settes av kalenderen; bind til Appointment.Date -->
     <input type="hidden" asp-for="Appointment.Date" id="SelectedDate" />
     <span asp-validation-for="Appointment.Date" class="text-danger"></span>
 
-    <!-- Kalender-partial (skal sette #SelectedDate til yyyy-MM-dd) -->
-    <partial name="_Calendar" model="Model" />
+    <!-- Kalender-partial (skal sette #SelectedDate til yyyy-MM-dd) 
+    <partial name="_Calendar" model="Model" />-->
 
     <button type="submit" class="btn btn-primary mt-3">Confirm request</button>
 </form>
