@@ -124,7 +124,7 @@ namespace HomeCareApp.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
 
-                    // Sjekk valgt rolle og redirect
+                    // Check selected role and redirect
                     if (!string.IsNullOrEmpty(Role))
                     {
                         if (Role == "Employee")
