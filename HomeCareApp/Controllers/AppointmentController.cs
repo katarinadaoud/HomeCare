@@ -74,14 +74,13 @@ namespace HomeCareApp.Controllers
                 .Select(e => e.EmployeeId)
                 .SingleOrDefaultAsync();
 
-            if (employeeId == 0)
+            if (employeeId != 0)
             {
-                _logger.LogWarning("Book POST: No Employee row found for user {UserId}", user.Id);
-                ModelState.AddModelError(string.Empty, "Ingen ansattprofil knyttet til innlogget bruker.");
+               model.Appointment.EmployeeId = employeeId;
             }
             else
             {
-                model.Appointment.EmployeeId = employeeId; // ← NØDVENDIG
+               _logger.LogInformation("Booking initiated by patient user {UserId}", user.Id);
             }
 
             // 3) valider at valgt pasient finnes
