@@ -39,34 +39,24 @@ public class PatientController : Controller
     [HttpGet]
     public IActionResult Create()
     {
-        ViewBag.Role = "employee";            // CHANGED
+        ViewBag.Role = "patient";            // Endret til "patient" hvis dette er pasientflaten
         ViewBag.ActiveTab = "patients";
         return View();
     }
 
-<<<<<<< HEAD
-
     [HttpPost]
-    [ValidateAntiForgeryToken] //Protects against CSRF attacks
+    [ValidateAntiForgeryToken] // Protects against CSRF attacks
     public async Task<IActionResult> Create(Patient patient)
     {
-        if (ModelState.IsValid)
-=======
-        /*Validation*/
-        [HttpPost]
-
-        public async Task<IActionResult> Create(Patient patient)
->>>>>>> 3775f337161da3b52cd7869a5f6481f84457cb01
+        if (!ModelState.IsValid)
         {
-            if (!ModelState.IsValid)
-            {
-                ViewBag.Role = "employee";            // CHANGED
-                ViewBag.ActiveTab = "patients";
-                return View("Patient", patient);
-            }
-
-            await _patientRepository.Create(patient);
-            return RedirectToAction(nameof(Patients));
+            ViewBag.Role = "patient";
+            ViewBag.ActiveTab = "patients";
+            return View(patient);
         }
+
+        await _patientRepository.Create(patient);
+        return RedirectToAction(nameof(Patients));
     }
+}
 

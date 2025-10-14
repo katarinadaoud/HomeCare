@@ -1,12 +1,9 @@
-<<<<<<< HEAD
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-=======
 // Controllers/AppointmentController.cs
 using System.Linq;
 using System.Threading.Tasks;
 using HomeCareApp.DAL;
->>>>>>> 3775f337161da3b52cd7869a5f6481f84457cb01
 using HomeCareApp.Models;
 using HomeCareApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -16,16 +13,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-<<<<<<< HEAD
 namespace HomeCareApp.Controllers;
 
-[Authorize] // Sikrer at kun autentiserte brukere kan få tilgang til disse endepunktene
-public class AppointmentController : Controller
-=======
-namespace HomeCareApp.Controllers
->>>>>>> 3775f337161da3b52cd7869a5f6481f84457cb01
-{
-    [Authorize] // valgfritt, men anbefalt
+    [Authorize] // Sikrer at kun autentiserte brukere kan få tilgang til disse endepunktene
     public class AppointmentController : Controller
     {
         private readonly AppDbContext _db;
@@ -138,4 +128,4 @@ namespace HomeCareApp.Controllers
             return new SelectList(patients, "PatientId", "FullName");
         }
     }
-}
+
