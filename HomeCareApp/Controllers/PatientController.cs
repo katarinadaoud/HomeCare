@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using HomeCareApp.Models;
 using HomeCareApp.ViewModels;
@@ -5,6 +6,7 @@ using HomeCareApp.DAL;
 
 namespace HomeCareApp.Controllers;
 
+[Authorize] // Sikrer at kun autentiserte brukere kan få tilgang til disse endepunktene
 public class PatientController : Controller
 {
     private readonly IPatientRepository _patientRepository;
@@ -21,17 +23,16 @@ public class PatientController : Controller
         ViewBag.ActiveTab = "appointments";     // NEW: marker riktig fane i pasient-UI
         return View();                          // viser Views/Patient/Index.cshtml
     }
-    
-// NEW: egen action for liste over pasienter (tidligere lå i Index)
+
+    // NEW: egen action for liste over pasienter (tidligere lå i Index)
     public async Task<IActionResult> Patients()
     {
         var patients = await _patientRepository.GetAll();
         ViewBag.CurrentViewName = "Patients List";
         ViewBag.Role = "employee";                 // NEW: endre til "patient" hvis lista skal vises i pasientflaten
         ViewBag.ActiveTab = "patients";         // NEW: valgfritt, for å markere fane i staff-topnav
-        return View("Patient", patients);       
+        return View("Patient", patients);
     }
-    
 
     [HttpGet]
     public IActionResult Create()
@@ -41,7 +42,9 @@ public class PatientController : Controller
         return View();
     }
 
+
     [HttpPost]
+    [ValidateAntiForgeryToken] //Protects against CSRF attacks
     public async Task<IActionResult> Create(Patient patient)
     {
         if (ModelState.IsValid)

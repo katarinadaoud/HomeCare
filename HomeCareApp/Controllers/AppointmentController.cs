@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using HomeCareApp.Models;
 using HomeCareApp.ViewModels;
@@ -6,6 +7,7 @@ using System.Drawing.Printing;
 
 namespace HomeCareApp.Controllers;
 
+[Authorize] // Sikrer at kun autentiserte brukere kan få tilgang til disse endepunktene
 public class AppointmentController : Controller
 {
     private readonly IAppointmentRepository _appointmentRepository;

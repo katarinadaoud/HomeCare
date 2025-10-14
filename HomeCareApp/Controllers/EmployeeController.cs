@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using HomeCareApp.Models;
 using HomeCareApp.ViewModels;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace HomeCareApp.Controllers;
 
+[Authorize] // Sikrer at kun autentiserte brukere kan få tilgang til disse endepunktene
 public class EmployeeController : Controller
 {
     private readonly IEmployeeRepository _employeeRepository;
@@ -35,9 +37,9 @@ public class EmployeeController : Controller
     public IActionResult Schedule()
     {
         ViewBag.Role = "employee";       // sørger for riktig topnav/branding
-    ViewData["Role"] = "employee";   // ekstra sikkerhet for layout
-    ViewBag.ActiveTab = "schedule";
-    return View("Index");            // viser Views/Employee/Index.cshtml
+        ViewData["Role"] = "employee";   // ekstra sikkerhet for layout
+        ViewBag.ActiveTab = "schedule";
+        return View("Index");            // viser Views/Employee/Index.cshtml
     }
 
     // CHANGE: behold alias som tidligere ble brukt, men redirect nå til lista

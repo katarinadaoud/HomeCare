@@ -15,12 +15,48 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         builder.Configuration["ConnectionStrings:AppDbContextConnection"]);
 });
 
-builder.Services.AddDefaultIdentity<User>()
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
+//builder.Services.AddDefaultIdentity<User>() (we dont need both this and the one below)
+   // .AddEntityFrameworkStores<AppDbContext>()
+   // .AddDefaultTokenProviders();
+
+builder.Services.AddDefaultIdentity<User>(options =>
+{
+    // Password settings
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequiredUniqueChars = 6;
+
+    /* Lockout settings
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(60);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true; */
+
+    // User settings
+    options.User.RequireUniqueEmail = true;
+
+    // Sign-in settings
+    options.SignIn.RequireConfirmedAccount = false; // Set to true if email confirmation is implemented
+})
+.AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Identity/Account/Login"; //Path for the login page
+});
 
 builder.Services.AddRazorPages();
-builder.Services.AddSession();
+//builder.Services.AddSession(); (dont need this line if we are using the options below)
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = ".HomeCareApp.Session";
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // 30 minutes
+    options.Cookie.IsEssential = true;
+});
+
 
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();

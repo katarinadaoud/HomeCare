@@ -26,19 +26,21 @@
     <h1 class="display-4 title">Select your role to continue</h1>
 
     <div class="d-grid gap-3 col-12 col-md-8 col-lg-6 mx-auto" role="group" aria-label="Choose role">
-        <a asp-controller="Patient"
-           asp-action="Index"
-           class="btn btn-lg btn-role btn-patient"
-           aria-label="Continue as patient">
-            Continue as patient
-        </a>
+    <a asp-area="Identity"
+       asp-page="/Account/Login"
+       asp-route-role="Patient"
+       class="btn btn-lg btn-role btn-patient"
+       aria-label="Continue as patient">
+        Continue as patient
+    </a>
 
-        <a asp-controller="Employee"
-           asp-action="Schedule"
-           class="btn btn-lg btn-role btn-staff"
-           aria-label="Continue as health-care employee">
-            Continue as health-care employee
-        </a>
+    <a asp-area="Identity"
+       asp-page="/Account/Login"
+       asp-route-role="Employee"
+       class="btn btn-lg btn-role btn-staff"
+       aria-label="Continue as health-care employee">
+        Continue as health-care employee
+    </a>
         @* ↑ viktig: Schedule, ikke Index *@
     </div>
 </div>

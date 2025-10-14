@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HomeCareApp.DAL;
@@ -5,7 +6,9 @@ using HomeCareApp.Models;
 using System.Linq;
 using System.Threading.Tasks;
 
+namespace HomeCareApp.Controllers;
 
+[Authorize] // Sikrer at kun autentiserte brukere kan få tilgang til disse endepunktene
 [Route("Notifications")]
 public class NotificationsController : Controller
 {

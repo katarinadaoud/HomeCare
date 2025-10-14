@@ -48,6 +48,9 @@ namespace HomeCareApp.Areas.Identity.Pages.Account
         /// </summary>
         public string ReturnUrl { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public string Role { get; set; }
+
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -100,8 +103,12 @@ namespace HomeCareApp.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             ReturnUrl = returnUrl;
-        }
 
+            if (!string.IsNullOrEmpty(Role))
+            {
+                ViewData["SelectedRole"] = Role;
+            }
+        }
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
@@ -116,6 +123,17 @@ namespace HomeCareApp.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+
+                    // Sjekk valgt rolle og redirect
+                    if (!string.IsNullOrEmpty(Role))
+                    {
+                        if (Role == "Employee")
+                            return LocalRedirect("/Employee/Schedule");
+                        if (Role == "Patient")
+                            return LocalRedirect("/Patient/Index");
+                    }
+
+
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
