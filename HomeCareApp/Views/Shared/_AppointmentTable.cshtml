@@ -1,0 +1,31 @@
+@model IEnumerable<Appointment>
+
+<div class="container">
+    <table class='table table-striped'>
+        <tr>
+            <th>Id</th>
+            <th>Subject</th>
+            <th>Description</th>
+            <th>Date</th>
+        </tr>
+        @foreach (var appointment in Model)
+        {
+            <tr>
+                <td>@appointment.AppointmentId</td>
+                <td>@appointment.Subject</td>
+                <td>@appointment.Description</td>
+                <td>@appointment.Date</td>
+            
+                <td>
+                    <a asp-action="Update" asp-route-id="@appointment.AppointmentId">Update</a>
+                    <a asp-action="Delete" asp-route-id="@appointment.AppointmentId">Delete</a>
+                </td>
+            </tr>
+        }
+    </table>
+    <p>
+        <a class="btn btn-secondary"
+           asp-controller="Appointment"
+           asp-action="Create">Create New Appointment</a>
+    </p>    
+</div>

@@ -35,13 +35,13 @@ namespace HomeCareApp.DAL;
     public interface IAppointmentRepository
     {
         Task<IEnumerable<Appointment>> GetAll();
-        Task<Appointment?> Get(int id);
+        Task<Appointment?> GetAppointmentById(int id);
         Task<bool> Create(Appointment appointment);
         Task<bool> Update(Appointment appointment);
         Task<bool> Delete(int id);
-        Task<List<Appointment>> GetForPatient(int patientId);
+        /*Task<List<Appointment>> GetForPatient(int patientId);
         Task<List<Appointment>> GetForEmployee(int employeeId);
-        Task<List<DateTime>> GetAvailableDays(int daysAhead = 30);
+        Task<List<DateTime>> GetAvailableDays(int daysAhead = 30);*/
     }
 
 

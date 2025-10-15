@@ -6,7 +6,7 @@ namespace HomeCareApp.Models
 {
     public class Patient
     {
-
+        [Key]
         public int PatientId { get; set; } //PK
 
         /*Validation på navn*/

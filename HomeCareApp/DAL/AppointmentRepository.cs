@@ -19,8 +19,8 @@ namespace HomeCareApp.DAL
             try
             {
                 return await _db.Appointments
-                    .Include(a => a.Patient)
-                    .Include(a => a.Employee)
+                   /* .Include(a => a.Patient)
+                    .Include(a => a.Employee)*/
                     .ToListAsync();
             }
             catch (Exception ex)
@@ -30,14 +30,14 @@ namespace HomeCareApp.DAL
             }
         }
 
-        public async Task<Appointment?> Get(int id)
+        public async Task<Appointment?> GetAppointmentById(int id)
         {
             try
             {
-                return await _db.Appointments
-                    .Include(a => a.Patient)
+                return await _db.Appointments.FindAsync(id);
+                    /*.Include(a => a.Patient)
                     .Include(a => a.Employee)
-                    .FirstOrDefaultAsync(a => a.AppointmentId == id);
+                    .FirstOrDefaultAsync(a => a.AppointmentId == id);*/
             }
             catch (Exception ex)
             {
@@ -50,7 +50,7 @@ namespace HomeCareApp.DAL
         {
             try
             {
-                if (appointment.Patient != null)
+                /*if (appointment.Patient != null)
                 {
                     _db.Entry(appointment.Patient).State = EntityState.Detached;
                     appointment.Patient = null;
@@ -59,7 +59,7 @@ namespace HomeCareApp.DAL
                 {
                     _db.Entry(appointment.Employee).State = EntityState.Detached;
                     appointment.Employee = null;
-                }
+                }*/
 
                 _db.Appointments.Add(appointment);
                 await _db.SaveChangesAsync();
@@ -106,7 +106,7 @@ namespace HomeCareApp.DAL
             }
         }
 
-        public async Task<List<Appointment>> GetForPatient(int patientId)
+        /*public async Task<List<Appointment>> GetForPatient(int patientId)
         {
             return await _db.Appointments
                 .Where(a => a.PatientId == patientId)
@@ -142,6 +142,6 @@ namespace HomeCareApp.DAL
                 .ToList();
 
             return available;
-        }
+        }*/
     }
 }

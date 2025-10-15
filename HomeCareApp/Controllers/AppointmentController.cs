@@ -17,125 +17,106 @@ namespace HomeCareApp.Controllers
     // [Authorize]  // valgfritt å slå på når du vil
     public class AppointmentController : Controller
     {
-        private readonly AppDbContext _db;
+        // private readonly AppDbContext _db;
         private readonly IAppointmentRepository _appointmentRepository;
-        private readonly UserManager<User> _userManager;
+        //private readonly UserManager<User> _userManager;
         private readonly ILogger<AppointmentController> _logger;
 
         public AppointmentController(
-            AppDbContext db,
+            //AppDbContext db,
             IAppointmentRepository appointmentRepository,
-            UserManager<User> userManager,
+            //UserManager<User> userManager,
             ILogger<AppointmentController> logger)
         {
-            _db = db;
+            //_db = db;
             _appointmentRepository = appointmentRepository;
-            _userManager = userManager;
+            //_userManager = userManager;
             _logger = logger;
+        }
+
+        public async Task<IActionResult> Table()
+        {
+            var appointments = await _appointmentRepository.GetAll();
+            if (appointments == null)
+            {
+                _logger.LogError("[AppointmentController] Appointment list not found while executing _appointmentRepository.GetAll()");
+                return NotFound("Appointment list not found");
+            }
+            var appointmentsViewModel = new AppointmentViewModel(appointments, "Table");
+            return View(appointmentsViewModel);
         }
 
         [HttpGet]
         public async Task<IActionResult> Book()
         {
-            var vm = new AppointmentBookViewModel
-            {
-                Appointment = new Appointment
-                {
-                    Date = System.DateTime.Today.AddDays(1) // kan overstyres av kalenderen/hidden field
-                },
-                PatientOptions = await BuildPatientOptionsAsync()
-            };
-
-            _logger.LogInformation("Book GET: Loaded {Count} patients for selection.",
-                vm.PatientOptions?.Count() ?? 0);
-
-                _logger.LogInformation("This is an information message.");
-                _logger.LogWarning("This is a warning message.");
-                _logger.LogError("This is an error message.");
-
-            return View(vm);
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Book(AppointmentBookViewModel model)
+        public async Task<IActionResult> Book(Appointment appointment)
         {
-            // 1) innlogget bruker?
-            var user = await _userManager.GetUserAsync(User);
-            if (user is null)
+            if (ModelState.IsValid)
             {
-                _logger.LogWarning("Book POST: No logged-in user. Challenging.");
-                return Challenge();
+                bool returnOk = await _appointmentRepository.Create(appointment);
+                if (returnOk)
+                    return RedirectToAction(nameof(Table));
             }
+            _logger.LogWarning("[AppointmentController] appointment creation failed {@appointment}", appointment);
+            return View(appointment);
 
-            // 2) slå opp EmployeeId for denne brukeren (MÅ settes for å unngå FK-feil)
-            var employeeId = await _db.Employees
-                .Where(e => e.UserId == user.Id)
-                .Select(e => e.EmployeeId)
-                .SingleOrDefaultAsync();
-
-            if (employeeId != 0)
-            {
-               model.Appointment.EmployeeId = employeeId;
-            }
-            else
-            {
-               _logger.LogInformation("Booking initiated by patient user {UserId}", user.Id);
-            }
-
-            // 3) valider at valgt pasient finnes
-            var patientOk = await _db.Patients
-                .AnyAsync(p => p.PatientId == model.Appointment.PatientId);
-
-            if (!patientOk)
-            {
-                _logger.LogWarning("Book POST: Invalid PatientId={PatientId}", model.Appointment.PatientId);
-                ModelState.AddModelError(nameof(Appointment.PatientId), "Ugyldig pasient valgt.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                model.PatientOptions = await BuildPatientOptionsAsync();
-                return View(model);
-            }
-
-            // 4) lagre
-            await _appointmentRepository.Create(model.Appointment);
-
-            TempData["Success"] = "Appointment booked successfully.";
-            return RedirectToAction(nameof(Confirmation));
+            /* TempData["Success"] = "Appointment booked successfully.";
+             return RedirectToAction(nameof(Confirmation));*/
         }
 
-        public IActionResult Confirmation() => View();
-
-        // === Lite JSON-endepunkt for kalenderen (serverer lagrede avtaler) ===
-        // GET /Appointment/Events?from=2025-10-01&to=2025-10-31
-        [HttpGet("/Appointment/Events")]
-        public async Task<IActionResult> Events(DateTime? from, DateTime? to)
+        [HttpGet]
+    public async Task<IActionResult> Update(int id)
+    {
+        var appointment = await _appointmentRepository.GetAppointmentById(id);
+        if (appointment == null)
         {
-            var q = _db.Appointments.AsQueryable();
-            if (from.HasValue) q = q.Where(a => a.Date >= from.Value.Date);
-            if (to.HasValue)   q = q.Where(a => a.Date <= to.Value.Date);
-
-            var data = await q
-                .Select(a => new
-                {
-                    id    = a.AppointmentId,
-                    title = a.Subject,
-                    start = a.Date.ToString("yyyy-MM-dd")
-                })
-                .ToListAsync();
-
-            return Ok(data);
+            _logger.LogError("[AppointmentController] Appointment not found when updating the ItemId {ItemId:0000}", id);
+            return BadRequest("Appointment not found for the ItemId");
         }
+        return View(appointment);
+    }
 
-        private async Task<SelectList> BuildPatientOptionsAsync()
+    [HttpPost]
+    public async Task<IActionResult> Update(Appointment appointment)
+    {
+        if (ModelState.IsValid)
         {
-            var patients = await _db.Patients
-                .Select(p => new { p.PatientId, p.FullName })
-                .ToListAsync();
-
-            return new SelectList(patients, "PatientId", "FullName");
+            bool returnOk = await _appointmentRepository.Update(appointment);
+            if (returnOk)
+                return RedirectToAction(nameof(Table));
         }
+        _logger.LogWarning("[AppointmentController] Appointment update failed {@item}", appointment);
+        return View(appointment);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var appointment = await _appointmentRepository.GetAppointmentById(id);
+        if (appointment == null)
+        {
+            _logger.LogError("[AppointmentController] Appointment not found for the AppointmentId {AppointmentId:0000}", id);
+            return BadRequest("Appointment not found for the AppointmentId");
+        }
+        return View(appointment);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        bool returnOk = await _appointmentRepository.Delete(id);
+        if (!returnOk)
+        {
+            _logger.LogError("[AppointmentController] Appointment deletion failed for the AppointmentId {AppointmentId:0000}", id);
+            return BadRequest("Item deletion failed");
+        }
+        return RedirectToAction(nameof(Table));
+    }
+
     }
 }

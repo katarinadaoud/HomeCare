@@ -19,13 +19,13 @@ namespace HomeCareApp.Models
         [Column(TypeName = "date")]   // lagres som DATE i SQL
         public DateTime Date { get; set; }   // Valgt dag
 
-        public int PatientId { get; set; } //FK to patient
-        public int EmployeeId { get; set; } //FK to employee
-
+        public int? PatientId { get; set; } //FK to patient
+        public int? EmployeeId { get; set; } //FK to employee
+    
         //navigation keys
-        public Patient Patient { get; set; } //we will not set it as non-nullable because we need these for an appointment
-        public Employee Employee { get; set; }
-        public ICollection<AppointmentTask> AppointmentTasks { get; set;}
+        public Patient? Patient { get; set; }//we will not set it as non-nullable because we need these for an appointment
+        public Employee? Employee { get; set; }
+        public ICollection<AppointmentTask>? AppointmentTasks { get; set;}
 
     }
 
