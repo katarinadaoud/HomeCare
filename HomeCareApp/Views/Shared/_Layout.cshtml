@@ -53,8 +53,9 @@
     {
         @await Html.PartialAsync("TopNav/_Public")
     }
-
-    @RenderBody()
+    <main style="margin-top: 70px;">
+        @RenderBody()
+    </main>
 
     @* Felles toasts kun når innlogget rolle *@
     @if (showToasts)

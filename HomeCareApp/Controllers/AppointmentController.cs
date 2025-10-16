@@ -1,36 +1,24 @@
-// Controllers/AppointmentController.cs
-using System.Linq;
-using System.Threading.Tasks;
 using HomeCareApp.DAL;
 using HomeCareApp.Models;
 using HomeCareApp.ViewModels;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System;
+
 
 namespace HomeCareApp.Controllers
 {
     // [Authorize]  // valgfritt å slå på når du vil
     public class AppointmentController : Controller
     {
-        // private readonly AppDbContext _db;
         private readonly IAppointmentRepository _appointmentRepository;
-        //private readonly UserManager<User> _userManager;
         private readonly ILogger<AppointmentController> _logger;
 
         public AppointmentController(
-            //AppDbContext db,
             IAppointmentRepository appointmentRepository,
-            //UserManager<User> userManager,
             ILogger<AppointmentController> logger)
         {
-            //_db = db;
+
             _appointmentRepository = appointmentRepository;
-            //_userManager = userManager;
             _logger = logger;
         }
 
@@ -47,7 +35,7 @@ namespace HomeCareApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Book()
+        public IActionResult Book()
         {
             return View();
         }
@@ -60,13 +48,19 @@ namespace HomeCareApp.Controllers
             {
                 bool returnOk = await _appointmentRepository.Create(appointment);
                 if (returnOk)
-                    return RedirectToAction(nameof(Table));
+                {
+                    TempData["Success"] = "Appointment booked successfully!";
+                    return RedirectToAction(nameof(Confirmation));
+                }
+
             }
             _logger.LogWarning("[AppointmentController] appointment creation failed {@appointment}", appointment);
             return View(appointment);
-
-            /* TempData["Success"] = "Appointment booked successfully.";
-             return RedirectToAction(nameof(Confirmation));*/
+        }
+        
+        public IActionResult Confirmation()
+        {
+            return View();
         }
 
         [HttpGet]

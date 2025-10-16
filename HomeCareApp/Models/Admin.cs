@@ -1,16 +1,18 @@
-using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace HomeCareApp.Models
 {
     public class Admin
     {
+        [Key]
         public int AdminId { get; set; } //PK
         public String Accesses { get; set; } = string.Empty;
 
-        public String UserId { get; set; } //FK to user
+        public String UserId { get; set; } = string.Empty; //FK to user
 
-        //navigation propeties
-        public User User { get; set; }
-        public ICollection<AdminLog> AdminLogs { get; set; }
+        //navigation properties
+        public required User User { get; set; }
+        public required ICollection<AdminLog> AdminLogs { get; set; }
 
     }
 }

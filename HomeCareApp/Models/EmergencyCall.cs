@@ -1,8 +1,10 @@
-using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace HomeCareApp.Models
 {
     public class EmergencyCall
     {
+        [Key]
         public int EmergencyCallId { get; set; } //PK
         public DateTime Time { get; set; }
         public String Status { get; set; } = string.Empty;
@@ -11,8 +13,8 @@ namespace HomeCareApp.Models
         public int PatientId { get; set; } //FK to patient
 
         //navigation properties
-        public Employee Employee { get; set; }
-        public Patient Patient { get; set; }
+        public required Employee Employee { get; set; }
+        public required Patient Patient { get; set; }
 
          
     }

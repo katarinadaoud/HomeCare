@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Identity;
     {
     //Since we are inheriting IdentityUser we dont need any attributes, only nav 
     //navigation properties
-    public ICollection<Admin> Admins { get; set; }
-        public ICollection<Employee> Employees { get; set; }
-        public ICollection<Patient> Patients { get; set; }
+    public required ICollection<Admin> Admins { get; set; }
+        public required ICollection<Employee> Employees { get; set; }
+        public required ICollection<Patient> Patients { get; set; }
          
     }

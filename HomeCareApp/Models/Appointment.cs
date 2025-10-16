@@ -1,31 +1,29 @@
-using System;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.Net.Http.Headers;
-using System.ComponentModel.DataAnnotations;       // for [Required], [Display], [DataType], osv.
-using System.ComponentModel.DataAnnotations.Schema; // for [Column], [ForeignKey], osv.
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema; 
+
 namespace HomeCareApp.Models
 {
     public class Appointment
     {
+        [Key]
         public int AppointmentId { get; set; } //PK
 
-        [Required]
-        public string Subject { get; set; }
+        public string Subject { get; set; } = string.Empty;
 
-        [Required]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
-        [Required]
-        [Column(TypeName = "date")]   // lagres som DATE i SQL
-        public DateTime Date { get; set; }   // Valgt dag
+        
+        [Column(TypeName = "date")]   // saves as a date in SQL
+        public DateTime Date { get; set; }
 
+//foreløpig satt med ? for at skjemaet funker uten 
         public int? PatientId { get; set; } //FK to patient
         public int? EmployeeId { get; set; } //FK to employee
-    
+
         //navigation keys
-        public Patient? Patient { get; set; }//we will not set it as non-nullable because we need these for an appointment
-        public Employee? Employee { get; set; }
-        public ICollection<AppointmentTask>? AppointmentTasks { get; set;}
+        public required Patient? Patient { get; set; }
+        public required Employee? Employee { get; set; }
+        public required ICollection<AppointmentTask>? AppointmentTasks { get; set; }
 
     }
 
