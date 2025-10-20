@@ -4,6 +4,10 @@ using HomeCareApp.Models;
 using HomeCareApp.ViewModels;
 using HomeCareApp.DAL;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Castle.Components.DictionaryAdapter.Xml;
+using System.Security.Claims;
+
 
 namespace HomeCareApp.Controllers;
 
@@ -54,6 +58,35 @@ public class EmployeeController : Controller
     }
 
     [HttpPost]
+
+    public async Task<IActionResult> CreateEmployee(HomeCareApp.Models. Employee employee)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); //Sets UserId from logged in user
+        
+        ModelState.Remove(nameof(employee.UserId));
+        if (!string.IsNullOrEmpty(userId)) employee.UserId = userId;
+        TryValidateModel(employee); //validerer på nytt
+        {
+            employee.UserId = userId;
+        }
+
+
+        if (ModelState.IsValid)
+        {
+            ViewBag.Role = "employee";
+            ViewBag.ActiveTab = "patients";
+            return View(employee);
+
+        }
+        await _employeeRepository.Create(employee);
+        return RedirectToAction(nameof(EmployeesList));
+    }
+        
+    
+
+
+
+    /* Må nulle dette
     public async Task<IActionResult> CreateEmployee(Employee employee)
     {
         if (ModelState.IsValid)
@@ -64,7 +97,7 @@ public class EmployeeController : Controller
         ViewBag.Role = "employee";
         ViewBag.ActiveTab = "patients";
         return View(employee);
-    }
+    } */
 
     [HttpGet]
     public async Task<IActionResult> UpdateEmployee(int id)

@@ -20,7 +20,7 @@ public class EmployeeRepository : IEmployeeRepository
 
     public async Task<IEnumerable<Employee>> GetAll()
     {
-        return await _db.Employees.ToListAsync();
+        return await _db.Employees.AsNoTracking().ToListAsync();
     }
 
     public async Task<Employee?> GetItemById(int id)

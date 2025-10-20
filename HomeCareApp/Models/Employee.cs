@@ -27,7 +27,7 @@ namespace HomeCareApp.Models
         */
 
         //Bytter navigation til validatenever så de blir sendt fra skjemaet
-        [ValidateNever] public User? User { get; set; }
+        [ValidateNever] public required User? User { get; set; }
         [ValidateNever] public ICollection<Appointment>? Appointments { get; set; } = new List<Appointment>();
         [ValidateNever] public ICollection<AvailableDay>? AvailableDays { get; set; } = new List<AvailableDay>();
         [ValidateNever] public ICollection<EmergencyCall>? EmergencyCalls { get; set; } = new List<EmergencyCall>();
