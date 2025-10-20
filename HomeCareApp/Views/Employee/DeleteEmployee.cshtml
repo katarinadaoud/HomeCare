@@ -23,8 +23,8 @@
         <dd class="col-sm-10">@Model.UserId</dd>
     </dl>
 
-    <form asp-action="DeleteEmployeeConfirmed" asp-route-id="@Model.EmployeeId" method="post">
+    <form asp-action="DeleteEmployee" asp-route-id="@Model.EmployeeId" method="post"> 
         <button type="submit" class="btn btn-danger">Delete</button>
-        <a asp-action="Employee" class="btn btn-secondary">Cancel</a>
+        <a asp-action="EmployeesList" class="btn btn-secondary">Cancel</a>
     </form>
 </div>

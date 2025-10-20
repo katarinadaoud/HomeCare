@@ -1,0 +1,49 @@
+
+@model IEnumerable<HomeCareApp.Models.Patient>
+@{
+    ViewData["Title"] = "Patients List";
+}
+
+<h2>Patients List (@(Model?.Count() ?? 0))</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Register new patient</a>
+</p>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Full name</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Health info</th>
+                <th>UserId</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.FullName</td>
+                <td>@p.phonenumber</td>
+                <td>@p.Address</td>
+                <td>@p.HealthRelated_info</td>
+                <td>@p.UserId</td>
+                <td class="text-end">
+                    
+                    @*Edit/Delete makes sure to point to the new actions we added in controller*@
+                    <a asp-controller="Patient" asp-action="UpdatePatient" asp-route-id="@p.PatientId" class="btn btn-sm btn-outline-secondary">Edit</a>
+                    <a asp-action="DeletePatient" asp-route-id="@p.PatientId" class="btn btn-sm btn-outline-danger">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No patients found.</p>
+}

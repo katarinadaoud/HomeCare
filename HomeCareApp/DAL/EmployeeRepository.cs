@@ -4,12 +4,18 @@ using HomeCareApp.Models;
 namespace HomeCareApp.DAL;
 
 public class EmployeeRepository : IEmployeeRepository
+
+
 {
     private readonly AppDbContext _db;
 
     public EmployeeRepository(AppDbContext db)
     {
         _db = db;
+
+        /*Test*/
+        var path = _db.Database.GetDbConnection().DataSource;
+        Console.WriteLine($"DB PATH = {path}");
     }
 
     public async Task<IEnumerable<Employee>> GetAll()
@@ -46,4 +52,5 @@ public class EmployeeRepository : IEmployeeRepository
         await _db.SaveChangesAsync();
         return true;
     }
+
 }

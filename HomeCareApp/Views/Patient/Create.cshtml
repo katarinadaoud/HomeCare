@@ -7,6 +7,8 @@
 <h2 class="mb-3">Register new patient</h2>
 
 <form asp-action="Create" method="post">
+
+
     @Html.AntiForgeryToken()
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -20,7 +22,7 @@
     <!-- TELEFON (+47 + 8 siffer) -->
     <div class="mb-3">
         <label asp-for="phonenumber" class="form-label"></label>
-        <input asp-for="phonenumber" class="form-control" value="+47" placeholder="+4712345678" />
+        <input asp-for="phonenumber" class="form-control" placeholder="+4712345678" />
         <span asp-validation-for="phonenumber" class="text-danger"></span>
     </div>
 

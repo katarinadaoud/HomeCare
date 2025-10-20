@@ -1,0 +1,28 @@
+@model HomeCareApp.Models.Patient
+
+<h2>Delete Patient</h2>
+<h3>Are you sure you want to delete this patient?</h3>
+
+<dl class="row">
+    <dt class="col-sm-3">Full name</dt>
+    <dd class="col-sm-9">@Model.FullName</dd>
+
+    <dt class="col-sm-3">Phone</dt>
+    <dd class="col-sm-9">@Model.phonenumber</dd>
+
+    <dt class="col-sm-3">Address</dt>
+    <dd class="col-sm-9">@Model.Address</dd>
+
+    <dt class="col-sm-3">Health info</dt>
+    <dd class="col-sm-9">@Model.HealthRelated_info</dd>
+</dl>
+
+<form asp-action="DeletePatient" method="post">
+    @Html.AntiForgeryToken()
+
+    @* POST må treffe [ActionName("DeletePatient")] – derfor dette action-navnet *@
+    <input type="hidden" name="id" value="@Model.PatientId" />
+
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Patients" class="btn btn-secondary">Cancel</a>
+</form>
