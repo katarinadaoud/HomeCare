@@ -5,6 +5,7 @@ using HomeCareApp.ViewModels;
 using HomeCareApp.DAL;
 using System.Security.Cryptography.X509Certificates;
 using NuGet.Protocol.Core.Types;
+using System.Security.Claims;
 
 namespace HomeCareApp.Controllers;
 
@@ -44,19 +45,112 @@ public class PatientController : Controller
         return View();
     }
 
+
+    //TEST FRA CHATGPT
+   
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Create(Patient patient)
+{
+    Console.WriteLine(">>> HIT Create(POST)");
+
+    // Sett UserId fra innlogget bruker (og fjern ev. ModelState-feil på UserId)
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    ModelState.Remove(nameof(Patient.UserId));
+    if (!string.IsNullOrEmpty(userId))
+        patient.UserId = userId;
+
+    // Valider på nytt etter at UserId er satt
+    TryValidateModel(patient);
+
+    if (!ModelState.IsValid)
+    {
+        Console.WriteLine(">>> MODELSTATE INVALID");
+        foreach (var kv in ModelState)
+            foreach (var err in kv.Value.Errors)
+                Console.WriteLine($">>> MODEL ERROR {kv.Key}: {err.ErrorMessage}");
+
+        ViewBag.Role = "patient";
+        ViewBag.ActiveTab = "patients";
+        return View(patient);
+    }
+
+    Console.WriteLine(">>> MODELSTATE VALID -> saving…");
+    await _patientRepository.Create(patient);
+    Console.WriteLine(">>> SAVED (Create) ✔");
+
+    return RedirectToAction(nameof(Patients));
+}
+
+
+
+
+    /*
+        [HttpPost]
+        [ValidateAntiForgeryToken] // Protects against CSRF attacks
+        public async Task<IActionResult> Create(Patient patient)
+        { //UserId is auto assigned to the logged in user, without this line ModelState will be invalid
+
+            if (!User.Identity?.IsAuthenticated == true && string.IsNullOrWhiteSpace(patient.UserId))
+                patient.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Role = "patient";
+                ViewBag.ActiveTab = "patients";
+                return View(patient);
+            }
+
+            await _patientRepository.Create(patient);
+            return RedirectToAction(nameof(Patients));
+        }
+    */
+    //Update Patient GET
+
+    [HttpGet]
+    public async Task<IActionResult> UpdatePatient(int id)
+    {
+        // Gets the patient by id
+        var patient = await _patientRepository.GetItemById(id);
+        if (patient == null)
+        {
+            return View("UpdatePatient", patient);
+        }
+        ViewBag.Role = "patient";
+        ViewBag.ActiveTab = "patients";
+        return View(patient);
+    }
+    // Update Patient POST
     [HttpPost]
     [ValidateAntiForgeryToken] // Protects against CSRF attacks
-    public async Task<IActionResult> Create(Patient patient)
+    public async Task<IActionResult> Update(Patient patient)
     {
-        if (!ModelState.IsValid)
-        {
-            ViewBag.Role = "patient";
-            ViewBag.ActiveTab = "patients";
-            return View(patient);
-        }
+        //UserId is auto assigned to the logged in user, without this line ModelState will be invalid
+        if (User.Identity?.IsAuthenticated == true && string.IsNullOrWhiteSpace(patient.UserId))
+            patient.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
-        await _patientRepository.Create(patient);
+         if (!ModelState.IsValid)
+    {
+        ViewBag.Role = "patient";
+        ViewBag.ActiveTab = "patients";
+        return View("UpdatePatient", patient);
+    }
+
+    
+        await _patientRepository.Update(patient);
+        return RedirectToAction(nameof(Patients));
+        
+
+    }
+
+    // Delete Patient
+    [HttpPost]
+    [ValidateAntiForgeryToken] // Protects against CSRF attacks
+    public async Task<IActionResult> Delete(int id)
+    {
+        await _patientRepository.Delete(id);
         return RedirectToAction(nameof(Patients));
     }
+
 }
 

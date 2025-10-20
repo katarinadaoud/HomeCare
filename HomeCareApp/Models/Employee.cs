@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace HomeCareApp.Models
 {
@@ -14,13 +15,23 @@ namespace HomeCareApp.Models
         public String Address { get; set; } = string.Empty;
         public String Department { get; set; } = string.Empty;
 
-        public required String UserId { get; set; } //FK to User
+        [Required]
+        public required String UserId { get; set; } = string.Empty; //FK to User
 
         //navigation properties
+        /*
         public required User User { get; set; }
         public required ICollection<Appointment> Appointments { get; set; }
         public required ICollection<AvailableDay> AvailableDays { get; set; }
         public required ICollection<EmergencyCall> EmergencyCalls { get; set; }
+        */
+
+        //Bytter navigation til validatenever så de blir sendt fra skjemaet
+        [ValidateNever] public User? User { get; set; }
+        [ValidateNever] public ICollection<Appointment>? Appointments { get; set; } = new List<Appointment>();
+        [ValidateNever] public ICollection<AvailableDay>? AvailableDays { get; set; } = new List<AvailableDay>();
+        [ValidateNever] public ICollection<EmergencyCall>? EmergencyCalls { get; set; } = new List<EmergencyCall>();
+
 
         
     }

@@ -1,3 +1,29 @@
 @model IEnumerable<Employee>
 
-<partial name="_EmployeeTable" model="Model"/>
+@*Fjerner midlertidig: <partial name="_EmployeeTable" model="Model"/> *@ 
+
+@*Legger til dette for å prøve å lagre i db:*@
+
+ @if (Model != null && Model.Any()) { 
+   <table class="table table-striped">
+     <thead>
+       <tr><th>Full Name</th><th>Address</th><th>Department</th><th>UserId</th><th></th></tr>
+     </thead>
+     <tbody>
+     @foreach (var e in Model) {
+       <tr>
+         <td>@e.FullName</td>
+         <td>@e.Address</td>
+         <td>@e.Department</td>
+         <td>@e.UserId</td>
+         <td class="text-end">
+           <a asp-action="UpdateEmployee" asp-route-id="@e.EmployeeId" class="btn btn-sm btn-outline-secondary">Edit</a>
+           <a asp-action="DeleteEmployee" asp-route-id="@e.EmployeeId" class="btn btn-sm btn-outline-danger">Delete</a>
+         </td>
+       </tr>
+     }
+     </tbody>
+   </table>
+ } else {
+   <p>No employees found.</p>
+ }

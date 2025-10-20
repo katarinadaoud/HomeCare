@@ -101,6 +101,15 @@ public class EmployeeController : Controller
         return View(employee);
     }
 
+    /*POST delete*/
+    [HttpPost, ActionName("DeleteEmployee")] // spesifiserer at dette er POST-versjonen av DeleteEmployee
+    [ValidateAntiForgeryToken] // beskytter mot CSRF-angrep
+    public async Task<IActionResult> DeleteEmployeeConfirmed(int id)
+    {
+        await _employeeRepository.Delete(id);
+        return RedirectToAction(nameof(EmployeesList)); // ← CHANGE
+    }
+
 
     // NEW: stub for "Today’s visits" slik at TopNav-lenken ikke 404'er
     [HttpGet]
@@ -111,7 +120,10 @@ public class EmployeeController : Controller
         return View();                  // forventer Views/Employee/Visits.cshtml (kan være en enkel placeholder)
     }
 
-    /*Validation*/
+}
+//Slettes ettersom det er validering i CreateEmployee
+
+    /*Validation
         [HttpPost]
 
         public async Task<IActionResult> Create(Employee employee)
@@ -126,5 +138,5 @@ public class EmployeeController : Controller
             await _employeeRepository.Create(employee);
             return RedirectToAction(nameof(employee));
         }
-    } 
+    } */ 
     

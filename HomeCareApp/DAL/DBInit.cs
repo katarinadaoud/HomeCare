@@ -12,8 +12,9 @@ public static class DBInit
         using var serviceScope = app.ApplicationServices.CreateScope();
         AppDbContext db = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        db.Database.EnsureDeleted(); ;
-        db.Database.EnsureCreated();
+        
+       // db.Database.EnsureDeleted(); ;
+        // db.Database.EnsureCreated();
 
         // Hopp over hvis vi allerede har data
         if (!db.Users.Any())

@@ -8,7 +8,8 @@
 
 <h2 class="mb-3">Register new employee</h2>
 
-<form asp-action="Create" method="post">
+ 
+<form asp-action="CreateEmployee" method="post">  
     @Html.AntiForgeryToken()
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -40,8 +41,8 @@
     *@
 
     <button type="submit" class="btn btn-primary">Save</button>
-    <a asp-action="Employees" class="btn btn-outline-secondary">Cancel</a>
-</form>
+    <a asp-action="EmployeesList" class="btn btn-outline-secondary">Cancel</a> 
+    </form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
