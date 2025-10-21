@@ -6,9 +6,9 @@
     </div>
   </div>
 
-  <div id="notifToast" class="toast align-items-center text-bg-primary border-0" role="status" aria-live="polite" aria-atomic="true">
+  <div id="notifToast" class="toast align-items-center text-bg-primary border-0" role="status" aria-live="polite" aria-atomic="true" hidden>
     <div class="d-flex">
-      <div class="toast-body">You have 2 new notifications.</div>
+      <div class="toast-body" id="notifToastBody"></div>  @* no default text *@
       <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   </div>
@@ -20,6 +20,21 @@
         <button class="btn btn-sm btn-outline-secondary ms-2" id="copyBtn">Copy</button>
       </div>
       <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+
+      @* NOTIFICATION TOAST *@
+  <div class="toast" id="notifToast" role="status" aria-live="polite" aria-atomic="true" data-bs-autohide="true">
+    <div class="toast-header">
+      <i class="bi bi-bell me-2"></i>
+      <strong class="me-auto">Varsler</strong>
+      <small class="text-muted">nå</small>
+      <button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+      <div class="toast-body">
+      <ul id="notifList" class="list-unstyled mb-0 small">
+      <li class="text-muted">Ingen varsler…</li>
+    </ul>
+  </div>
+</div>
     </div>
   </div>
 </div>
