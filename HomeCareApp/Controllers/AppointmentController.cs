@@ -1,13 +1,13 @@
 using HomeCareApp.DAL;
 using HomeCareApp.Models;
 using HomeCareApp.ViewModels;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace HomeCareApp.Controllers
 {
-    // [Authorize]  // valgfritt å slå på når du vil
+    [Authorize]
     public class AppointmentController : Controller
     {
         private readonly IAppointmentRepository _appointmentRepository;

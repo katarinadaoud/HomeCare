@@ -1,17 +1,13 @@
-//using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using HomeCareApp.Models;
-using HomeCareApp.ViewModels;
 using HomeCareApp.DAL;
-using System.Threading.Tasks;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Castle.Components.DictionaryAdapter.Xml;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace HomeCareApp.Controllers;
 
-//[Authorize] // Sikrer at kun autentiserte brukere kan få tilgang til disse endepunktene
+[Authorize]
 public class EmployeeController : Controller
 {
     private readonly IEmployeeRepository _employeeRepository;
@@ -70,7 +66,6 @@ public class EmployeeController : Controller
             employee.UserId = userId;
         }
 
-
         if (ModelState.IsValid)
         {
             ViewBag.Role = "employee";
@@ -80,24 +75,7 @@ public class EmployeeController : Controller
         }
         await _employeeRepository.Create(employee);
         return RedirectToAction(nameof(EmployeesList));
-    }
-        
-    
-
-
-
-    /* Må nulle dette
-    public async Task<IActionResult> CreateEmployee(Employee employee)
-    {
-        if (ModelState.IsValid)
-        {
-            await _employeeRepository.Create(employee);
-            return RedirectToAction(nameof(EmployeesList)); // ← CHANGE
-        }
-        ViewBag.Role = "employee";
-        ViewBag.ActiveTab = "patients";
-        return View(employee);
-    } */
+    }    
 
     [HttpGet]
     public async Task<IActionResult> UpdateEmployee(int id)
@@ -105,8 +83,8 @@ public class EmployeeController : Controller
         var employee = await _employeeRepository.GetItemById(id);
         if (employee == null) return NotFound();
 
-        ViewBag.Role = "employee";      // NEW
-        ViewBag.ActiveTab = "patients"; // NEW
+        ViewBag.Role = "employee";
+        ViewBag.ActiveTab = "patients"; 
         return View(employee);
     }
 
@@ -140,36 +118,17 @@ public class EmployeeController : Controller
     public async Task<IActionResult> DeleteEmployeeConfirmed(int id)
     {
         await _employeeRepository.Delete(id);
-        return RedirectToAction(nameof(EmployeesList)); // ← CHANGE
+        return RedirectToAction(nameof(EmployeesList));
     }
 
 
     // NEW: stub for "Today’s visits" slik at TopNav-lenken ikke 404'er
     [HttpGet]
-    public IActionResult Visits() // ← NEW
+    public IActionResult Visits()
     {
-        ViewBag.Role = "employee";      // NEW
-        ViewBag.ActiveTab = "visits";   // NEW
-        return View();                  // forventer Views/Employee/Visits.cshtml (kan være en enkel placeholder)
+        ViewBag.Role = "employee";
+        ViewBag.ActiveTab = "visits";   
+        return View();                  
     }
 
 }
-//Slettes ettersom det er validering i CreateEmployee
-
-    /*Validation
-        [HttpPost]
-
-        public async Task<IActionResult> Create(Employee employee)
-        {
-        if (!ModelState.IsValid)
-        {
-            ViewBag.Role = "employee";
-            ViewBag.ActiveTab = "patients";
-            return View("employee", employee);
-        }
-    
-            await _employeeRepository.Create(employee);
-            return RedirectToAction(nameof(employee));
-        }
-    } */ 
-    
