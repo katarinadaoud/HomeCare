@@ -38,7 +38,7 @@
 }
 .view-toggle .toggle[aria-pressed="true"]{ background: var(--active-bg); color: var(--brand-dark); }
 
-/* FullCalendar kort/ramme */
+/* FullCalendar */
 .fc{
   color: var(--text);
   border-radius: 14px;
@@ -50,11 +50,11 @@
 .fc a { color: var(--text); text-decoration: none; }
 .fc a:hover { text-decoration: underline; text-underline-offset: 2px; }
 
-/* Grid-linjer + helgedager */
+/* Grid-lines and weekend */
 .fc-theme-standard td, .fc-theme-standard th, .fc-theme-standard .fc-scrollgrid { border-color: rgba(17,24,39,.08); }
 .fc .fc-day-sat, .fc .fc-day-sun { background-color: rgba(47,108,171,0.05); }
 
-/* Uke-nummerkolonne */
+/* Week number column*/
 .fc .fc-week-number,
 .fc .fc-daygrid-week-number {
   width: 56px;
@@ -62,7 +62,7 @@
   color: var(--muted);
 }
 
-/* Datoer (tappflate) */
+/* Dates */
 .fc .fc-daygrid-day-number{
   font-weight: 800;
   min-width: 44px; min-height: 44px;
@@ -71,7 +71,7 @@
 }
 .fc .fc-daygrid-day:hover { background-color: rgba(17,24,39,.035); }
 
-/* I dag */
+/* Today */
 .fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number{
   position: relative; z-index: 1; color: var(--brand-dark);
 }
@@ -82,24 +82,24 @@
   background-color: color-mix(in srgb, var(--today-ring) 10%, transparent);
 }
 
-/* Valgt dag (settes via JS: .is-selected) */
+/* Selected date set with js*/
 .fc .is-selected .fc-daygrid-day-number{
   background: var(--selected-bg);
   box-shadow: inset 0 0 0 2px var(--brand);
   color: var(--brand-dark);
 }
 
-/* Prikk-indikator (1–3) */
+/* Dot indicator */
 .fc .fc-daygrid-day-frame{ position: relative; }
 .fc .dot-wrap{ position:absolute; top:6px; right:6px; display:flex; gap:4px; }
 .fc .dot{ width:6px; height:6px; border-radius:50%; background: var(--brand-dark); opacity:.8; }
 
-/* ListView lesbarhet */
+/* ListView redability */
 .fc-list{ font-size: 1rem; }
 .fc-list-day-cushion{ font-weight: 800; }
 .fc-list-event:hover{ background: #f3f4f6; }
 
-/* Tom-tilstand for måned */
+/* empty state for months*/
 .empty-state{
   margin-top: 16px;
   display: none;
