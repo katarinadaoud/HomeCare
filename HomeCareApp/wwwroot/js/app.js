@@ -34,10 +34,6 @@ function getCalendarElement() {
 
 /* 
  * Simple hash-based view router
- * - Each screen/section has class "app-view".
- * - Only one view is visible at a time (we hide the rest).
- * - The URL hash (#appointment, #book-time, etc.) decides which view to show.
- * - For some views we lazy-load a page-specific CSS file and run one-time setup.
  */
 function showView(id) {
   // Hide all sections first to guarantee exactly one active view
@@ -70,7 +66,7 @@ function route() {
   }
 }
 
-/* --- Calendar (FullCalendar) ------------------------------------------- */
+/*Calendar (FullCalendar)*/
 
 function initCalendarOnce() {
   if (calendarInited) return;
@@ -106,8 +102,8 @@ function initCalendarOnce() {
       selectedCell = info.dayEl;
       selectedCell.classList.add('is-selected');
 
-      // FullCalendar v6 uses dateStr (camelCase)
-      const val = info.dateStr; // YYYY-MM-DD
+      // FullCalendar v6 uses dateStr 
+      const val = info.dateStr; 
 
       // Write ONLY to the real date field
       const hiddenByName = document.querySelector('input[name="Appointment.Date"]');
@@ -169,7 +165,7 @@ function initCalendarOnce() {
   setPressed(calendar.view.type === 'dayGridMonth');
   calendar.on('viewDidMount', (arg) => localStorage.setItem('kalView', arg.view.type));
 
-  /* Keyboard: ←/→, T, L */
+  
   document.addEventListener('keydown', e => {
     // Patient: only when "#appointment" is shown. Employee/booking: always when calendar exists.
     if (window.AppRole === 'patient' && window.location.hash !== '#appointment') return;
@@ -275,9 +271,9 @@ function initCalendarOnce() {
   }
 }
 
-/* --- Bootstrap ---------------------------------------------------------- */
+/* Bootstrap  */
 document.addEventListener('DOMContentLoaded', () => {
-  // Do not let client-side validation block the form submit (for this specific form)
+  // Notlet client-side validation block the form submit
   const bookForm =
     document.querySelector('form[method="post"][action*="/Appointment/Book"]') ||
     document.querySelector('form[method="post"][asp-action="Book"]') ||
@@ -292,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         $f.removeData('validator');
         $f.removeData('unobtrusiveValidation');
-      } catch (_) { /* noop */ }
+      } catch (_) { /* noop*/ }
     }
   }
 
@@ -341,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(refreshBadge, 5000);
 })();
 
-/* --- Booking → refetch hook -------------------------------------------- */
+/* Booking → refetch hook*/
 /* Call `document.dispatchEvent(new Event('booking:saved'));` after backend saved the appointment */
 document.addEventListener('booking:saved', () => {
   if (calendarInited && calendar) calendar.refetchEvents();

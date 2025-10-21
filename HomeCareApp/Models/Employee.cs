@@ -19,14 +19,6 @@ namespace HomeCareApp.Models
         public required String UserId { get; set; } = string.Empty; //FK to User
 
         //navigation properties
-        /*
-        public required User User { get; set; }
-        public required ICollection<Appointment> Appointments { get; set; }
-        public required ICollection<AvailableDay> AvailableDays { get; set; }
-        public required ICollection<EmergencyCall> EmergencyCalls { get; set; }
-        */
-
-        //Bytter navigation til validatenever så de blir sendt fra skjemaet
         [ValidateNever] public required User? User { get; set; }
         [ValidateNever] public ICollection<Appointment>? Appointments { get; set; } = new List<Appointment>();
         [ValidateNever] public ICollection<AvailableDay>? AvailableDays { get; set; } = new List<AvailableDay>();

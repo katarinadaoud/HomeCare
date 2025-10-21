@@ -2,12 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using HomeCareApp.Models;
 
 namespace HomeCareApp.DAL;
-
+// Repository for CRUD operations on patient entities
 public class PatientRepository : IPatientRepository
 
 
 {
-    private readonly AppDbContext _db;
+    private readonly AppDbContext _db; // EF Core DbContext (injected via DI)
+
 
     public PatientRepository(AppDbContext db)
     {

@@ -2,6 +2,7 @@ using HomeCareApp.Models;
 
 namespace HomeCareApp.DAL;
 
+// basic crud for patient entities
 public interface IPatientRepository
 {
     Task<IEnumerable<Patient>> GetAll();

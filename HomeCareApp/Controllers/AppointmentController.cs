@@ -57,11 +57,43 @@ namespace HomeCareApp.Controllers
             _logger.LogWarning("[AppointmentController] appointment creation failed {@appointment}", appointment);
             return View(appointment);
         }
-        
+
         public IActionResult Confirmation()
         {
             return View();
         }
+        
+        [HttpGet]
+// 🆕 JSON-endepunkt for FullCalendar
+[HttpGet]
+public async Task<IActionResult> Events()
+{
+    try
+    {
+        var appointments = await _appointmentRepository.GetAll();
+
+        // Konverterer Appointment til FullCalendar-format
+        var events = appointments.Select(a => new
+        {
+            id = a.AppointmentId,
+            title = string.IsNullOrWhiteSpace(a.Subject)
+                ? "Appointment"
+                : a.Subject,
+            description = a.Description,
+            start = a.Date.ToString("yyyy-MM-dd"), // FullCalendar liker ISO-format
+            allDay = true
+        });
+
+        return Json(events);
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "[AppointmentController] Error while fetching events");
+        return StatusCode(500, new { message = "Failed to load calendar events." });
+    }
+}
+
+
 
         [HttpGet]
     public async Task<IActionResult> Update(int id)

@@ -3,4 +3,15 @@
 }
 
 <h2>@TempData["Success"]</h2>
-<p>Your appointment has been booked. You can go back to <a asp-controller="Appointment" asp-action="Table">My Appointments</a>.</p>
+
+<p>
+    Your appointment has been booked.  
+    You can go back to 
+    <a asp-controller="Appointment" asp-action="Table">My Appointments</a>
+    or <a asp-controller="Patient" asp-action="Index">Go back to calendar</a>.
+</p>
+
+<!-- 🧩 Dette skriptet sender signal til kalenderen om å oppdatere -->
+<script>
+  document.dispatchEvent(new Event('booking:saved'));
+</script>
