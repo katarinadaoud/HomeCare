@@ -4,6 +4,8 @@ using HomeCareApp.Models;
 namespace HomeCareApp.DAL;
 // Repository for CRUD operations on patient entities
 public class PatientRepository : IPatientRepository
+
+
 {
     private readonly AppDbContext _db; // EF Core DbContext (injected via DI)
 
@@ -11,11 +13,15 @@ public class PatientRepository : IPatientRepository
     public PatientRepository(AppDbContext db)
     {
         _db = db;
+
+        /*Test*/
+        var path = _db.Database.GetDbConnection().DataSource;
+        Console.WriteLine($"DB PATH = {path}");
     }
 
     public async Task<IEnumerable<Patient>> GetAll()
     {
-        return await _db.Patients.ToListAsync();
+        return await _db.Patients.AsNoTracking().ToListAsync();
     }
 
     public async Task<Patient?> GetItemById(int id)
@@ -42,6 +48,7 @@ public class PatientRepository : IPatientRepository
         {
             return false;
         }
+
         _db.Patients.Remove(patient);
         await _db.SaveChangesAsync();
         return true;
