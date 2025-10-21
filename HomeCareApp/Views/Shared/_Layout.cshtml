@@ -1,10 +1,12 @@
 ﻿@{
-    // Rolle
-    var role = (string?) (ViewBag.Role ?? ViewData["Role"]) ?? "public"; // public | patient | employee
+    // Resolve current role for layout logic: "public" | "patient" | "employee"
+    var role = (string?) (ViewBag.Role ?? ViewData["Role"]) ?? "public";
+    // Show SOS modal only for patients
     var showSOS = role == "patient";
+    // Show generic toasts for all logged-in users (not public)
     var showToasts = role != "public";
 
-    // Hvor er vi? (skjul public-topnav på forsiden)
+    // Detect if we are on Home/Index to decide which top nav to render
     var ctrl = (string?)ViewContext.RouteData.Values["Controller"];
     var act  = (string?)ViewContext.RouteData.Values["Action"];
     var isHome = string.Equals(ctrl, "Home", StringComparison.OrdinalIgnoreCase)
@@ -15,32 +17,52 @@
 <html lang="nb">
 <head>
     <meta charset="utf-8" />
+    <!-- Mobile-friendly viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Prefer light color scheme -->
     <meta name="color-scheme" content="light" />
+    <!-- Browser UI theme color (address bar, etc.) -->
     <meta name="theme-color" content="#2F6CAB" />
     <title>@ViewData["Title"] - LifeLink</title>
 
-    <!-- Fonts -->
+    <!-- Performance hint: preconnect to Google Fonts domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- App display font (heavy weights only) -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
 
-    <!-- Vendor CSS -->
+    <!-- Vendor CSS: Bootstrap base styles -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/main.min.css" />
+    <!-- Vendor CSS: FullCalendar core styles (global) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" />
 
-    <!-- Våre CSS -->
+    <!-- Our CSS layers: tokens → base → layout → components → utilities -->
     <link rel="stylesheet" href="~/css/00-tokens.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/01-base.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/02-layout.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/03-components.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/04-utilities.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/page-calendar.css" asp-append-version="true" />
+    @* Calendar page CSS is lazy-loaded by JS; keep it out of the global bundle:
+       <link rel="stylesheet" href="~/css/page-calendar.css" asp-append-version="true" /> *@
 
+    <!-- Ensure jQuery is available BEFORE views/partials that may load jquery.validate* -->
+    <environment include="Development">
+        <script src="~/Identity/lib/jquery/dist/jquery.min.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+                integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+                crossorigin="anonymous"></script>
+    </environment>
+
+    <!-- Optional per-view styles injection point -->
     @RenderSection("Styles", required: false)
 </head>
 <body class="bg-light" data-role="@role">
-    @* Topplinje styres av rolle. For public: vis IKKE på Home/Index *@
+    @* Top navigation:
+       - Patient sees patient nav
+       - Employee sees employee nav
+       - Public pages (except exact home) see public nav *@
     @if (role == "patient")
     {
         @await Html.PartialAsync("TopNav/_Patient")
@@ -53,45 +75,47 @@
     {
         @await Html.PartialAsync("TopNav/_Public")
     }
-    <main style="margin-top: 70px;">
-        @RenderBody()
-    </main>
 
-    @* Felles toasts kun når innlogget rolle *@
+    @* Main content from the current view *@
+    @RenderBody()
+
+    @* Shared toasts for logged-in users (hidden for public) *@
     @if (showToasts)
     {
         @await Html.PartialAsync("_Toasts")
     }
 
-    @* SOS-modal kun for pasient *@
+    @* SOS confirmation modal (patients only) *@
     @if (showSOS)
     {
         @await Html.PartialAsync("_SosConfirmModal")
     }
 
-    <!-- Vendor JS -->
+    <!-- Vendor JS: Bootstrap (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Vendor JS: FullCalendar global bundle (required by calendar view) -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/list.min.js"></script>
 
-    <!-- App-rolle tilgjengelig for JS før app.js lastes -->
+    <!-- Expose current app role to client-side scripts -->
     <script>window.AppRole = "@role";</script>
-
-    <!--Notifications-->
     @{
-    var pid = ViewBag.PatientId as int?; // henter pasientId hvis pasient
+        // Patient id passed from controller via ViewBag when applicable
+        var pid = ViewBag.PatientId as int?;
     }
-    @if (role == "patient" && pid.HasValue) //sjekker at det er pasient og at pid finnes
+    @if (role == "patient" && pid.HasValue)
     {
-    <script>window.AppPatientId = @pid.Value;</script> //setter pasientId i JS
+        <!-- Expose patient id to client-side scripts (used by notifications) -->
+        <script>window.AppPatientId = @pid.Value;</script>
     }
 
-    <!-- Vår app -->
+    <!-- Our application script (routing, calendar init, SOS logic, etc.) -->
     <script src="~/js/app.js" asp-append-version="true"></script>
 
-   @RenderSection("Scripts", required: false)
+    <!-- Optional per-view scripts injection point -->
+    @RenderSection("Scripts", required: false)
 
-    <!--<partial name="_LoginPartial" />-->
+    @* Login/logout partial (usually in footer) *@
+    <partial name="_LoginPartial" />
 </body>
 </html>
-
