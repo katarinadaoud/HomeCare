@@ -2,18 +2,20 @@ let calendar;
 let calendarInited = false;
 let selectedCell = null;
 
-const PHONE_SOS = "+4712345678"; // ← Replace with the real number
+const PHONE_SOS = "+4746956500"; // The number to the HomeCareSOS service
 
-/* --- Helpers ------------------------------------------------------------ */
-
-/** Lazy-load a CSS file once (page-specific CSS) */
+/** Load a CSS file only once */
 function loadCssOnce(href) {
+  // Check if the CSS is already on the page:
+  // - existing <link rel="stylesheet"> whose href contains our path
+  // - an existing stylesheet in document.styleSheets
   const exists =
     [...document.querySelectorAll('link[rel="stylesheet"]')].some(l => l.href && l.href.includes(href)) ||
     [...document.styleSheets].some(s => s.href && s.href.includes && s.href.includes(href));
 
+  // If not found, create and append a <link> to load it
   if (!exists) {
-    const link = document.createElement('link');
+    const link = document.createElement('link'); // make a new <link> element
     link.rel = 'stylesheet';
     link.href = href;
     document.head.appendChild(link);
@@ -30,33 +32,41 @@ function getCalendarElement() {
   return document.getElementById('kal') || document.getElementById('bookingCal');
 }
 
-/* --- Routing / Views (pasient) ----------------------------------------- */
-
+/* 
+ * Simple hash-based view router
+ * - Each screen/section has class "app-view".
+ * - Only one view is visible at a time (we hide the rest).
+ * - The URL hash (#appointment, #book-time, etc.) decides which view to show.
+ * - For some views we lazy-load a page-specific CSS file and run one-time setup.
+ */
 function showView(id) {
+  // Hide all sections first to guarantee exactly one active view
   document.querySelectorAll('.app-view').forEach(sec => (sec.hidden = true));
-  const target = document.getElementById(id);
-  if (!target) return;
-  target.hidden = false;
 
-  // Lazy-load CSS per view
-  if (id === 'view-mine-timeavtaler') {
+  const target = document.getElementById(id); // find the target section by its id
+  if (!target) return;                        // if not found, stop
+  target.hidden = false;                      // show only the requested section 
+
+  // Lazy-load CSS and do per-view initialization (only when that view is shown)
+  if (id === 'view-appointment') {
+    // load calendar page CSS once, then init calendar
     loadCssOnce('css/page-calendar.css');
     initCalendarOnce();
     setTimeout(() => calendar && calendar.updateSize(), 0);
   } else if (id === 'view-mine-medisiner') {
-    loadCssOnce('css/page-medisiner.css'); // create when you build that page
+    loadCssOnce('css/page-medisiner.css'); // the medicine page is not finished yet
   } else if (id === 'view-book-time') {
-    loadCssOnce('css/page-book.css');      // create when you build that page
+    loadCssOnce('css/page-book.css');
   }
 }
 
 function route() {
-  const hash = window.location.hash || '#mine-timeavtaler';
+  const hash = window.location.hash || '#appointment';
   switch (hash) {
-    case '#mine-timeavtaler': showView('view-mine-timeavtaler'); break;
-    case '#book-time':        showView('view-book-time');        break;
-    case '#mine-medisiner':   showView('view-mine-medisiner');   break;
-    default:                  showView('view-mine-timeavtaler');
+    case '#appointment':   showView('view-appointment');    break;
+    case '#book-time':     showView('view-book-time');      break;
+    case '#mine-medisiner':showView('view-mine-medisiner'); break;
+    default:               showView('view-appointment');
   }
 }
 
@@ -69,7 +79,6 @@ function initCalendarOnce() {
   if (!el || typeof FullCalendar === 'undefined') return;
 
   const todayISO = new Date().toISOString().slice(0, 10);
-
   const savedView = localStorage.getItem('kalView') || 'dayGridMonth';
 
   calendar = new FullCalendar.Calendar(el, {
@@ -83,11 +92,11 @@ function initCalendarOnce() {
     // Show U instead of W
     weekNumberContent: (arg) => ({ html: `<span class="badge bg-light text-dark fw-bold">U${arg.num}</span>` }),
 
-    // ← Event-kilde: JSON-feed fra backend. FullCalendar sender start/end automatisk.
+    // Event source: JSON from backend. FullCalendar sends start/end automatically.
     events: {
       url: '/Appointment/Events',
       method: 'GET',
-      extraParams: () => ({ _: Date.now() }), // hindrer dev-cache
+      extraParams: () => ({ _: Date.now() }), // prevent dev cache
       failure: (e) => console.error('Events fetch failed', e)
     },
 
@@ -97,18 +106,12 @@ function initCalendarOnce() {
       selectedCell = info.dayEl;
       selectedCell.classList.add('is-selected');
 
-      // IMPORTANT: FullCalendar v6 uses dateStr (camelCase)
-      const val = info.dateStr;
+      // FullCalendar v6 uses dateStr (camelCase)
+      const val = info.dateStr; // YYYY-MM-DD
 
-      // Write to hidden input if present (supports both id and name w/ prefix)
-      const hiddenById   = document.getElementById('SelectedDate');
+      // Write ONLY to the real date field
       const hiddenByName = document.querySelector('input[name="Appointment.Date"]');
-
-      if (hiddenById)   hiddenById.value   = val;
       if (hiddenByName) hiddenByName.value = val;
-
-      // Optional: quick feedback on booking page
-      // if (hiddenById || hiddenByName) alert("You chose: " + val);
     },
   });
 
@@ -168,8 +171,8 @@ function initCalendarOnce() {
 
   /* Keyboard: ←/→, T, L */
   document.addEventListener('keydown', e => {
-    // Pasient: kun når "#mine-timeavtaler" vises. Ansatt/booking: alltid når kalender finnes.
-    if (window.AppRole === 'patient' && window.location.hash !== '#mine-timeavtaler') return;
+    // Patient: only when "#appointment" is shown. Employee/booking: always when calendar exists.
+    if (window.AppRole === 'patient' && window.location.hash !== '#appointment') return;
     if (!calendarInited) return;
 
     if (e.key === 'ArrowLeft')         calendar.prev();
@@ -274,63 +277,72 @@ function initCalendarOnce() {
 
 /* --- Bootstrap ---------------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
-  const hasBookingHidden =
-    document.getElementById('SelectedDate') ||
-    document.querySelector('input[name="Appointment.Date"]');
+  // Do not let client-side validation block the form submit (for this specific form)
+  const bookForm =
+    document.querySelector('form[method="post"][action*="/Appointment/Book"]') ||
+    document.querySelector('form[method="post"][asp-action="Book"]') ||
+    document.querySelector('form[action*="/Appointment/Book"]');
 
+  if (bookForm) {
+    bookForm.setAttribute('novalidate', '');
+
+    // If jQuery Unobtrusive is loaded: remove validator instance so it won't intercept submit
+    if (window.jQuery && window.jQuery.validator) {
+      const $f = window.jQuery(bookForm);
+      try {
+        $f.removeData('validator');
+        $f.removeData('unobtrusiveValidation');
+      } catch (_) { /* noop */ }
+    }
+  }
+
+  const hasBookingField = !!document.querySelector('input[name="Appointment.Date"]');
   const hasCalendarEl = !!getCalendarElement();
 
-  // Init kalender direkte hvis den finnes (booking/employee/patient)
+  // Init calendar immediately if it exists (booking/employee/patient)
   if (hasCalendarEl && !calendarInited) {
     loadCssOnce('css/page-calendar.css');
     initCalendarOnce();
     setTimeout(() => calendar && calendar.updateSize(), 0);
   }
 
-  // Pasient: behold hash-routing mellom seksjonene
+  // Patient: keep hash-routing between sections
   if (window.AppRole === 'patient') {
     route();
     window.addEventListener('hashchange', route);
   }
 });
 
-/*NOTIFICATIONS CONTROLLER*/
+/* NOTIFICATIONS CONTROLLER */
 (function () {
   const pid = window.AppPatientId;
-  const btn = document.getElementById('notifBtn'); // bjelleknapp som viser badge
-  const badge = document.getElementById('notifBadge'); // selve tallet
+  const btn = document.getElementById('notifBtn');   // bell button that shows badge
+  const badge = document.getElementById('notifBadge'); // the number
 
-  if (!btn || !badge || !pid) return; // sjekekr at alt er der, hvis pasient, bjelle eller tall mangler = feil
+  if (!btn || !badge || !pid) return; // if any of these are missing, abort
 
-  // Henter antall uleste notifikasjoner og oppdaterer UI
+  // Fetch unread count and update UI
   async function refreshBadge() {
-
-    try { // Henter fra server
-      // cache: 'no-store' for å unngå caching i dev (kan fjernes i prod)
+    try {
       const res = await fetch(`/Notifications/UnreadCount?patientId=${pid}`, { cache: 'no-store' });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const count = await res.json();
 
-      // Oppdater tall og skjuler hvis 0
       badge.textContent = count;
       badge.style.display = count > 0 ? '' : 'none';
-
-      // Setter teksten som vises ved hover
       btn.title = count === 1 ? 'You have 1 notification' : `You have ${count} notifications`;
     } catch (e) {
-      // stilletiende i dev
+      // silent in dev
     }
   }
 
-  // Kjører første gang og så hvert 10. sekund
+  // First run, then every 5s
   refreshBadge();
   setInterval(refreshBadge, 5000);
 })();
 
 /* --- Booking → refetch hook -------------------------------------------- */
-/* Kall `document.dispatchEvent(new Event('booking:saved'));` når backend har lagret avtalen */
+/* Call `document.dispatchEvent(new Event('booking:saved'));` after backend saved the appointment */
 document.addEventListener('booking:saved', () => {
   if (calendarInited && calendar) calendar.refetchEvents();
 });
-
-/* Hvis du har et konkret form med AJAX kan du manuelt dispatch'e ovenfor når 200/OK */

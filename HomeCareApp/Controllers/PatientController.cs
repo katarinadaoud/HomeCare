@@ -1,15 +1,12 @@
-//using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using HomeCareApp.Models;
-using HomeCareApp.ViewModels;
 using HomeCareApp.DAL;
-using System.Security.Cryptography.X509Certificates;
-using NuGet.Protocol.Core.Types;
 using System.Security.Claims;
 
 namespace HomeCareApp.Controllers;
 
-//[Authorize] // Sikrer at kun autentiserte brukere kan få tilgang til disse endepunktene
+[Authorize]
 public class PatientController : Controller
 {
     private readonly IPatientRepository _patientRepository;
@@ -46,7 +43,6 @@ public class PatientController : Controller
     }
 
 
-    //TEST FRA CHATGPT
    
 [HttpPost]
 [ValidateAntiForgeryToken]
@@ -81,31 +77,6 @@ public async Task<IActionResult> Create(Patient patient)
 
     return RedirectToAction(nameof(Patients));
 }
-
-
-
-
-    /*
-        [HttpPost]
-        [ValidateAntiForgeryToken] // Protects against CSRF attacks
-        public async Task<IActionResult> Create(Patient patient)
-        { //UserId is auto assigned to the logged in user, without this line ModelState will be invalid
-
-            if (!User.Identity?.IsAuthenticated == true && string.IsNullOrWhiteSpace(patient.UserId))
-                patient.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-
-            if (!ModelState.IsValid)
-            {
-                ViewBag.Role = "patient";
-                ViewBag.ActiveTab = "patients";
-                return View(patient);
-            }
-
-            await _patientRepository.Create(patient);
-            return RedirectToAction(nameof(Patients));
-        }
-    */
-    //Update Patient GET
 
     [HttpGet]
     public async Task<IActionResult> UpdatePatient(int id)
