@@ -13,10 +13,6 @@ public class PatientRepository : IPatientRepository
     public PatientRepository(AppDbContext db)
     {
         _db = db;
-
-        /*Test*/
-        var path = _db.Database.GetDbConnection().DataSource;
-        Console.WriteLine($"DB PATH = {path}");
     }
 
     public async Task<IEnumerable<Patient>> GetAll()
@@ -24,7 +20,7 @@ public class PatientRepository : IPatientRepository
         return await _db.Patients.AsNoTracking().ToListAsync();
     }
 
-    public async Task<Patient?> GetItemById(int id)
+    public async Task<Patient?> GetPatientById(int id)
     {
         return await _db.Patients.FindAsync(id);
     }
