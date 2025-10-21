@@ -1,44 +1,63 @@
-﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
+﻿/* Navbar brand link:
+   - allow wrapping to new lines
+   - center the text
+   - break very long words/URLs if needed */
 a.navbar-brand { 
   white-space: normal;
   text-align: center;
   word-break: break-all;
 }
 
+/* Default link color */
 a {
   color: #0077cc;
 }
 
+/* Primary button:
+   - white text
+   - blue background
+   - slightly darker blue border */
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
 
+/* Active pill-style nav link:
+   - white text on the same primary blue */
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
 
+/* Thin gray top border utility */
 .border-top {
   border-top: 1px solid #e5e5e5;
 }
+
+/* Thin gray bottom border utility */
 .border-bottom {
   border-bottom: 1px solid #e5e5e5;
 }
 
+/* Soft subtle shadow utility */
 .box-shadow {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
+/* Cookie/consent button:
+   - readable size
+   - keep the line height from its parent */
 button.accept-policy {
   font-size: 1rem;
   line-height: inherit;
 }
 
+/* Footer pinned at the bottom:
+   - take full width
+   - keep text on one line
+   - fixed line height for spacing */
 .footer {
   position: absolute;
   bottom: 0;
