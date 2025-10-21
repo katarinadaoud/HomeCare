@@ -57,8 +57,7 @@
     }
   }
 }
-
-
+// Load and render the latest notifications into the list
 
   async function loadLatest() {
     if (!list) return;
@@ -71,6 +70,8 @@
         list.innerHTML = `<li class="text-muted">Ingen varsler…</li>`;
         return;
       }
+
+      // Render notifications: unread get primary dot + "Mark as read" action
       list.innerHTML = items.map(n => `
         <li class="d-flex align-items-start gap-2 py-1">
           <i class="bi bi-dot fs-4 ${n.isRead ? 'text-secondary' : 'text-primary'}"></i>
@@ -96,7 +97,7 @@
   }
 
   btn.addEventListener('click', async () => {
-  await loadLatest(); // keep your existing list loading
+  await loadLatest(); // Fetch and display the latest notifications
 
   // only show toast if there are real notifications
   try {

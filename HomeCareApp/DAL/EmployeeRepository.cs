@@ -6,21 +6,22 @@ namespace HomeCareApp.DAL;
 public class EmployeeRepository : IEmployeeRepository
 
 
-{
+{ // Repository for CRUD operations on employee entities
     private readonly AppDbContext _db;
 
     public EmployeeRepository(AppDbContext db)
     {
         _db = db;
 
-        /*Test*/
+        // helps with debugging the DB path
         var path = _db.Database.GetDbConnection().DataSource;
         Console.WriteLine($"DB PATH = {path}");
     }
 
     public async Task<IEnumerable<Employee>> GetAll()
     {
-        return await _db.Employees.AsNoTracking().ToListAsync();
+        // AsNoTracking improves performance when entities aren't updated
+        return await _db.Employees.AsNoTracking().ToListAsync();  
     }
 
     public async Task<Employee?> GetItemById(int id)
@@ -40,6 +41,7 @@ public class EmployeeRepository : IEmployeeRepository
         await _db.SaveChangesAsync();
     }
 
+    // delete employee by id, returnes true if successful and false if not
     public async Task<bool> Delete(int id)
     {
         var employee = await _db.Employees.FindAsync(id);

@@ -1,4 +1,4 @@
-/* Små hjelpeklasser — legg til flere ved behov */
+/* Small utility classes */
 .u-maxw-calendar { max-width: var(--max-calendar-width); }
 .u-center   { margin-left: auto; margin-right: auto; }
 .u-muted    { color: var(--muted) !important; }

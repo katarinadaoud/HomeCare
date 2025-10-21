@@ -1,26 +1,25 @@
-/* === Home / Role chooser (kun forsiden) === */
+/* Home / Role chooser (front page only) */
 .role-chooser { padding-bottom: 2rem; }
 
-/* Brand-kicker: STØRRE logo + wordmark over headingen */
+/* Brand kicker: larger logo + wordmark above the heading */
 .brand-kicker{ margin-bottom: .75rem; opacity: .98; }
 .brand-kicker .brand-inline{
   display: inline-flex; align-items: center; gap: .6rem; white-space: nowrap;
 }
 .brand-kicker .brand-icon{
-  /* Stor, men responsiv: 40 → 64 px */
+  /* Large but responsive: scales from 40px up to 64px */
   width: clamp(40px, 6vw, 64px);
   height: clamp(40px, 6vw, 64px);
   transform: translateY(.04em);
 }
 .brand-kicker .brand-text{
-  /* Wordmark større for å matche ikonet */
+  /* Make the wordmark larger to match the icon */
   font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: clamp(28px, 4vw, 48px);
   line-height: 1;
   font-weight: 900;
 }
-
-/* H1 – mindre, mykere og i systemfont for roligere uttrykk */
+/* H1 smaller */
 .role-chooser .title{
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: clamp(22px, 3.4vw, 36px);   /* tydelig mindre enn før */
@@ -31,7 +30,7 @@
   margin-bottom: 1.25rem;
 }
 
-/* Knapper – som før, med svakt responsiv tekst */
+/* /* Buttons — same as before, with slightly responsive text */
 .role-chooser .btn-role{
   border-radius: 9999px;
   padding: 1.1rem 2rem;
@@ -47,11 +46,11 @@
   box-shadow: 0 10px 24px rgba(2,12,27,.10);
 }
 .role-chooser .btn-role:focus-visible{
-  outline: 3px solid rgba(47,108,171,.35);  /* myk brandet fokusring */
+  outline: 3px solid rgba(47,108,171,.35);  
   outline-offset: 3px;
 }
 
-/* Farger (AA-kontrast) */
+/* Colors */
 .role-chooser .btn-patient{
   background-color: #2F6FB1; border-color: #2F6FB1;
 }
@@ -67,7 +66,7 @@
   background-color: #562F8A; border-color: #562F8A;
 }
 
-/* Mobil: fyll bredden */
+/* full with for mobile*/
 @media (max-width: 576px){
   .role-chooser .btn-role{ width: 100%; }
 }

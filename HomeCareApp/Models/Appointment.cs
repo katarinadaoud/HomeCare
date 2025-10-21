@@ -16,7 +16,6 @@ namespace HomeCareApp.Models
         [Column(TypeName = "date")]   // saves as a date in SQL
         public DateTime Date { get; set; }
 
-//foreløpig satt med ? for at skjemaet funker uten 
         public int? PatientId { get; set; } //FK to patient
         public int? EmployeeId { get; set; } //FK to employee
 

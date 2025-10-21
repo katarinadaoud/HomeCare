@@ -1,6 +1,6 @@
-/* Gjenbrukbare komponenter: knapper, ikoner, badge, separator, toast */
+/* Reusable UI parts: buttons, icons, badges, dividers, and notifications */
 
-/* Primær CTA */
+/* Main action button */
 .btn-cta{
   background-color: var(--brand);
   color: #fff;
@@ -21,7 +21,7 @@
 .btn-cta:active{ transform: translateY(0); }
 .btn-cta:focus-visible{ outline: 4px solid var(--brand-focus); outline-offset: 3px; }
 
-/* Ikonknapp (varsler/SOS) */
+/* Icon button - notifications/emergency) */
 .icon-btn{
   position: relative;
   background-color: #fff;
@@ -39,7 +39,7 @@
 .icon-btn:active{ transform: translateY(0); }
 .icon-btn:focus-visible{ outline: 4px solid var(--brand-focus); outline-offset: 3px; }
 
-/* Varsel-badge */
+/* Notification-icon */
 .icon-btn {position: relative;}
 .icon-btn .badge{
   position: absolute; top: -6px; right: -4px;
@@ -47,14 +47,14 @@
   border-radius: 9999px; padding: 2px 6px; line-height: 1;
 }
 
-/* Separator i toppverktøylinje */
+/* Separator in the top toolbar */
 .toolbar-sep{
   width: 1px; height: 28px;
   background: rgba(17,24,39,.12);
   border-radius: 1px;
 }
 
-/* SOS-telefon (hvit knapp, rød ikon/ramme) */
+/* SOS button (white background, red icon/border) */
 .sos-btn{
   background: #fff;
   border: 2px solid var(--alert);
@@ -70,6 +70,6 @@
 .sos-btn:active{ transform: translateY(0); }
 .sos-btn:focus-visible{ outline: 4px solid var(--alert-focus); outline-offset: 3px; }
 
-/* Toast over alt */
+/* Toast everywhere */
 .toast-container{ z-index: 2000; }
 
