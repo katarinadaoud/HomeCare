@@ -1,4 +1,4 @@
-/* Overordnet layout, navbar, containere, visninger */
+/* Overall layout, navbar, containers, and views */
 .app-container { padding-top: var(--container-pt); }
 .app-view[hidden] { display: none !important; }
 
@@ -34,12 +34,12 @@
   color: var(--brand-dark) !important;
   text-decoration: none;
 }
-/* Juster navbar spacing */
+/* Adjust navbar spacing */
 .navbar .navbar-nav {
   margin-bottom: 0;
 }
 
-/* Style logout-ikonet */
+/* Style logout-emoji */
 .logout-section {
   margin-left: 1rem;
 }

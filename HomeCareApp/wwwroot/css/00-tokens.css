@@ -1,4 +1,4 @@
-/* Design tokens: farger, typografi, spacing, skygger */
+/* Design tokens: colors, typography, spacing, etc. */
 :root{
   /* Brand */
   --brand: #2F6CAB;
@@ -17,7 +17,7 @@
   --bg: #f8f9fa;
   --shadow: rgba(0,0,0,.12);
 
-  /* Calendar accents */
+  /* Visuals in calendar */
   --today-ring: #2F6CAB;
   --selected-bg: #E7F1FB;
 

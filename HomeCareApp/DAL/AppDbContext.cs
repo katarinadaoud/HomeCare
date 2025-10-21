@@ -5,10 +5,10 @@ using HomeCareApp.Models;
 namespace HomeCareApp.DAL;
 
 public class AppDbContext : IdentityDbContext<User>
-{
+{ // EF Core DbContext for the application
 	public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
-		Database.EnsureCreated();
+		Database.EnsureCreated(); 
     }
 	public DbSet<Patient> Patients { get; set; }
 	public DbSet<Employee> Employees { get; set; }

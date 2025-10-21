@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using HomeCareApp.Models;
 using HomeCareApp.DAL;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HomeCareApp.Controllers;
 
@@ -16,112 +16,92 @@ public class PatientController : Controller
         _patientRepository = patientRepository;
     }
 
-    // CHANGED: Index er nå pasientportalen (kalender-UI), ingen modell lastes her
+    // KUN FOR PASIENTER - fjern employee-logikk
     public IActionResult Index()
     {
-        ViewBag.Role = "patient";               // NEW: sørger for pasient-topnav + SOS i layout
-        ViewBag.ActiveTab = "appointments";     // NEW: marker riktig fane i pasient-UI
-        return View();                          // viser Views/Patient/Index.cshtml
+        ViewBag.Role = "patient";
+        ViewBag.ActiveTab = "appointments";
+        return View(); // viser Views/Patient/Index.cshtml
     }
 
-    // NEW: egen action for liste over pasienter (tidligere lå i Index)
-    public async Task<IActionResult> Patients()
-    {
-        var patients = await _patientRepository.GetAll();
-        ViewBag.CurrentViewName = "Patients List";
-        ViewBag.Role = "employee";                 // NEW: endre til "patient" hvis lista skal vises i pasientflaten
-        ViewBag.ActiveTab = "patients";         // NEW: valgfritt, for å markere fane i staff-topnav
-        return View("Patient", patients);
-    }
+    // FJERN ALLE DISSE:
+    // - Schedule()
+    // - PatientsList() 
+    // - Patients()
+    // - Visits()
 
+    // BEHOLD KUN patient CRUD-operasjoner:
     [HttpGet]
-    public IActionResult Create()
+    public IActionResult CreatePatient()
     {
-        ViewBag.Role = "patient";            // Endret til "patient" hvis dette er pasientflaten
+        ViewBag.Role = "employee";
         ViewBag.ActiveTab = "patients";
         return View();
     }
 
-
-   
-[HttpPost]
-[ValidateAntiForgeryToken]
-public async Task<IActionResult> Create(Patient patient)
-{
-    Console.WriteLine(">>> HIT Create(POST)");
-
-    // Sett UserId fra innlogget bruker (og fjern ev. ModelState-feil på UserId)
-    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-    ModelState.Remove(nameof(Patient.UserId));
-    if (!string.IsNullOrEmpty(userId))
-        patient.UserId = userId;
-
-    // Valider på nytt etter at UserId er satt
-    TryValidateModel(patient);
-
-    if (!ModelState.IsValid)
+    [HttpPost]
+    public async Task<IActionResult> CreatePatient(HomeCareApp.Models.Patient patient)
     {
-        Console.WriteLine(">>> MODELSTATE INVALID");
-        foreach (var kv in ModelState)
-            foreach (var err in kv.Value.Errors)
-                Console.WriteLine($">>> MODEL ERROR {kv.Key}: {err.ErrorMessage}");
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        ViewBag.Role = "patient";
-        ViewBag.ActiveTab = "patients";
-        return View(patient);
-    }
+        ModelState.Remove(nameof(patient.UserId));
+        if (!string.IsNullOrEmpty(userId)) patient.UserId = userId;
+        TryValidateModel(patient);
+        {
+            patient.UserId = userId;
+        }
 
-    Console.WriteLine(">>> MODELSTATE VALID -> saving…");
-    await _patientRepository.Create(patient);
-    Console.WriteLine(">>> SAVED (Create) ✔");
+        if (!ModelState.IsValid)
+        {
+            ViewBag.Role = "employee";
+            ViewBag.ActiveTab = "patients";
+            return View(patient);
+        }
 
-    return RedirectToAction(nameof(Patients));
-}
+        await _patientRepository.Create(patient);
+        return RedirectToAction("Table", "Employee"); // endre fra "Patients" til "Table"
+    }    
 
     [HttpGet]
     public async Task<IActionResult> UpdatePatient(int id)
     {
-        // Gets the patient by id
         var patient = await _patientRepository.GetItemById(id);
-        if (patient == null)
+        if (patient == null) return NotFound();
+
+        ViewBag.Role = "employee";
+        ViewBag.ActiveTab = "patients"; 
+        return View(patient);
+    }
+    [HttpPost]
+    public async Task<IActionResult> UpdatePatient(Patient patient)
+    {
+        if (ModelState.IsValid)
         {
-            return View("UpdatePatient", patient);
+            await _patientRepository.Update(patient);
+            return RedirectToAction("Table", "Employee"); // ← Endre til Employee controller
         }
-        ViewBag.Role = "patient";
+        ViewBag.Role = "employee";
         ViewBag.ActiveTab = "patients";
         return View(patient);
     }
-    // Update Patient POST
-    [HttpPost]
-    [ValidateAntiForgeryToken] // Protects against CSRF attacks
-    public async Task<IActionResult> Update(Patient patient)
-    {
-        //UserId is auto assigned to the logged in user, without this line ModelState will be invalid
-        if (User.Identity?.IsAuthenticated == true && string.IsNullOrWhiteSpace(patient.UserId))
-            patient.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
-         if (!ModelState.IsValid)
+    [HttpGet]
+    public async Task<IActionResult> DeletePatient(int id)
     {
-        ViewBag.Role = "patient";
-        ViewBag.ActiveTab = "patients";
-        return View("UpdatePatient", patient);
+        var patient = await _patientRepository.GetItemById(id);
+        if (patient == null) return NotFound();
+
+        ViewBag.Role = "employee";      // NEW
+        ViewBag.ActiveTab = "patients"; // NEW
+        return View(patient);
     }
 
-    
-        await _patientRepository.Update(patient);
-        return RedirectToAction(nameof(Patients));
-        
-
+    /*POST delete*/
+        /*POST delete*/
+        [HttpPost, ActionName("DeletePatient")] // spesifiserer at dette er POST-versjonen av DeletePatient
+        public async Task<IActionResult> DeletePatientConfirmed(int id)
+        {
+            await _patientRepository.Delete(id);
+            return RedirectToAction("Table", "Employee"); // ← Endre til Employee controller
+        }
     }
-
-    // Delete Patient
-    [HttpPost]
-    [ValidateAntiForgeryToken] // Protects against CSRF attacks
-    public async Task<IActionResult> Delete(int id)
-    {
-        await _patientRepository.Delete(id);
-        return RedirectToAction(nameof(Patients));
-    }
-
-}
-

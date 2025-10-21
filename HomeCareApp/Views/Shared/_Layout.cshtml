@@ -1,5 +1,5 @@
 ﻿@{
-    // Rolle
+    // Role
     var role = (string?) (ViewBag.Role ?? ViewData["Role"]) ?? "public"; // public | patient | employee
     var showSOS = role == "patient";
     // Show generic toasts for all logged-in users (not public)
