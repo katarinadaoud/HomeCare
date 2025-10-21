@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using HomeCareApp.DAL;
-using HomeCareApp.Models;
-using HomeCareApp.ViewModels; // Husk å legge til denne using-setningen
+using HomeCareApp.ViewModels; 
 
 namespace HomeCareApp.Controllers;
+// Controller for managing employee-related views
 
 [Authorize]
 public class EmployeeController : Controller
@@ -31,9 +31,8 @@ public class EmployeeController : Controller
         ViewBag.Role = "employee";
         ViewBag.ActiveTab = "patients";
 
-        var viewModel = new PatientsViewModel(patients, "Table"); // ← Bruk constructor
-        return View(viewModel); // viser Views/Employee/Table.cshtml automatisk
-    }
+        var viewModel = new PatientsViewModel(patients, "Table"); // Using the same ViewModel for different views
+        return View(viewModel); // shows Views/Employee/Table.cshtml
 
     // Today's visits
     public IActionResult Visits()

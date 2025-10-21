@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 
 
 namespace HomeCareApp.Controllers
-{
+{ // Controller for managing appointments
     [Authorize]
     public class AppointmentController : Controller
-    {
+    { 
         private readonly IAppointmentRepository _appointmentRepository;
-        private readonly ILogger<AppointmentController> _logger;
+        private readonly ILogger<AppointmentController> _logger; // Logger for logging information and errors
 
         public AppointmentController(
             IAppointmentRepository appointmentRepository,
@@ -22,7 +22,7 @@ namespace HomeCareApp.Controllers
             _logger = logger;
         }
 
-        public async Task<IActionResult> Table()
+        public async Task<IActionResult> Table() // Lists all appointments in a table view
         {
             var appointments = await _appointmentRepository.GetAll();
             if (appointments == null)
@@ -30,7 +30,7 @@ namespace HomeCareApp.Controllers
                 _logger.LogError("[AppointmentController] Appointment list not found while executing _appointmentRepository.GetAll()");
                 return NotFound("Appointment list not found");
             }
-            var appointmentsViewModel = new AppointmentViewModel(appointments, "Table");
+            var appointmentsViewModel = new AppointmentViewModel(appointments, "Table"); // Using the same ViewModel for different views
             return View(appointmentsViewModel);
         }
 
@@ -44,16 +44,16 @@ namespace HomeCareApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Book(Appointment appointment)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid) // Validates the model state
             {
                 bool returnOk = await _appointmentRepository.Create(appointment);
-                if (returnOk)
+                if (returnOk) // If creation of appointment is successful
                 {
                     TempData["Success"] = "Appointment booked successfully!";
                     return RedirectToAction(nameof(Confirmation));
                 }
 
-            }
+            } // If model state is invalid or creation failed
             _logger.LogWarning("[AppointmentController] appointment creation failed {@appointment}", appointment);
             return View(appointment);
         }
@@ -62,17 +62,19 @@ namespace HomeCareApp.Controllers
         {
             return View();
         }
-        
+
         [HttpGet]
-// 🆕 JSON-endepunkt for FullCalendar
+        
+ // Endpoint to fetch appointments in FullCalendar format
 [HttpGet]
 public async Task<IActionResult> Events()
 {
     try
     {
-        var appointments = await _appointmentRepository.GetAll();
+                var appointments = await _appointmentRepository.GetAll();
 
-        // Konverterer Appointment til FullCalendar-format
+        // Converts appointments to FullCalendar format
+      
         var events = appointments.Select(a => new
         {
             id = a.AppointmentId,
@@ -80,7 +82,8 @@ public async Task<IActionResult> Events()
                 ? "Appointment"
                 : a.Subject,
             description = a.Description,
-            start = a.Date.ToString("yyyy-MM-dd"), // FullCalendar liker ISO-format
+            start = a.Date.ToString("yyyy-MM-dd"), // FullCalendar  requires date in ISO format
+            end = a.Date.ToString("yyyy-MM-dd"),
             allDay = true
         });
 

@@ -1,15 +1,15 @@
 @model IEnumerable<Employee>
-
-@*Fjerner midlertidig: <partial name="_EmployeeTable" model="Model"/> *@ 
-
-@*Legger til dette for å prøve å lagre i db:*@
+ @*the view expects a collection of employee objects*@
 
  @if (Model != null && Model.Any()) { 
+
+  <!--shows a table if there are employees in the model-->
    <table class="table table-striped">
      <thead>
        <tr><th>Full Name</th><th>Address</th><th>Department</th><th>UserId</th><th></th></tr>
      </thead>
-     <tbody>
+
+     <tbody> <!--Goes through each employee and display their data-->
      @foreach (var e in Model) {
        <tr>
          <td>@e.FullName</td>

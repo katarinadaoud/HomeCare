@@ -5,7 +5,7 @@
 @inject UserManager<User> UserManager
 
 @{
-    // Finn ut hvor vi er (controller/action)
+    
     var ctrl = (string?)ViewContext.RouteData.Values["Controller"];
     var act  = (string?)ViewContext.RouteData.Values["Action"];
     var isHome = string.Equals(ctrl, "Home", StringComparison.OrdinalIgnoreCase)
