@@ -33,7 +33,7 @@ public class EmployeeController : Controller
 
         var viewModel = new PatientsViewModel(patients, "Table"); // Using the same ViewModel for different views
         return View(viewModel); // shows Views/Employee/Table.cshtml
-
+    }
     // Today's visits
     public IActionResult Visits()
     {
