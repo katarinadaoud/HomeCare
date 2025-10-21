@@ -4,7 +4,7 @@
 <h2>Update Patient</h2>
 
 <form asp-action="UpdatePatient" method="post"> 
-    @Html.AntiForgeryToken() 
+    @Html.AntiForgeryToken()  <!--csrf protection-->
 
     <input type="hidden" asp-for="PatientId" />
     <input type="hidden" asp-for="UserId" />

@@ -1,8 +1,10 @@
 @{
-    ViewData["Title"] = "Employee schedule";
-    Layout = "_Layout";
+    ViewData["Title"] = "Employee schedule"; <!--Title for the layout-->
+    Layout = "_Layout"; <!--Uses shared layout-->
 }
-
+<!-- renders employee schedule page by using the shared _layout. 
+Includes a partial view for the calendar and an empty state message if there are no shifts/visits.
+  -->
 <main id="main" class="container app-container" tabindex="-1">
   <section aria-labelledby="kal-heading" class="mt-4 pt-4">
     <header class="mb-2">

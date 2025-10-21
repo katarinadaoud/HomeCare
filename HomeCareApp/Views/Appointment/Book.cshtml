@@ -1,7 +1,8 @@
 @model Appointment
-
 <h2>Create New Appointment</h2>
+@*page heading*@
 
+@* Form posts to the Book action*@
 <form asp-action="Book">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">
@@ -22,8 +23,7 @@
     <button type="submit" class="btn btn-primary">Create</button>
     <a asp-action="Table" class="btn btn-secondary">Back to Table View</a>
 
-        <!-- Kalender-partial (skal sette #SelectedDate til yyyy-MM-dd) 
-    <partial name="_Calendar" model="Model" />-->
+      
 
     @section Scripts {
     <partial name="_ValidationScriptsPartial" />

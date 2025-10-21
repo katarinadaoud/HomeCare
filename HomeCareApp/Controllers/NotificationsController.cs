@@ -37,7 +37,7 @@ public class NotificationsController : Controller
     [HttpPost("Create")]
     public async Task<IActionResult> Create(Notification model)
     {
-        if (!ModelState.IsValid) return View(model);
+        if (!ModelState.IsValid) return View(model); // return view with validation errors
         model.CreatedAt = DateTime.UtcNow;
 
         _db.Notifications.Add(model);
@@ -53,7 +53,7 @@ public class NotificationsController : Controller
             .Where(n => n.PatientId == patientId && !n.IsRead)
             .CountAsync();
 
-        return Json(count);
+        return Json(count); // return count as JSON
     }
 
         [HttpGet("Latest")]
@@ -61,55 +61,25 @@ public class NotificationsController : Controller
         {
             var items = await _db.Notifications
                 .Where(n => n.PatientId == patientId)
-                .OrderByDescending(n => n.CreatedAt)
-                .Take(Math.Clamp(take, 1, 20)) // litt vern
-                .Select(n => new { n.NotificationId, n.Message, n.CreatedAt, n.IsRead })
+                .OrderByDescending(n => n.CreatedAt) // latest first
+                .Take(Math.Clamp(take, 1, 20)) // limit between 1 and 20
+                .Select(n => new { n.NotificationId, n.Message, n.CreatedAt, n.IsRead }) // select only necessary fields
                 .ToListAsync();
 
             return Json(items);
         }
 
          [HttpPost("MarkRead")]
-        public async Task<IActionResult> MarkRead(int id)
+        public async Task<IActionResult> MarkRead(int id) // Marks a notification as read
         {
-            var n = await _db.Notifications.FindAsync(id);
+            var n = await _db.Notifications.FindAsync(id); // Find notification by ID
             if (n == null) return NotFound();
 
-            n.IsRead = true;
+            n.IsRead = true; // Mark as read
             await _db.SaveChangesAsync();
             return Ok();
         }
     }
-
-
-
-
-
-    /* Henter de siste 5 notifikasjonene
-    [HttpGet("Latest")]
-    public async Task<IActionResult> Latest(int patientId, int take = 10) Take sier hvor mange varslinger man henter som standard, kanskje lavere enn 10 for ytelse?
-    {
-        var items = await _db.Notifications
-            .Where(n => n.PatientId == patientId)
-            .OrderByDescending(n => n.CreatedAt) /*Nyeste først
-            .Take(take)
-            .Select(n => new { n.NotificationId, n.Message, n.CreatedAt, n.IsRead }) 
-            .ToListAsync();
-
-        return Json(items); // returnerer liste med notifikasjoner, om vi vil ha dropdown
-    }
-
-    // Marker en notifikasjon som lest
-    [HttpPost("MarkRead")]
-    public async Task<IActionResult> MarkRead(int id)
-    {
-        var n = await _db.Notifications.FindAsync(id); /*Find henter varselet fra db
-        if (n == null) return NotFound(); /*returnerer 404 hvis ikke funnet
-
-        n.IsRead = true; // markerer som lest
-        await _db.SaveChangesAsync(); /*Lagrer endringen i db
-        return Ok(); // returnerer 200 OK
-    } */
 
 
 

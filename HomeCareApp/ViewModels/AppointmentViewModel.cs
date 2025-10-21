@@ -1,9 +1,7 @@
 using HomeCareApp.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
 
 namespace HomeCareApp.ViewModels
-{
+{ // ViewModel for managing appointments
    public class AppointmentViewModel
     {
         public IEnumerable<Appointment> Appointments;

@@ -21,7 +21,7 @@
       <span class="brand-text"><span class="brand-L">L</span>ife<span class="brand-L">L</span>ink</span>
     </a>
 
-    <!-- Navigasjon -->
+    <!-- Navigation -->
     <ul class="nav ms-2" role="list">
       <li class="nav-item">
         <a class="nav-link @(ViewBag.ActiveTab=="schedule" ? "active" : "")"
@@ -36,7 +36,7 @@
            asp-controller="Employee" asp-action="Table">Patients</a> <!-- ENDRET -->
       </li>
 
-      @* 👇 My profile med ikon *@
+      @* My profile with icon *@
       @if (SignInManager.IsSignedIn(User))
       {
           <li class="nav-item d-flex align-items-center">
@@ -55,7 +55,7 @@
       }
     </ul>
 
-    <!-- Høyreside (knapper + logout) -->
+    <!-- Buttons and logout) -->
     <div class="ms-auto d-flex align-items-center gap-3">
       <button class="btn-cta" id="btnOnCall" type="button">Notify on-call</button>
 
@@ -64,11 +64,9 @@
         <span class="badge" id="notifBadge"></span>  <!-- no number -->
       </button>
 
-<<<<<<< HEAD
-=======
       <span class="toolbar-sep" aria-hidden="true"></span>
 
-      @* 👇 Logout-ikon *@
+      @* Signout icon *@
       @if (SignInManager.IsSignedIn(User))
       {
           <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout"
@@ -84,7 +82,6 @@
               </button>
           </form>
       }
->>>>>>> 66d62d2640a5d05249960394cec6137c3594177a
     </div>
   </div>
 </nav>

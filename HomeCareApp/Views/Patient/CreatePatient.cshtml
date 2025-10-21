@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Register new patient";
     ViewBag.Role = "employee";
-    ViewBag.ActiveTab = "patients";   // evt. endre til den fanen du vil markere
+    ViewBag.ActiveTab = "patients";   
     Layout = "_Layout";
 }
 
@@ -38,7 +38,7 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Save</button>
-    <a asp-action="PatientsList" class="btn btn-outline-secondary">Cancel</a> 
+    <a asp-controller="Employee" asp-action="Table" class="btn btn-secondary">Cancel</a> 
     </form>
 
 @section Scripts {
