@@ -1,9 +1,9 @@
-/* Kalender-spesifikk stil og FullCalendar overrides */
+/*Calendar spesific-style and fullCallendar override*/
 
 /* Wrapper */
 #kalWrap { max-width: var(--max-calendar-width); margin: 24px auto; }
 
-/* Header med kontroller og visnings-toggle */
+/* Header with controller */
 #kalHeader{
   display: grid;
   grid-template-columns: 1fr auto 1fr;
