@@ -34,3 +34,40 @@
   color: var(--brand-dark) !important;
   text-decoration: none;
 }
+/* Juster navbar spacing */
+.navbar .navbar-nav {
+  margin-bottom: 0;
+}
+
+/* Style logout-ikonet */
+.logout-section {
+  margin-left: 1rem;
+}
+
+.logout-btn {
+  border: none;
+  background: transparent;
+  color: var(--brand-accent);
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.logout-btn:hover {
+  color: #c0392b;
+  transform: scale(1.1);
+}
+.nav .nav-item .nav-link {
+  color: var(--brand-accent);
+  font-weight: 500;
+}
+
+.nav .nav-item .nav-link:hover {
+  color: #1b4d89;
+}
+
+.nav-link svg {
+  margin-top: -1px;
+}
+.nav-link svg {
+  margin-top: -1px;
+}
