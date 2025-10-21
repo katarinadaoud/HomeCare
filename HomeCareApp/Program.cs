@@ -61,7 +61,6 @@ builder.Services.AddSession(options =>
 
 
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 
 var loggerConfiguration = new LoggerConfiguration()

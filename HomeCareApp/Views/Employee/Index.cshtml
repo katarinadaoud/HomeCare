@@ -1,6 +1,6 @@
 @{
     ViewData["Title"] = "Employee schedule";
-    Layout = "_Layout"; // rolle/fane settes i EmployeeController.Schedule()
+    Layout = "_Layout";
 }
 
 <main id="main" class="container app-container" tabindex="-1">
@@ -9,28 +9,11 @@
       <h1 id="kal-heading" class="h4 fw-bold mb-0">Employee schedule</h1>
     </header>
 
-    <div id="kalWrap">
-      <div id="kalHeader" aria-live="polite">
-        <div class="kal-controls" role="group" aria-label="Month navigation">
-          <button class="kal-btn" type="button" id="btnPrev" aria-label="Previous month">‹</button>
-          <button class="kal-btn" type="button" id="btnToday" aria-label="Go to today">Today</button>
-          <button class="kal-btn" type="button" id="btnNext" aria-label="Next month">›</button>
-          <input type="date" id="jumpDate" class="kal-date" aria-label="Jump to date" />
-        </div>
-
-        <div class="title" id="kalTittel"></div>
-
-        <div class="view-toggle" role="group" aria-label="View mode">
-          <button class="toggle" id="btnViewMonth" type="button" aria-pressed="true" aria-label="Calendar view">Calendar</button>
-          <button class="toggle" id="btnViewList" type="button" aria-pressed="false" aria-label="List view">List</button>
-        </div>
-      </div>
-
-      <div id="kal" role="region" aria-label="Calendar"></div>
+    
+  <partial name="_Calendar" model="Model" />
 
       <div class="empty-state" id="emptyState" aria-live="polite">
         <span>No shifts/visits in this period.</span>
-        <a class="btn btn-sm btn-outline-primary" asp-controller="Employee" asp-action="CreateEmployee">Assign task</a>
       </div>
     </div>
   </section>

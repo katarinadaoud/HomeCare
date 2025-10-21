@@ -1,57 +1,46 @@
 @model IEnumerable<HomeCareApp.Models.Patient>
+@{
+    ViewData["Title"] = "Patients List";
+}
 
+<p>
+    <a asp-controller="Patient" asp-action="CreatePatient" class="btn btn-primary">Register new patient</a>
+</p>
 
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LIFELINK</title>
-</head>
-<body>
-    <div class="container">
-        <h1>@ViewBag.CurrentViewName</h1>
-        <table class='table table-striped'>
-            <thead>
-                <tr>
-                <th>Patient Id</th>
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Full name</th>
+                <th>Phone</th>
                 <th>Address</th>
-                <th>Health Related Info</th>
-                <th>User Id</th>
-                <th>Emergency Contact Id</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var patient in Model)
-                {
-                <tr>
-                    <td>@patient.PatientId</td>
-                    <td>
-                        <!--<a asp-controller="Item"
-                            asp-action="Details"
-                            asp-route-id="@patient.PatientId">@patient.PatientId</a>
-                    </td>-->
-                    <td>@patient.Address</td>
-                    <td>@patient.HealthRelated_info</td>
-                    <td>@patient.UserId</td>
-                    <td>@patient.EmergencyContactId</td>
-                    <td>
-                        <a asp-action="Update" asp-route-id="@patient.PatientId">Update</a>
-                        <a asp-action="Delete" asp-route-id="@patient.PatientId">Delete</a>
-                    </td>
-                </tr>
-                }
-            </tbody>
-        </table>
-
-         <p>
-        <a class="btn btn-secondary"
-           asp-controller="Patient"
-           asp-action="Create">Create New Patient</a>
-    </p>  
-
-    </div>
-    
-</body>
-</html>
+                <th>Health info</th>
+                <th>UserId</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.FullName</td>
+                <td>@p.phonenumber</td>
+                <td>@p.Address</td>
+                <td>@p.HealthRelated_info</td>
+                <td>@p.UserId</td>
+                <td class="text-end">
+                    
+                    @*Edit/Delete makes sure to point to the new actions we added in controller*@
+                    <a asp-controller="Patient" asp-action="UpdatePatient" asp-route-id="@p.PatientId" class="btn btn-sm btn-outline-secondary">Edit</a>
+                    <a asp-controller="Patient" asp-action="DeletePatient" asp-route-id="@p.PatientId" class="btn btn-sm btn-outline-danger">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No patients found.</p>
+}
