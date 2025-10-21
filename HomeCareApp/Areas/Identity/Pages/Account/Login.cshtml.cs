@@ -128,7 +128,7 @@ namespace HomeCareApp.Areas.Identity.Pages.Account
                     if (!string.IsNullOrEmpty(Role))
                     {
                         if (Role == "Employee")
-                            return LocalRedirect("/Employee/Schedule");
+                            return LocalRedirect("/Employee/Index");
                         if (Role == "Patient")
                             return LocalRedirect("/Patient/Index");
                     }

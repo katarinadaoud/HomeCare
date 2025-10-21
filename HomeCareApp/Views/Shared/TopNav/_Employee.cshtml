@@ -3,8 +3,9 @@
   <div class="container-fluid topnav">
 
     <!-- Samme logo/brand som pasient. Tving farge via currentColor -->
+    <!-- ENDRET -->
     <a class="navbar-brand d-flex align-items-center gap-2 brand"
-       asp-controller="Employee" asp-action="Schedule" aria-label="Home"
+       asp-controller="Employee" asp-action="Index" aria-label="Home"
        style="color: var(--brand-primary);">
       <svg class="brand-icon" width="28" height="28" viewBox="0 0 24 24" role="img" aria-hidden="true">
         <!-- Stroke følger currentColor, ikke CSS-var direkte -->
@@ -21,7 +22,7 @@
     <ul class="nav ms-2" role="list">
       <li class="nav-item">
         <a class="nav-link @(ViewBag.ActiveTab=="schedule" ? "active" : "")"
-           asp-controller="Employee" asp-action="Schedule">Schedule</a>
+           asp-controller="Employee" asp-action="Index">Schedule</a> <!-- ENDRET -->
       </li>
       <li class="nav-item">
         <a class="nav-link @(ViewBag.ActiveTab=="visits" ? "active" : "")"
@@ -29,7 +30,7 @@
       </li>
       <li class="nav-item">
         <a class="nav-link @(ViewBag.ActiveTab=="patients" ? "active" : "")"
-           asp-controller="Employee" asp-action="EmployeesList">Patients</a>
+           asp-controller="Employee" asp-action="Table">Patients</a> <!-- ENDRET -->
       </li>
     </ul>
 
