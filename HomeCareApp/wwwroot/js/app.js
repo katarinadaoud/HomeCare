@@ -44,7 +44,7 @@ function showView(id) {
   target.hidden = false;                      // show only the requested section 
 
   // Lazy-load CSS and do per-view initialization (only when that view is shown)
-  if (id === 'view-appointment') {
+  if (id === 'view-mine-timeavtaler') {
     // load calendar page CSS once, then init calendar
     loadCssOnce('css/page-calendar.css');
     initCalendarOnce();
@@ -59,10 +59,10 @@ function showView(id) {
 function route() {
   const hash = window.location.hash || '#appointment';
   switch (hash) {
-    case '#appointment':   showView('view-appointment');    break;
+    case '#appointment':   showView('view-mine-timeavtaler');    break;
     case '#book-time':     showView('view-book-time');      break;
     case '#mine-medisiner':showView('view-mine-medisiner'); break;
-    default:               showView('view-appointment');
+    default:               showView('view-mine-timeavtaler');    break;
   }
 }
 
@@ -296,20 +296,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const hasCalendarEl = !!getCalendarElement();
 
   // Init calendar immediately if it exists (booking/employee/patient)
-  if (hasCalendarEl && !calendarInited) {
+   if (hasCalendarEl && !calendarInited) {
     loadCssOnce('css/page-calendar.css');
     initCalendarOnce();
     setTimeout(() => calendar && calendar.updateSize(), 0);
   }
+}); 
 
-  // Patient: keep hash-routing between sections
-  if (window.AppRole === 'patient') {
-    route();
-    window.addEventListener('hashchange', route);
-  }
-});
-
-/* NOTIFICATIONS CONTROLLER */
+ /* NOTIFICATIONS CONTROLLER */
 (function () {
   const pid = window.AppPatientId;
   const btn = document.getElementById('notifBtn');   // bell button that shows badge
@@ -335,10 +329,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // First run, then every 5s
   refreshBadge();
   setInterval(refreshBadge, 5000);
-})();
+})(); 
 
-/* Booking → refetch hook*/
-/* Call `document.dispatchEvent(new Event('booking:saved'));` after backend saved the appointment */
+/* Booking → refetch hook */
 document.addEventListener('booking:saved', () => {
   if (calendarInited && calendar) calendar.refetchEvents();
 });
+

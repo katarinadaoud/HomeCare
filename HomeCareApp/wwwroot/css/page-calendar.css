@@ -107,3 +107,12 @@
   color: var(--muted);
 }
 .empty-state.show{ display: inline-flex; }
+
+#kal {
+  opacity: 0;
+  transition: opacity 0.2s ease-in;
+}
+
+.fc {
+  opacity: 1 !important;
+}

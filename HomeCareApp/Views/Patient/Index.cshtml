@@ -16,10 +16,11 @@
         <span>No appointments in this period.</span>
         <a class="btn btn-sm btn-outline-primary" asp-controller="Appointment" asp-action="Book">Book appointment</a>
       </div>
-    </div>
+    </div> 
+    <partial name="_Calendar" model="Model" />
   </section>
 
-  <partial name="_Calendar" model="Model" />
+ 
 
 
   <!-- Placeholders -->
