@@ -11,7 +11,7 @@ using System.Security.Claims;
 
 namespace HomeCareApp.Controllers;
 
-//[Authorize] // Sikrer at kun autentiserte brukere kan få tilgang til disse endepunktene
+//[Authorize] // Makes sure only authorized users can access the controller
 public class EmployeeController : Controller
 {
     private readonly IEmployeeRepository _employeeRepository;
@@ -21,13 +21,14 @@ public class EmployeeController : Controller
         _employeeRepository = employeeRepository;
     }
 
-    // CHANGE: /Employee -> redirect til kalender
+    // CHANGE: /Employee -> redirect to schedule
     public IActionResult Index()
     {
         return RedirectToAction(nameof(Schedule)); // ←
     }
 
-    // NEW: egen action for listevisning (tidl. i Index)
+    // This method returns a view displaying the list of employees
+
     public async Task<IActionResult> EmployeesList()
     {
         var employees = await _employeeRepository.GetAll();
@@ -37,16 +38,18 @@ public class EmployeeController : Controller
         return View("Employee", employees);
     }
 
-    // Kalenderdashboard for ansatte (viser Views/Employee/Index.cshtml)
+
+    // this makes sure that when navigating to /Employee/Schedule, the correct view is shown
     public IActionResult Schedule()
     {
-        ViewBag.Role = "employee";       // sørger for riktig topnav/branding
-        ViewData["Role"] = "employee";   // ekstra sikkerhet for layout
+        ViewBag.Role = "employee";       //makes sure layout knows the role
+        ViewBag.ActiveTab = "schedule";  //makes sure layout knows the active tab
+        ViewData["Role"] = "employee";
         ViewBag.ActiveTab = "schedule";
-        return View("Index");            // viser Views/Employee/Index.cshtml
+        return View("Index");            // shows Views/Employee/Index.cshtml
     }
 
-    // CHANGE: behold alias som tidligere ble brukt, men redirect nå til lista
+    // redirect /Employee/Employee to /Employee/EmployeesList
     public IActionResult Employee() => RedirectToAction(nameof(EmployeesList)); // ←
 
     [HttpGet]
@@ -59,13 +62,13 @@ public class EmployeeController : Controller
 
     [HttpPost]
 
-    public async Task<IActionResult> CreateEmployee(HomeCareApp.Models. Employee employee)
+    public async Task<IActionResult> CreateEmployee(HomeCareApp.Models.Employee employee)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); //Sets UserId from logged in user
-        
+
         ModelState.Remove(nameof(employee.UserId));
         if (!string.IsNullOrEmpty(userId)) employee.UserId = userId;
-        TryValidateModel(employee); //validerer på nytt
+        TryValidateModel(employee); // validate the model again after setting UserId
         {
             employee.UserId = userId;
         }
@@ -81,8 +84,8 @@ public class EmployeeController : Controller
         await _employeeRepository.Create(employee);
         return RedirectToAction(nameof(EmployeesList));
     }
-        
-    
+
+
 
 
 
@@ -135,8 +138,8 @@ public class EmployeeController : Controller
     }
 
     /*POST delete*/
-    [HttpPost, ActionName("DeleteEmployee")] // spesifiserer at dette er POST-versjonen av DeleteEmployee
-    [ValidateAntiForgeryToken] // beskytter mot CSRF-angrep
+    [HttpPost, ActionName("DeleteEmployee")] // specifies that this action handles POST requests for DeleteEmployee
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteEmployeeConfirmed(int id)
     {
         await _employeeRepository.Delete(id);
@@ -144,15 +147,14 @@ public class EmployeeController : Controller
     }
 
 
-    // NEW: stub for "Today’s visits" slik at TopNav-lenken ikke 404'er
     [HttpGet]
-    public IActionResult Visits() // ← NEW
+    public IActionResult Visits()
     {
-        ViewBag.Role = "employee";      // NEW
-        ViewBag.ActiveTab = "visits";   // NEW
-        return View();                  // forventer Views/Employee/Visits.cshtml (kan være en enkel placeholder)
-    }
+        ViewBag.Role = "employee";
+        ViewBag.ActiveTab = "visits";
+        return View();
 
+    }
 }
 //Slettes ettersom det er validering i CreateEmployee
 

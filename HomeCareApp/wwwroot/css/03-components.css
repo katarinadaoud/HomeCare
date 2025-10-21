@@ -40,6 +40,7 @@
 .icon-btn:focus-visible{ outline: 4px solid var(--brand-focus); outline-offset: 3px; }
 
 /* Varsel-badge */
+.icon-btn {position: relative;}
 .icon-btn .badge{
   position: absolute; top: -6px; right: -4px;
   background: var(--alert); color: #fff; font-size: 12px;
