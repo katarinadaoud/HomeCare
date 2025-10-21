@@ -75,6 +75,10 @@
         @await Html.PartialAsync("TopNav/_Public")
     }
 
+    <main style="margin-top: 70px;">
+        @RenderBody()
+    </main>
+
     @* Main content from the current view *@
     @RenderBody()
 
@@ -114,7 +118,5 @@
     <!-- Optional per-view scripts injection point -->
     @RenderSection("Scripts", required: false)
 
-    @* Login/logout partial (usually in footer) *@
-    <partial name="_LoginPartial" />
 </body>
 </html>
