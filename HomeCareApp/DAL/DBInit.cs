@@ -158,12 +158,6 @@ public static class DBInit
 
         }
 
-
-        // ---------- NOTIFICATIONS ----------
-        // Fjernet inntil tabell finnes (migrasjonen din 'AddNotifications' er tom)
-        // db.Notifications.Add(new Notification { ... });
-        // db.SaveChanges();
-
         // ---------- EMERGENCY CALLS ----------
         if (!db.EmergencyCalls.Any())
         {

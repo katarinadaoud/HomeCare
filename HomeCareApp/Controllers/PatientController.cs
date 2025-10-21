@@ -15,22 +15,16 @@ public class PatientController : Controller
     {
         _patientRepository = patientRepository;
     }
-
-    // KUN FOR PASIENTER - fjern employee-logikk
+//Patient dashboard
     public IActionResult Index()
     {
         ViewBag.Role = "patient";
         ViewBag.ActiveTab = "appointments";
-        return View(); // viser Views/Patient/Index.cshtml
+        return View(); 
     }
 
-    // FJERN ALLE DISSE:
-    // - Schedule()
-    // - PatientsList() 
-    // - Patients()
-    // - Visits()
 
-    // BEHOLD KUN patient CRUD-operasjoner:
+    //CRUD operations for patients
     [HttpGet]
     public IActionResult CreatePatient()
     {
@@ -65,7 +59,7 @@ public class PatientController : Controller
     [HttpGet]
     public async Task<IActionResult> UpdatePatient(int id)
     {
-        var patient = await _patientRepository.GetItemById(id);
+        var patient = await _patientRepository.GetPatientById(id);
         if (patient == null) return NotFound();
 
         ViewBag.Role = "employee";
@@ -78,7 +72,7 @@ public class PatientController : Controller
         if (ModelState.IsValid)
         {
             await _patientRepository.Update(patient);
-            return RedirectToAction("Table", "Employee"); // ← Endre til Employee controller
+            return RedirectToAction("Table", "Employee"); 
         }
         ViewBag.Role = "employee";
         ViewBag.ActiveTab = "patients";
@@ -88,20 +82,18 @@ public class PatientController : Controller
     [HttpGet]
     public async Task<IActionResult> DeletePatient(int id)
     {
-        var patient = await _patientRepository.GetItemById(id);
+        var patient = await _patientRepository.GetPatientById(id);
         if (patient == null) return NotFound();
 
-        ViewBag.Role = "employee";      // NEW
-        ViewBag.ActiveTab = "patients"; // NEW
+        ViewBag.Role = "employee";      
+        ViewBag.ActiveTab = "patients";
         return View(patient);
     }
 
-    /*POST delete*/
-        /*POST delete*/
-        [HttpPost, ActionName("DeletePatient")] // spesifiserer at dette er POST-versjonen av DeletePatient
+        [HttpPost, ActionName("DeletePatient")] 
         public async Task<IActionResult> DeletePatientConfirmed(int id)
         {
             await _patientRepository.Delete(id);
-            return RedirectToAction("Table", "Employee"); // ← Endre til Employee controller
+            return RedirectToAction("Table", "Employee");
         }
     }
