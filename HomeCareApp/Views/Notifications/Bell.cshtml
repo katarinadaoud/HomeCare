@@ -1,19 +1,27 @@
+<!-- Notification bell button with badge for unread count -->
 <button id="notifBtn" type="button" class="btn position-relative icon-btn" aria-label="Notifications" title="Notifications">
     <i class="bi bi-bell"></i>
+    <!-- Red badge showing number of unread notifications (hidden by default) -->
     <span id="notifBadge" class="badge" style="display:none;">0</span>
 </button>
 
+<!-- Toast container positioned at top-right of screen -->
 <div class="toast-container position-fixed top-0 end-0 p-3">
+  <!-- Bootstrap toast for showing notification details -->
   <div id="notifToast" class="toast" role="status" aria-live="polite" aria-atomic="true">
+    <!-- Toast header with bell icon and title -->
     <div class="toast-header">
       <i class="bi bi-bell me-2"></i>
-      <strong class="me-auto">Varsler</strong>
-      <small class="text-muted">nå</small>
+      <strong class="me-auto">Varsler</strong> <!-- "Notifications" in Norwegian -->
+      <small class="text-muted">nå</small> <!-- "now" timestamp -->
+      <!-- Close button for dismissing toast -->
       <button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
+    <!-- Toast body containing notification list -->
     <div class="toast-body">
+      <!-- List of notifications (empty state shows "No notifications") -->
       <ul id="notifList" class="list-unstyled mb-0 small">
-        <li class="text-muted">Ingen varsler…</li>
+        <li class="text-muted">Ingen varsler…</li> <!-- "No notifications..." -->
       </ul>
     </div>
   </div>
