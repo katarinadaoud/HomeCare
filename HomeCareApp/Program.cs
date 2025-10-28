@@ -62,6 +62,7 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<IMedicationRepository, MedicationRepository>();
 
 var loggerConfiguration = new LoggerConfiguration()
     .MinimumLevel.Information() // levels: Trace< Information < Warning < Erorr < Fatal

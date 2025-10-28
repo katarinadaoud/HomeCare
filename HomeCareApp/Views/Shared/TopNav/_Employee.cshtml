@@ -25,15 +25,15 @@
     <ul class="nav ms-2" role="list">
       <li class="nav-item">
         <a class="nav-link @(ViewBag.ActiveTab=="schedule" ? "active" : "")"
-           asp-controller="Employee" asp-action="Index">Schedule</a> <!-- ENDRET -->
+           asp-controller="Employee" asp-action="Index">Schedule</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link @(ViewBag.ActiveTab=="visits" ? "active" : "")"
-           asp-controller="Employee" asp-action="Visits">Today’s visits</a>
+        <a class="nav-link @(ViewBag.ActiveTab=="medications" ? "active" : "")"
+           asp-controller="Medication" asp-action="Table">Medications</a>
       </li>
       <li class="nav-item">
         <a class="nav-link @(ViewBag.ActiveTab=="patients" ? "active" : "")"
-           asp-controller="Employee" asp-action="Table">Patients</a> <!-- ENDRET -->
+           asp-controller="Employee" asp-action="Table">Patients</a>
       </li>
 
       @* My profile with icon *@
@@ -55,7 +55,7 @@
       }
     </ul>
 
-    <!-- Buttons and logout) -->
+    <!-- Buttons and logout -->
     <div class="ms-auto d-flex align-items-center gap-3">
       <button class="btn-cta" id="btnOnCall" type="button">Notify on-call</button>
 

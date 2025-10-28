@@ -1,7 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using HomeCareApp.Models;
-using Microsoft.Extensions.DependencyInjection;
-using System.Threading.Tasks;
 
 namespace HomeCareApp.DAL;
 
@@ -12,7 +10,7 @@ public static class DBInit
         using var serviceScope = app.ApplicationServices.CreateScope();
         AppDbContext db = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        
+
         if (!db.Users.Any())
         {
             // ---------- USERS ----------
@@ -47,16 +45,16 @@ public static class DBInit
             db.SaveChanges();
 
         }
-        
+
         var people = await db.Users.ToListAsync();
-       
+
 
         // ---------- PATIENTS ----------
         if (!db.Patients.Any())
         {
             var patients = new List<Patient>
             {
-            
+
             new Patient
             {
                 FullName = "Tor Hansen",
@@ -124,8 +122,8 @@ public static class DBInit
 
         }
 
-            var ppeople = await db.Patients.ToListAsync();
-            var epeople = await db.Employees.ToListAsync();
+        var ppeople = await db.Patients.ToListAsync();
+        var epeople = await db.Employees.ToListAsync();
 
 
 
@@ -145,7 +143,7 @@ public static class DBInit
                 AppointmentTasks = new List<AppointmentTask>()
             };
 
-            var task1 = new AppointmentTask { Description = "Take a blood test",     Status = "Pending", Appointment = appointment1 };
+            var task1 = new AppointmentTask { Description = "Take a blood test", Status = "Pending", Appointment = appointment1 };
             var task2 = new AppointmentTask { Description = "Measure blood pressure", Status = "Pending", Appointment = appointment1 };
 
             appointment1.AppointmentTasks.Add(task1);
@@ -177,26 +175,71 @@ public static class DBInit
 
 
         }
-        
+
         // ---------- ADMINS ----------
         if (!db.Admins.Any())
         {
-           var admin = new Admin
-           {
-               Accesses = "Full",
-               UserId = people.First(u => u.UserName == "admin1").Id,
-               User = people.First(u => u.UserName == "admin1"),
-               AdminLogs = new List<AdminLog>()
-           };
+            var admin = new Admin
+            {
+                Accesses = "Full",
+                UserId = people.First(u => u.UserName == "admin1").Id,
+                User = people.First(u => u.UserName == "admin1"),
+                AdminLogs = new List<AdminLog>()
+            };
 
-           // Create logs and set the required Admin navigation property
-           admin.AdminLogs.Add(new AdminLog { Action = "Created initial seed data", Time = DateTime.Now, Admin = admin });
-           admin.AdminLogs.Add(new AdminLog { Action = "Checked system health",     Time = DateTime.Now.AddMinutes(5), Admin = admin });
+            // Create logs and set the required Admin navigation property
+            admin.AdminLogs.Add(new AdminLog { Action = "Created initial seed data", Time = DateTime.Now, Admin = admin });
+            admin.AdminLogs.Add(new AdminLog { Action = "Checked system health", Time = DateTime.Now.AddMinutes(5), Admin = admin });
 
-           var admins = new List<Admin> { admin };
-           db.Admins.AddRange(admins);
-           db.SaveChanges(); 
+            var admins = new List<Admin> { admin };
+            db.Admins.AddRange(admins);
+            db.SaveChanges();
         }
-        
+
+
+        // ---------- MEDICATIONS ----------
+        if (!db.Medications.Any())
+        {
+            var medications = new List<Medication>
+            {
+                new Medication
+                {
+                    Name = "Paracetamol",
+                    Dosage = "500mg",
+                    Purpose = "Pain relief",
+                    Frequency = "3 times daily",
+                    Instructions = "Take with food",
+                    PatientId = ppeople.First(p => p.FullName == "Tor Hansen").PatientId,
+                    Patient = ppeople.First(p => p.FullName == "Tor Hansen"),
+                    Employee = epeople.First(e => e.FullName == "Ida Johansen")
+                },
+                new Medication
+                {
+                    Name = "Vitamin D",
+                    Dosage = "1000 IU",
+                    Purpose = "Supplement deficiency",
+                    Frequency = "Once daily",
+                    Instructions = "Take with breakfast",
+                    PatientId = ppeople.First(p => p.FullName == "Tor Hansen").PatientId,
+                    Patient = ppeople.First(p => p.FullName == "Tor Hansen"),
+                    Employee = epeople.First(e => e.FullName == "Ida Johansen")
+                },
+                new Medication
+                {
+                    Name = "Blood pressure medication",
+                    Dosage = "10mg",
+                    Purpose = "Lower blood pressure",
+                    Frequency = "Once daily in the morning",
+                    Instructions = "Take on empty stomach",
+                    PatientId = ppeople.First(p => p.FullName == "Tor Hansen").PatientId,
+                    Patient = ppeople.First(p => p.FullName == "Tor Hansen"),
+                    Employee = epeople.First(e => e.FullName == "Ida Johansen")
+                }
+            };
+
+            db.Medications.AddRange(medications);
+            db.SaveChanges();
+
+        }
     }
 }

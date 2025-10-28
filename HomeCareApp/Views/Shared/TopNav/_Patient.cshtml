@@ -18,7 +18,11 @@
 
     <ul class="nav ms-2" role="list">
       <li class="nav-item"><a class="nav-link" href="#mine-timeavtaler" aria-current="page">My appointments</a></li>
-      <li class="nav-item"><a class="nav-link" href="#mine-medisiner">My medications</a></li>
+      
+      <li class="nav-item">
+        <a class="nav-link @(ViewBag.ActiveTab=="medications" ? "active" : "")"
+           asp-controller="Medication" asp-action="Table">My medications</a>
+      </li>
 
       @*  My profile with icon *@
       @if (SignInManager.IsSignedIn(User))

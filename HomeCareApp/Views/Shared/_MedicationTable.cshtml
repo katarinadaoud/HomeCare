@@ -1,0 +1,50 @@
+@model IEnumerable<HomeCareApp.Models.Medication>
+@{
+    ViewData["Title"] = "Medications List";
+}
+
+<p>
+    <a asp-controller="Medication" asp-action="CreateMed" class="btn btn-primary">Register new medication</a>
+</p>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Patient</th>
+                <th>PatientId</th>
+                <th>Medication name</th>
+                <th>Purpose</th>
+                <th>Dosage</th>
+                <th>Frequency</th>
+                <th>Instructions</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.Patient.FullName</td>
+                <td>@p.PatientId</td>
+                <td>@p.Name</td>
+                <td>@p.Purpose</td>
+                <td>@p.Dosage</td>
+                <td>@p.Frequency</td>
+                <td>@p.Instructions</td>
+                <td class="text-end">
+                    
+                    @*Edit/Delete makes sure to point to the new actions we added in controller*@
+                    <a asp-controller="Medication" asp-action="UpdateMed" asp-route-id="@p.MedicationId" class="btn btn-sm btn-outline-secondary">Edit</a>
+                    <a asp-controller="Medication" asp-action="DeleteMed" asp-route-id="@p.MedicationId" class="btn btn-sm btn-outline-danger">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No medications found.</p>
+}
