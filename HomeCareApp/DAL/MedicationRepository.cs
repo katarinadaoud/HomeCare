@@ -6,7 +6,6 @@ namespace HomeCareApp.DAL;
 public class MedicationRepository : IMedicationRepository
 {
     private readonly AppDbContext _db;
-
     private readonly ILogger<MedicationRepository> _logger;
 
     public MedicationRepository(AppDbContext db, ILogger<MedicationRepository> logger)
@@ -15,65 +14,72 @@ public class MedicationRepository : IMedicationRepository
         _logger = logger;
     }
 
-    // Get all medications with patient information
-    public async Task<IEnumerable<Medication>?> GetAll()
+    // ✅ Always return a non-null list (fix for NullReferenceException)
+    public async Task<IEnumerable<Medication>> GetAll()
     {
         try
         {
-            return await _db.Medications
-                .Include(m => m.Patient) // ← LEGG TIL DENNE LINJEN
+            var meds = await _db.Medications
+                .Include(m => m.Patient)
                 .AsNoTracking()
                 .ToListAsync();
+
+            return meds ?? new List<Medication>(); // never return null
         }
         catch (Exception e)
         {
-            _logger.LogError("[MedicationRepository] medications ToListAsync() failed when GetAll(), error message: {e}", e.Message);
-            return null;
+            _logger.LogError("[MedicationRepository] GetAll() failed: {e}", e.Message);
+            return new List<Medication>(); // safe fallback
         }
     }
 
-    // Get medication by ID with patient information
+    // ✅ Get single medication by ID with patient info
     public async Task<Medication?> GetMedById(int id)
     {
         try
         {
             return await _db.Medications
-                .Include(m => m.Patient) // ← LEGG TIL DENNE LINJEN
+                .Include(m => m.Patient)
                 .FirstOrDefaultAsync(m => m.MedicationId == id);
         }
         catch (Exception e)
         {
-            _logger.LogError("[MedicationRepository] medication FindAsync(id) failed when GetMedById for MedicationId {MedicationId:0000}, error message: {e}", id, e.Message);
+            _logger.LogError("[MedicationRepository] GetMedById({id}) failed: {e}", id, e.Message);
             return null;
         }
     }
 
+    // ✅ Create a new medication and link it to the correct patient
     public async Task<bool> Create(Medication medication)
     {
         try
         {
-            Console.WriteLine("=== Repository.Create() called ===");
-            
-            // TEMP: Fjern foreign key for testing
-            medication.PatientId = null;
-            medication.Patient = null;
-            
-            Console.WriteLine($"Creating: {medication.Name}");
-            
+            if (medication.PatientId == null)
+            {
+                _logger.LogWarning("[MedicationRepository] Tried to create medication without PatientId");
+                return false;
+            }
+
+            // Create a stub patient object (bypasses 'required' validation)
+            var stubPatient = (Patient)Activator.CreateInstance(typeof(Patient))!;
+            stubPatient.PatientId = medication.PatientId.Value;
+            // Attach the existing patient reference without loading full data
+            _db.Attach(stubPatient).State = EntityState.Unchanged;
+
             _db.Medications.Add(medication);
             await _db.SaveChangesAsync();
-            
-            Console.WriteLine("SUCCESS!");
+
+            _logger.LogInformation("[MedicationRepository] Successfully created medication {Name}", medication.Name);
             return true;
         }
         catch (Exception e)
         {
-            Console.WriteLine($"DETAILED ERROR: {e.Message}");
-            Console.WriteLine($"Inner: {e.InnerException?.Message}");
+            _logger.LogError("[MedicationRepository] Create() failed: {e}", e.Message);
             return false;
         }
     }
 
+    // ✅ Update an existing medication
     public async Task<bool> Update(Medication medication)
     {
         try
@@ -84,11 +90,12 @@ public class MedicationRepository : IMedicationRepository
         }
         catch (Exception e)
         {
-            _logger.LogError("[MedicationRepository] medication FindAsync(id) failed when updating the MedicationId {MedicationId:0000}, error message: {e}", medication.MedicationId, e.Message);
+            _logger.LogError("[MedicationRepository] Update() failed for ID {id}: {e}", medication.MedicationId, e.Message);
             return false;
         }
     }
 
+    // ✅ Delete a medication by ID
     public async Task<bool> Delete(int id)
     {
         try
@@ -96,7 +103,7 @@ public class MedicationRepository : IMedicationRepository
             var medication = await _db.Medications.FindAsync(id);
             if (medication == null)
             {
-                _logger.LogError("[MedicationRepository] medication not found for the MedicationId {MedicationId:0000}", id);
+                _logger.LogWarning("[MedicationRepository] Delete() failed — medication not found for ID {id}", id);
                 return false;
             }
 
@@ -106,7 +113,7 @@ public class MedicationRepository : IMedicationRepository
         }
         catch (Exception e)
         {
-            _logger.LogError("[MedicationRepository] medication deletion failed for the MedicationId {MedicationId:0000}, error message: {e}", id, e.Message);
+            _logger.LogError("[MedicationRepository] Delete() failed for ID {id}: {e}", id, e.Message);
             return false;
         }
     }
