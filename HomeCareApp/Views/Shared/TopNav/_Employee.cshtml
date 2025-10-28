@@ -25,7 +25,7 @@
     <ul class="nav ms-2" role="list">
       <li class="nav-item">
         <a class="nav-link @(ViewBag.ActiveTab=="schedule" ? "active" : "")"
-           asp-controller="Employee" asp-action="Index">Schedule</a> <!-- ENDRET -->
+           asp-controller="Employee" asp-action="Index">Schedule</a>
       </li>
       <li class="nav-item">
         <a class="nav-link @(ViewBag.ActiveTab=="visits" ? "active" : "")"
@@ -33,7 +33,7 @@
       </li>
       <li class="nav-item">
         <a class="nav-link @(ViewBag.ActiveTab=="patients" ? "active" : "")"
-           asp-controller="Employee" asp-action="Table">Patients</a> <!-- ENDRET -->
+           asp-controller="Employee" asp-action="Table">Patients</a> 
       </li>
 
       @* My profile with icon *@
@@ -57,8 +57,11 @@
 
     <!-- Buttons and logout) -->
     <div class="ms-auto d-flex align-items-center gap-3">
-      <button class="btn-cta" id="btnOnCall" type="button">Notify on-call</button>
-
+      <a class="btn-cta" id="btnOnCall"
+          href="tel:+4746956500"
+          aria-label="Call home-care service now">
+        Notify on-call
+      </a>
       <button class="icon-btn" id="notifBtn" type="button" aria-label="Notifications">
         <span aria-hidden="true">🔔</span>
         <span class="badge" id="notifBadge"></span>  <!-- no number -->

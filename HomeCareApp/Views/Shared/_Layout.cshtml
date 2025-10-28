@@ -1,7 +1,7 @@
 ﻿@{
     // Role
     var role = (string?) (ViewBag.Role ?? ViewData["Role"]) ?? "public"; // public | patient | employee
-    var showSOS = role == "patient";
+    var showSOS = role == "patient" || role == "employee";
     // Show generic toasts for all logged-in users (not public)
     var showToasts = role != "public";
 
@@ -85,7 +85,6 @@
         @await Html.PartialAsync("_Toasts")
     }
 
-    @* SOS confirmation modal (patients only) *@
     @if (showSOS)
     {
         @await Html.PartialAsync("_SosConfirmModal")

@@ -10,11 +10,15 @@
         <input asp-for="Subject" class="form-control" />
         <span asp-validation-for="Subject" class="text-danger"></span>
     </div>
+
+        @*Subject field group *@
     <div class="form-group">
         <label asp-for="Description"></label><span class="text-danger">*</span>
         <input asp-for="Description" class="form-control" />
-        <span asp-validation-for="Description" class="text-danger"></span>
+        <span asp-validation-for="Description" class="text-danger"></span> @* Placeholder for field-specific validation message for Subject *@
     </div>
+
+        @*  Description field group *@
     <div class="form-group">
         <label asp-for="Date"></label>
         <input asp-for="Date" class="form-control" />
@@ -22,8 +26,6 @@
     </div>
     <button type="submit" class="btn btn-primary">Create</button>
     <a asp-action="Table" class="btn btn-secondary">Back to Table View</a>
-
-      
 
     @section Scripts {
     <partial name="_ValidationScriptsPartial" />
