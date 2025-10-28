@@ -1,4 +1,12 @@
 
+@using Microsoft.AspNetCore.Http
 @{
+    // Retrieve the user's role from session (set during login)
+    var role = Context.Session.GetString("Role") ?? "public";
+
+    // Pass the role to the layout so it knows which navbar to display
+    ViewBag.Role = role;
+
+    // Use the main shared layout for all Identity pages
     Layout = "/Views/Shared/_Layout.cshtml";
 }

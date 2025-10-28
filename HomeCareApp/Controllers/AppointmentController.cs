@@ -24,6 +24,9 @@ namespace HomeCareApp.Controllers
 
         public async Task<IActionResult> Table() // Lists all appointments in a table view
         {
+            ViewBag.Role = "patient";
+            ViewBag.ActiveTab = "appointments";
+            
             var appointments = await _appointmentRepository.GetAll();
             if (appointments == null)
             {
@@ -37,6 +40,8 @@ namespace HomeCareApp.Controllers
         [HttpGet]
         public IActionResult Book()
         {
+            ViewBag.Role = "patient";
+            ViewBag.ActiveTab = "appointments";
             return View();
         }
 
@@ -44,6 +49,9 @@ namespace HomeCareApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Book(Appointment appointment)
         {
+            ViewBag.Role = "patient";
+            ViewBag.ActiveTab = "appointments";
+
             if (ModelState.IsValid) // Validates the model state
             {
                 bool returnOk = await _appointmentRepository.Create(appointment);
@@ -60,6 +68,8 @@ namespace HomeCareApp.Controllers
 
         public IActionResult Confirmation()
         {
+            ViewBag.Role = "patient";
+            ViewBag.ActiveTab = "appointments";
             return View();
         }
 
@@ -68,7 +78,9 @@ namespace HomeCareApp.Controllers
  // Endpoint to fetch appointments in FullCalendar format
 [HttpGet]
 public async Task<IActionResult> Events()
-{
+        {
+            ViewBag.Role = "patient";
+            ViewBag.ActiveTab = "appointments";
     try
     {
                 var appointments = await _appointmentRepository.GetAll();
@@ -101,6 +113,9 @@ public async Task<IActionResult> Events()
         [HttpGet]
     public async Task<IActionResult> Update(int id)
     {
+            ViewBag.Role = "patient";
+            ViewBag.ActiveTab = "appointments";
+        
         var appointment = await _appointmentRepository.GetAppointmentById(id);
         if (appointment == null)
         {
@@ -112,7 +127,10 @@ public async Task<IActionResult> Events()
 
     [HttpPost]
     public async Task<IActionResult> Update(Appointment appointment)
-    {
+        {
+            ViewBag.Role = "patient";
+            ViewBag.ActiveTab = "appointments";
+
         if (ModelState.IsValid)
         {
             bool returnOk = await _appointmentRepository.Update(appointment);
@@ -125,7 +143,10 @@ public async Task<IActionResult> Events()
 
     [HttpGet]
     public async Task<IActionResult> Delete(int id)
-    {
+        {
+            ViewBag.Role = "patient";
+            ViewBag.ActiveTab = "appointments";
+
         var appointment = await _appointmentRepository.GetAppointmentById(id);
         if (appointment == null)
         {
@@ -137,7 +158,10 @@ public async Task<IActionResult> Events()
 
     [HttpPost]
     public async Task<IActionResult> DeleteConfirmed(int id)
-    {
+        {
+            ViewBag.Role = "patient";
+            ViewBag.ActiveTab = "appointments";
+
         bool returnOk = await _appointmentRepository.Delete(id);
         if (!returnOk)
         {
