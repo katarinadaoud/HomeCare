@@ -1,7 +1,8 @@
 ﻿@{
     // Role
-    var role = (string?) (ViewBag.Role ?? ViewData["Role"]) ?? "public"; // public | patient | employee
+    var role = (string?) (ViewBag.Role ?? ViewData["Role"] ?? Context.Session.GetString("Role")) ?? "public";
     var showSOS = role == "patient" || role == "employee";
+
     // Show generic toasts for all logged-in users (not public)
     var showToasts = role != "public";
 
