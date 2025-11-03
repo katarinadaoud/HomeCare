@@ -9,6 +9,7 @@ public static class DBInit
     {
         using var serviceScope = app.ApplicationServices.CreateScope();
         AppDbContext db = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+         db.Database.EnsureCreated();
 
 
         if (!db.Users.Any())
@@ -197,7 +198,7 @@ public static class DBInit
         }
 
 
-        // ---------- MEDICATIONS ----------
+        /* ---------- MEDICATIONS ----------
         if (!db.Medications.Any())
         {
             var medications = new List<Medication>
@@ -238,8 +239,61 @@ public static class DBInit
             };
 
             db.Medications.AddRange(medications);
-            db.SaveChanges();
+            db.SaveChanges();*/
+            // ---------- MEDICATIONS ----------
+var medsTableExists = db.Database.ExecuteSqlRaw(
+    "SELECT 1 FROM sqlite_master WHERE type='table' AND name='Medications'") > 0;
+
+Console.WriteLine($"[DB] Medications table exists? {medsTableExists}");
+
+if (medsTableExists && !db.Medications.Any())
+{
+    var medications = new List<Medication>
+    {
+        new Medication
+        {
+            Name = "Paracetamol",
+            Dosage = "500mg",
+            Purpose = "Pain relief",
+            Frequency = "3 times daily",
+            Instructions = "Take with food",
+            PatientId = ppeople.First(p => p.FullName == "Tor Hansen").PatientId,
+            Patient  = ppeople.First(p => p.FullName == "Tor Hansen"),
+            Employee = epeople.First(e => e.FullName == "Ida Johansen")
+        },
+        new Medication
+        {
+            Name = "Vitamin D",
+            Dosage = "1000 IU",
+            Purpose = "Supplement deficiency",
+            Frequency = "Once daily",
+            Instructions = "Take with breakfast",
+            PatientId = ppeople.First(p => p.FullName == "Tor Hansen").PatientId,
+            Patient  = ppeople.First(p => p.FullName == "Tor Hansen"),
+            Employee = epeople.First(e => e.FullName == "Ida Johansen")
+        },
+        new Medication
+        {
+            Name = "Blood pressure medication",
+            Dosage = "10mg",
+            Purpose = "Lower blood pressure",
+            Frequency = "Once daily in the morning",
+            Instructions = "Take on empty stomach",
+            PatientId = ppeople.First(p => p.FullName == "Tor Hansen").PatientId,
+            Patient  = ppeople.First(p => p.FullName == "Tor Hansen"),
+            Employee = epeople.First(e => e.FullName == "Ida Johansen")
+        }
+    };
+
+    db.Medications.AddRange(medications);
+    db.SaveChanges();
+    Console.WriteLine("[DBInit] Seeded Medications");
+}
+else if (!medsTableExists)
+{
+    Console.WriteLine("[DBInit] Skipping Medications seed (table missing).");
+}
+
 
         }
     }
-}
