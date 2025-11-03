@@ -113,6 +113,12 @@ namespace HomeCareApp.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
 
+            var role = Request.Query["role"].ToString();
+            if (!string.IsNullOrEmpty(role))
+            {
+                HttpContext.Session.SetString("Role", role.ToLower());
+            }
+        
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (ModelState.IsValid)

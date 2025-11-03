@@ -2,7 +2,7 @@ let calendar;
 let calendarInited = false;
 let selectedCell = null;
 
-const PHONE_SOS = "+4746956500"; // The number to the HomeCareSOS service
+const PHONE_SOS = '+4746956500'; // bare hvis du bruker fallback
 
 /** Load a CSS file only once */
 function loadCssOnce(href) {

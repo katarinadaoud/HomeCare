@@ -57,7 +57,8 @@ public class PatientController : Controller
         if (!string.IsNullOrEmpty(userId)) patient.UserId = userId;
         TryValidateModel(patient);
         {
-            patient.UserId = userId;
+            if (!string.IsNullOrEmpty(userId))
+                patient.UserId = userId;
         }
 
         if (!ModelState.IsValid)

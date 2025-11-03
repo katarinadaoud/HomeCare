@@ -34,6 +34,9 @@ namespace HomeCareApp.Controllers
 
         public async Task<IActionResult> Table() // Lists all appointments in a table view
         {
+            ViewBag.Role = "patient";
+            ViewBag.ActiveTab = "appointments";
+            
             var appointments = await _appointmentRepository.GetAll();
             if (appointments == null)
             {
@@ -47,6 +50,8 @@ namespace HomeCareApp.Controllers
         [HttpGet]
         public IActionResult Book()
         {
+            ViewBag.Role = "patient";
+            ViewBag.ActiveTab = "appointments";
             return View();
         }
 
@@ -54,7 +59,10 @@ namespace HomeCareApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Book(Appointment appointment)
         {
-            if (!ModelState.IsValid)
+            ViewBag.Role = "patient";
+            ViewBag.ActiveTab = "appointments";
+
+            if (ModelState.IsValid) // Validates the model state
             {
                 _logger.LogWarning("[AppointmentController] invalid model {@appointment}", appointment);
                 return View(appointment);
@@ -104,10 +112,22 @@ namespace HomeCareApp.Controllers
 
         public IActionResult Confirmation()
         {
+            ViewBag.Role = "patient";
+            ViewBag.ActiveTab = "appointments";
             return View();
         }
 
         [HttpGet]
+        
+ // Endpoint to fetch appointments in FullCalendar format
+[HttpGet]
+public async Task<IActionResult> Events()
+        {
+            ViewBag.Role = "patient";
+            ViewBag.ActiveTab = "appointments";
+    try
+    {
+                var appointments = await _appointmentRepository.GetAll();
 
         // Endpoint to fetch appointments in FullCalendar format
         [HttpGet]
@@ -142,7 +162,13 @@ namespace HomeCareApp.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Update(int id)
+    public async Task<IActionResult> Update(int id)
+    {
+            ViewBag.Role = "patient";
+            ViewBag.ActiveTab = "appointments";
+        
+        var appointment = await _appointmentRepository.GetAppointmentById(id);
+        if (appointment == null)
         {
             var appointment = await _appointmentRepository.GetAppointmentById(id);
             if (appointment == null)
@@ -153,8 +179,13 @@ namespace HomeCareApp.Controllers
             return View(appointment);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Update(Appointment appointment)
+    [HttpPost]
+    public async Task<IActionResult> Update(Appointment appointment)
+        {
+            ViewBag.Role = "patient";
+            ViewBag.ActiveTab = "appointments";
+
+        if (ModelState.IsValid)
         {
             if (ModelState.IsValid)
             {
@@ -166,8 +197,14 @@ namespace HomeCareApp.Controllers
             return View(appointment);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Delete(int id)
+    [HttpGet]
+    public async Task<IActionResult> Delete(int id)
+        {
+            ViewBag.Role = "patient";
+            ViewBag.ActiveTab = "appointments";
+
+        var appointment = await _appointmentRepository.GetAppointmentById(id);
+        if (appointment == null)
         {
             var appointment = await _appointmentRepository.GetAppointmentById(id);
             if (appointment == null)
@@ -178,8 +215,14 @@ namespace HomeCareApp.Controllers
             return View(appointment);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+    [HttpPost]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            ViewBag.Role = "patient";
+            ViewBag.ActiveTab = "appointments";
+
+        bool returnOk = await _appointmentRepository.Delete(id);
+        if (!returnOk)
         {
             bool returnOk = await _appointmentRepository.Delete(id);
             if (!returnOk)

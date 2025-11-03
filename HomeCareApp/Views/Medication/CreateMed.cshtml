@@ -1,0 +1,56 @@
+@model HomeCareApp.Models.Medication
+
+@{
+    ViewData["Title"] = "Register new medication";
+    ViewBag.Role = "employee";
+    ViewBag.ActiveTab = "medications";   
+    Layout = "_Layout";
+}
+
+<h2 class="mb-3">Register new medication</h2>
+
+<form asp-controller="Medication" asp-action="CreateMed" method="post">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label for="PatientId" class="form-label">Patient</label>
+        <select asp-for="PatientId" class="form-control" required>
+            <option value="">Select Patient</option>
+            @if (ViewBag.Patients != null)
+            {
+                @foreach (var patient in ViewBag.Patients as IEnumerable<Patient>)
+                {
+                    <option value="@patient.PatientId">@patient.FullName</option>
+                }
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Medication Name</label>
+        <input asp-for="Name" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Dosage" class="form-label">Dosage</label>
+        <input asp-for="Dosage" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Frequency" class="form-label">Frequency</label>
+        <input asp-for="Frequency" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Instructions" class="form-label">Instructions</label>
+        <textarea asp-for="Instructions" class="form-control" rows="3"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Medication</button>
+    <a asp-controller="Medication" asp-action="Table" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
