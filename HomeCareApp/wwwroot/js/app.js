@@ -44,7 +44,7 @@ function showView(id) {
   target.hidden = false;                      // show only the requested section 
 
   // Lazy-load CSS and do per-view initialization (only when that view is shown)
-  if (id === 'view-mine-timeavtaler') {
+  if (id === 'view-appointment') {
     // load calendar page CSS once, then init calendar
     loadCssOnce('css/page-calendar.css');
     initCalendarOnce();
@@ -56,13 +56,13 @@ function showView(id) {
   }
 }
 
-function route() {
+/*function route() {
   const hash = window.location.hash || '#appointment';
   switch (hash) {
-    case '#appointment':   showView('view-mine-timeavtaler');    break;
+    case '#appointment':   showView('view-appointment');    break;
     case '#book-time':     showView('view-book-time');      break;
     case '#mine-medisiner':showView('view-mine-medisiner'); break;
-    default:               showView('view-mine-timeavtaler');    break;
+    default:               showView('view-appointment');
   }
 }
 
@@ -216,12 +216,86 @@ function initCalendarOnce() {
     empty.classList.toggle('show', !hasEvents);
   }
 
-  /* UI: notifications + SOS */
-  document.getElementById('notifBtn')?.addEventListener('click', () => {
+/* UI: notifications + SOS */
+/* UI: notifications toggle */
+document.getElementById('notifBtn')?.addEventListener('click', async () => {
+  const toastEl = document.getElementById('notifToast');
+  const bodyEl  = document.getElementById('notifToastBody');
+  const Toast   = window.bootstrap?.Toast;
+  if (!toastEl || !Toast) return;
+
+  // === TOGGLE: hvis synlig → lukk og tøm, ferdig ===
+  const inst = Toast.getInstance(toastEl) ?? new Toast(toastEl);
+  if (toastEl.classList.contains('show')) {
+    inst.hide();
+    if (bodyEl) bodyEl.innerHTML = '';            // fjern varsler fra skjermen
+    return;
+  }
+
+  // === Ikke synlig → last inn, merk lest, vis ===
+  if (bodyEl) bodyEl.innerHTML = '<div class="text-muted">Laster…</div>';
+
+  try {
+    const res = await fetch(`/Notifications/Latest?patientId=${window.AppPatientId}&take=5`, { cache: 'no-store' });
+    const items = res.ok ? await res.json() : [];
+    if (Array.isArray(items) && items.length) {
+      const html = `
+        <ul class="notif-list">
+          ${items.map(n => `
+            <li class="notif-item">
+              <span class="notif-dot" aria-hidden="true"></span>
+              <div class="notif-content">
+                <div class="notif-title">${n.message ?? n.Message}</div>
+                <div class="notif-time">${new Date(n.createdAt ?? n.CreatedAt).toLocaleString()}</div>
+              </div>
+            </li>
+          `).join('')}
+        </ul>`;
+      bodyEl.innerHTML = html;
+    } else {
+      bodyEl.textContent = 'Ingen varsler…';
+    }
+  } catch {
+    if (bodyEl) bodyEl.textContent = 'Klarte ikke å hente varsler';
+  }
+
+  // Marker alle lest og skjul badge (så tallet ikke kommer tilbake)
+  try {
+    const token = document.querySelector('meta[name="request-verification-token"]')?.content;
+    await fetch(`/Notifications/MarkAllRead?patientId=${window.AppPatientId}`, {
+      method: 'POST',
+      headers: token ? { 'RequestVerificationToken': token } : {}
+    });
+    const badgeEl = document.getElementById('notifBadge');
+    if (badgeEl) { badgeEl.style.display = 'none'; badgeEl.textContent = ''; }
+  } catch { /* ignore */ }
+
+  // Vis toasten (autolukk etter 4s, men toggle tar uansett)
+  toastEl.removeAttribute('hidden');
+  const t = new Toast(toastEl, { autohide: true, delay: 4000 });
+  t.show();
+});
+
+  /*document.getElementById('notifBtn')?.addEventListener('click', async () => {
     const toastEl = document.getElementById('notifToast');
-    if (!toastEl || !window.bootstrap?.Toast) return;
-    new bootstrap.Toast(toastEl, { delay: 2500 }).show();
+    const bodyEl  = document.getElementById('notifToastBody'); // fra _Toasts.cshtml
+    if (!toastEl || !window.bootstrap?.Toast || !window.AppPatientId) return;
+
+   // Marker alle som lest når bjella åpnes
+try {
+  const token = document.querySelector('meta[name="request-verification-token"]')?.content;
+  await fetch(`/Notifications/MarkAllRead?patientId=${window.AppPatientId}`, {
+    method: 'POST',
+    headers: token ? { 'RequestVerificationToken': token } : {}
   });
+
+  // Skjul badge umiddelbart i UI
+  const badgeEl = document.getElementById('notifBadge');
+  if (badgeEl) { badgeEl.style.display = 'none'; badgeEl.textContent = ''; }
+} catch { /* ignorer evt. feil; toast vises uansett */ 
+
+     
+
 
   // SOS: confirm -> tel:, with desktop fallback (toast + copy)
   const sosBtn = document.getElementById('sosBtn');
@@ -296,14 +370,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const hasCalendarEl = !!getCalendarElement();
 
   // Init calendar immediately if it exists (booking/employee/patient)
-   if (hasCalendarEl && !calendarInited) {
+  if (hasCalendarEl && !calendarInited) {
     loadCssOnce('css/page-calendar.css');
     initCalendarOnce();
     setTimeout(() => calendar && calendar.updateSize(), 0);
   }
-}); 
 
- /* NOTIFICATIONS CONTROLLER */
+  // Patient: keep hash-routing between sections
+  if (window.AppRole === 'patient') {
+    route();
+    window.addEventListener('hashchange', route);
+  }
+});
+
+/* NOTIFICATIONS CONTROLLER */
 (function () {
   const pid = window.AppPatientId;
   const btn = document.getElementById('notifBtn');   // bell button that shows badge
@@ -329,10 +409,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // First run, then every 5s
   refreshBadge();
   setInterval(refreshBadge, 5000);
-})(); 
+})();
 
-/* Booking → refetch hook */
+/* Booking → refetch hook*/
+/* Call `document.dispatchEvent(new Event('booking:saved'));` after backend saved the appointment */
 document.addEventListener('booking:saved', () => {
   if (calendarInited && calendar) calendar.refetchEvents();
 });
+
 

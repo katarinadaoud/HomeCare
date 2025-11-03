@@ -6,62 +6,44 @@
     // Show generic toasts for all logged-in users (not public)
     var showToasts = role != "public";
 
-    // Detect if we are on Home/Index to decide which top nav to render
-    var ctrl = (string?)ViewContext.RouteData.Values["Controller"];
-    var act  = (string?)ViewContext.RouteData.Values["Action"];
+    // Hvilken side
+    var ctrl  = (string?)ViewContext.RouteData.Values["Controller"];
+    var act   = (string?)ViewContext.RouteData.Values["Action"];
     var isHome = string.Equals(ctrl, "Home", StringComparison.OrdinalIgnoreCase)
-                 && string.Equals(act,  "Index", StringComparison.OrdinalIgnoreCase);
+              && string.Equals(act,  "Index", StringComparison.OrdinalIgnoreCase);
+
+    // Pasient-ID fra controller (hvis satt)
+    int? pid = ViewBag.PatientId as int?;
 }
 
 <!doctype html>
 <html lang="nb">
 <head>
     <meta charset="utf-8" />
-    <!-- Mobile-friendly viewport -->
+    <meta name="request-verification-token" content="@Antiforgery.GetTokens(Context).RequestToken" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Prefer light color scheme -->
     <meta name="color-scheme" content="light" />
-    <!-- Browser UI theme color (address bar, etc.) -->
     <meta name="theme-color" content="#2F6CAB" />
     <title>@ViewData["Title"] - LifeLink</title>
 
-    <!-- Performance hint: preconnect to Google Fonts domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- App display font (heavy weights only) -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
 
-    <!-- Vendor CSS: Bootstrap base styles -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css" />
-    <!-- Vendor CSS: FullCalendar core styles (global) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" />
 
-    <!-- Our CSS layers: tokens → base → layout → components → utilities -->
     <link rel="stylesheet" href="~/css/00-tokens.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/01-base.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/02-layout.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/03-components.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/04-utilities.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/page-calendar.css" asp-append-version="true" /> 
+    <link rel="stylesheet" href="~/css/page-calendar.css" asp-append-version="true" />
 
-    <!-- Ensure jQuery is available BEFORE views/partials that may load jquery.validate* -->
-    <environment include="Development">
-        <script src="~/Identity/lib/jquery/dist/jquery.min.js"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-                integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-                crossorigin="anonymous"></script>
-    </environment>
-
-    <!-- Optional per-view styles injection point -->
     @RenderSection("Styles", required: false)
 </head>
 <body class="bg-light" data-role="@role">
-    @* Top navigation:
-       - Patient sees patient nav
-       - Employee sees employee nav
-       - Public pages (except exact home) see public nav *@
+
     @if (role == "patient")
     {
         @await Html.PartialAsync("TopNav/_Patient")
@@ -75,12 +57,10 @@
         @await Html.PartialAsync("TopNav/_Public")
     }
 
-        <!-- Main content -->
     <main style="margin-top: 70px;">
         @RenderBody()
     </main>
 
-    @* Shared toasts for logged-in users (hidden for public) *@
     @if (showToasts)
     {
         @await Html.PartialAsync("_Toasts")
@@ -91,28 +71,17 @@
         @await Html.PartialAsync("_SosConfirmModal")
     }
 
-    <!-- Vendor JS: Bootstrap (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Vendor JS: FullCalendar global bundle (required by calendar view) -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
 
-    <!-- Expose current app role -->
     <script>window.AppRole = "@role";</script>
-
-    @* Pass patient ID to JS if logged in as patient *@
-    @{
-        var pid = ViewBag.PatientId as int?;
-    }
     @if (role == "patient" && pid.HasValue)
     {
         <script>window.AppPatientId = @pid.Value;</script>
     }
 
-    <!-- Our main application script (routing, calendar init, SOS, notifications, etc.) -->
     <script src="~/js/app.js" asp-append-version="true"></script>
 
-    <!-- Optional per-view scripts -->
     @RenderSection("Scripts", required: false)
 </body>
 </html>

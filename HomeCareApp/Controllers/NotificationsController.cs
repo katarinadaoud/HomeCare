@@ -30,7 +30,6 @@ public class NotificationsController : Controller
             return View(items);
         }
 
-
     [HttpGet("Create")]
     public IActionResult Create() => View(new Notification());
 
@@ -69,17 +68,29 @@ public class NotificationsController : Controller
             return Json(items);
         }
 
-         [HttpPost("MarkRead")]
-        public async Task<IActionResult> MarkRead(int id) // Marks a notification as read
-        {
-            var n = await _db.Notifications.FindAsync(id); // Find notification by ID
-            if (n == null) return NotFound();
+    [HttpPost("MarkRead")]
+    public async Task<IActionResult> MarkRead(int id) // Marks a notification as read
+    {
+        var n = await _db.Notifications.FindAsync(id); // Find notification by ID
+        if (n == null) return NotFound();
 
-            n.IsRead = true; // Mark as read
-            await _db.SaveChangesAsync();
-            return Ok();
-        }
+        n.IsRead = true; // Mark as read
+        await _db.SaveChangesAsync();
+        return Ok();
     }
+        
+        [HttpPost("MarkAllRead")]
+public async Task<IActionResult> MarkAllRead(int patientId)
+{
+    var items = await _db.Notifications
+        .Where(n => n.PatientId == patientId && !n.IsRead)
+        .ToListAsync();
 
+    if (items.Count == 0) return Ok();
 
+    foreach (var n in items) n.IsRead = true;
+    await _db.SaveChangesAsync();
+    return Ok();
+}
 
+}
