@@ -1,4 +1,6 @@
 ﻿@{
+    @using Microsoft.AspNetCore.Antiforgery
+    @inject IAntiforgery Antiforgery
     // Role
     var role = (string?) (ViewBag.Role ?? ViewData["Role"] ?? Context.Session.GetString("Role")) ?? "public";
     var showSOS = role == "patient" || role == "employee";
