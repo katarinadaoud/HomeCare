@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using HomeCareApp.Models;
+using System.Linq;
 
 namespace HomeCareApp.DAL
 {
@@ -21,12 +22,32 @@ namespace HomeCareApp.DAL
             try
             {
                 return await _db.Appointments
-                   
                     .ToListAsync();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "[AppointmentRepository] GetAll() failed: {Message}", ex.Message);
+                return new List<Appointment>();
+            }
+        }
+
+        // get appointments for a specific patient (null => all)
+        public async Task<IEnumerable<Appointment>> GetAllForPatient(int? patientId)
+        {
+            try
+            {
+                if (patientId.HasValue)
+                {
+                    return await _db.Appointments
+                        .Where(a => a.PatientId == patientId.Value)
+                        .ToListAsync();
+                }
+
+                return await GetAll();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[AppointmentRepository] GetAllForPatient({PatientId}) failed: {Message}", patientId, ex.Message);
                 return new List<Appointment>();
             }
         }

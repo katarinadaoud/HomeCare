@@ -6,6 +6,7 @@ namespace HomeCareApp.DAL;
     public interface IAppointmentRepository
     {
         Task<IEnumerable<Appointment>> GetAll();
+        Task<IEnumerable<Appointment>> GetAllForPatient(int? patientId);
         Task<Appointment?> GetAppointmentById(int id);
         Task<bool> Create(Appointment appointment);
         Task<bool> Update(Appointment appointment);

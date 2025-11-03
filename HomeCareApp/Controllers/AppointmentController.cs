@@ -33,8 +33,30 @@ namespace HomeCareApp.Controllers
         {
             ViewBag.Role = "patient";
             ViewBag.ActiveTab = "appointments";
+            // If the logged-in user is a patient, show only their appointments
+            var appointments = new List<Models.Appointment>();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!string.IsNullOrEmpty(userId))
+            {
+                var pid = await _db.Patients
+                    .Where(p => p.UserId == userId)
+                    .Select(p => (int?)p.PatientId)
+                    .FirstOrDefaultAsync();
 
-            var appointments = await _appointmentRepository.GetAll();
+                if (pid.HasValue)
+                {
+                    appointments = (await _appointmentRepository.GetAllForPatient(pid.Value)).ToList();
+                }
+                else
+                {
+                    // No Patient record for this user -> show empty list to avoid leaking others' appointments
+                    appointments = new List<Models.Appointment>();
+                }
+            }
+            else
+            {
+                appointments = (await _appointmentRepository.GetAll()).ToList();
+            }
             if (appointments == null)
             {
                 _logger.LogError("[AppointmentController] Appointment list not found while executing _appointmentRepository.GetAll()");
@@ -68,7 +90,7 @@ namespace HomeCareApp.Controllers
                 return View(appointment);
             }
 
-            // Knytt time til innlogget pasient (hvis mulig)
+            // Knytt time til innlogget pasient (opprett pasient-rad hvis ikke eksisterer)
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!string.IsNullOrEmpty(userId))
             {
@@ -77,7 +99,35 @@ namespace HomeCareApp.Controllers
                     .Select(p => (int?)p.PatientId)
                     .FirstOrDefaultAsync();
 
-                if (pid.HasValue) appointment.PatientId = pid.Value;
+                if (pid.HasValue)
+                {
+                    appointment.PatientId = pid.Value;
+                }
+                else
+                {
+                    // No Patient record exists for this user — create one so bookings are owned
+                    var email = User.FindFirstValue(ClaimTypes.Email) ?? string.Empty;
+                    var name = User.FindFirstValue(ClaimTypes.Name) ?? email;
+
+                    var newPatient = new Models.Patient
+                    {
+                        FullName = string.IsNullOrWhiteSpace(name) ? "Unknown" : name,
+                        Address = string.Empty,
+                        HealthRelated_info = string.Empty,
+                        phonenumber = string.Empty,
+                        UserId = userId,
+                        // satisfy required navigation properties with safe defaults
+                        User = null!,
+                        EmergencyContact = null!,
+                        Appointments = new List<Models.Appointment>(),
+                        EmergencyCalls = new List<Models.EmergencyCall>()
+                    };
+
+                    _db.Patients.Add(newPatient);
+                    await _db.SaveChangesAsync();
+
+                    appointment.PatientId = newPatient.PatientId;
+                }
             }
 
             var created = await _appointmentRepository.Create(appointment);
@@ -121,7 +171,26 @@ namespace HomeCareApp.Controllers
 
             try
             {
-                var appointments = await _appointmentRepository.GetAll();
+                // Filter events for logged-in patient
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                IEnumerable<Models.Appointment> appointments;
+                if (!string.IsNullOrEmpty(userId))
+                {
+                    var pid = await _db.Patients
+                        .Where(p => p.UserId == userId)
+                        .Select(p => (int?)p.PatientId)
+                        .FirstOrDefaultAsync();
+
+                    if (pid.HasValue)
+                        appointments = await _appointmentRepository.GetAllForPatient(pid.Value);
+                    else
+                        // No Patient record for this user -> return empty set
+                        appointments = new List<Models.Appointment>();
+                }
+                else
+                {
+                    appointments = await _appointmentRepository.GetAll();
+                }
                 var events = appointments.Select(a => new
                 {
                     id = a.AppointmentId,
@@ -154,6 +223,21 @@ namespace HomeCareApp.Controllers
                 _logger.LogError("[AppointmentController] Appointment not found when updating the AppointmentId {AppointmentId:0000}", id);
                 return BadRequest("Appointment not found for the AppointmentId");
             }
+
+            // If logged-in user is a patient, ensure they own this appointment
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!string.IsNullOrEmpty(userId))
+            {
+                var pid = await _db.Patients
+                    .Where(p => p.UserId == userId)
+                    .Select(p => (int?)p.PatientId)
+                    .FirstOrDefaultAsync();
+
+                if (pid.HasValue && appointment.PatientId.HasValue && appointment.PatientId.Value != pid.Value)
+                {
+                    return Forbid();
+                }
+            }
             return View(appointment);
         }
 
@@ -168,6 +252,28 @@ namespace HomeCareApp.Controllers
             {
                 _logger.LogWarning("[AppointmentController] Invalid model on update {@appointment}", appointment);
                 return View(appointment);
+            }
+
+            // Ensure patient cannot update someone else's appointment
+            var existing = await _appointmentRepository.GetAppointmentById(appointment.AppointmentId);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!string.IsNullOrEmpty(userId))
+            {
+                var pid = await _db.Patients
+                    .Where(p => p.UserId == userId)
+                    .Select(p => (int?)p.PatientId)
+                    .FirstOrDefaultAsync();
+
+                if (pid.HasValue && existing != null && existing.PatientId.HasValue && existing.PatientId.Value != pid.Value)
+                {
+                    return Forbid();
+                }
+            }
+
+            // preserve PatientId from existing record to avoid privilege escalation
+            if (existing != null)
+            {
+                appointment.PatientId = existing.PatientId;
             }
 
             bool ok = await _appointmentRepository.Update(appointment);
@@ -190,6 +296,21 @@ namespace HomeCareApp.Controllers
                 _logger.LogError("[AppointmentController] Appointment not found for the AppointmentId {AppointmentId:0000}", id);
                 return BadRequest("Appointment not found for the AppointmentId");
             }
+
+            // Ensure patient cannot view/delete others' appointments
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!string.IsNullOrEmpty(userId))
+            {
+                var pid = await _db.Patients
+                    .Where(p => p.UserId == userId)
+                    .Select(p => (int?)p.PatientId)
+                    .FirstOrDefaultAsync();
+
+                if (pid.HasValue && appointment.PatientId.HasValue && appointment.PatientId.Value != pid.Value)
+                {
+                    return Forbid();
+                }
+            }
             return View(appointment);
         }
 
@@ -199,6 +320,22 @@ namespace HomeCareApp.Controllers
         {
             ViewBag.Role = "patient";
             ViewBag.ActiveTab = "appointments";
+
+            // Check ownership before deleting
+            var appointment = await _appointmentRepository.GetAppointmentById(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!string.IsNullOrEmpty(userId))
+            {
+                var pid = await _db.Patients
+                    .Where(p => p.UserId == userId)
+                    .Select(p => (int?)p.PatientId)
+                    .FirstOrDefaultAsync();
+
+                if (pid.HasValue && appointment != null && appointment.PatientId.HasValue && appointment.PatientId.Value != pid.Value)
+                {
+                    return Forbid();
+                }
+            }
 
             bool ok = await _appointmentRepository.Delete(id);
             if (!ok)
