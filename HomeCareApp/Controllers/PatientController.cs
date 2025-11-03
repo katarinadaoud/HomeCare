@@ -3,26 +3,41 @@ using HomeCareApp.Models;
 using HomeCareApp.DAL;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-
+using HomeCareApp.Controllers;
+using System.Linq; 
 namespace HomeCareApp.Controllers;
 
 [Authorize]
 public class PatientController : Controller
 {
     private readonly IPatientRepository _patientRepository;
+    private readonly AppDbContext _db; // ADD
 
-    public PatientController(IPatientRepository patientRepository)
+    public PatientController(IPatientRepository patientRepository, AppDbContext db)
+
     {
-        _patientRepository = patientRepository;
+    _patientRepository = patientRepository;
+    _db = db ?? throw new ArgumentNullException(nameof(db));
     }
+
+
 //Patient dashboard
     public IActionResult Index()
     {
         ViewBag.Role = "patient";
         ViewBag.ActiveTab = "appointments";
+        // ADD: gi JS tilgang til pasientens id (for bjella)
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!string.IsNullOrEmpty(userId))
+        {
+        ViewBag.PatientId = _db.Patients
+        .Where(p => p.UserId == userId)
+        .Select(p => (int?)p.PatientId)
+        .FirstOrDefault();
+        }
+
         return View(); 
     }
-
 
     //CRUD operations for patients
     [HttpGet]

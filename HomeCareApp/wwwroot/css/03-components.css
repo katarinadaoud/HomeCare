@@ -70,6 +70,77 @@
 .sos-btn:active{ transform: translateY(0); }
 .sos-btn:focus-visible{ outline: 4px solid var(--alert-focus); outline-offset: 3px; }
 
-/* Toast everywhere */
-.toast-container{ z-index: 2000; }
 
+/* ---- Notifications: force white toast card ---- */
+.toast-container { z-index: 5000 !important; } /* over navbar */
+
+.toast.notif-toast{
+  /* Hvit bakgrunn */
+  --nt-bg: #ffffff;
+  /* Standard mørk tekst (brukes bl.a. på tid) */
+  --nt-fg: #111827;
+  --nt-fg-muted: rgba(17,24,39,.60);
+  --nt-sep: rgba(17,24,39,.10);
+
+  /* Primær blå (brukes til titler og markør) */
+  --brand: #2F6CAB;
+
+  /* Koble til Bootstrap-variablene */
+  --bs-toast-bg: var(--nt-bg);
+  --bs-toast-color: var(--nt-fg);
+  --bs-toast-border-color: var(--nt-sep);
+  --bs-toast-header-bg: var(--nt-bg);
+  --bs-toast-header-color: var(--brand);
+
+  background-color: var(--nt-bg) !important;
+  color: var(--nt-fg) !important;
+  border: 1px solid var(--nt-sep) !important;
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(17,24,39,.12);
+  min-width: 360px;
+  max-width: 560px;
+}
+
+/* Header */
+.toast.notif-toast .toast-header{
+  border-bottom: 1px solid var(--nt-sep);
+  padding: 12px 16px;
+  font-weight: 700;
+  color: var(--brand); /* blå tittel i header */
+}
+.toast.notif-toast .btn-close{ filter: none; opacity: .7; }
+.toast.notif-toast .btn-close:hover{ opacity: 1; }
+
+/* Body */
+.toast.notif-toast .toast-body{
+  padding: 14px 18px;
+  max-height: 60vh;
+  overflow: auto;
+}
+
+/* Liste med bullets */
+.notif-list{
+  list-style: disc;            /* vanlige punkttegn */
+  margin: 0;
+  padding: 6px 0 6px 1.25rem;  /* plass til bullet */
+}
+.notif-item{
+  display: list-item;          /* bruk naturlig liste-rad, ikke grid */
+  padding: 10px 0;
+}
+.notif-item + .notif-item{ border-top: 1px solid var(--nt-sep); }
+
+/* Gjør tittel blå, tid grå */
+.notif-title{ font-weight: 700; letter-spacing: .2px; color: var(--brand); }
+.notif-time { font-size: 12px; margin-top: 4px; color: var(--nt-fg-muted); }
+
+/* Skjul tidligere “dot”-span fra app.js (vi bruker bullets nå) */
+.notif-dot{ display: none !important; }
+
+/* Diskret hover på rad */
+.notif-item:hover{
+  background: rgba(17,24,39,.03);
+  border-radius: 10px;
+  padding-left: 4px;
+  transition: background .15s ease, padding-left .15s ease;
+}

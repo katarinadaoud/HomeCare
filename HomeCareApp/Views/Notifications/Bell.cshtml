@@ -5,24 +5,69 @@
     <span id="notifBadge" class="badge" style="display:none;">0</span>
 </button>
 
-<!-- Toast container positioned at top-right of screen -->
+<!-- Toast container positioned at top-right of screen 
 <div class="toast-container position-fixed top-0 end-0 p-3">
-  <!-- Bootstrap toast for showing notification details -->
+  <!-- Bootstrap toast for showing notification details 
   <div id="notifToast" class="toast" role="status" aria-live="polite" aria-atomic="true">
-    <!-- Toast header with bell icon and title -->
+    <!-- Toast header with bell icon and title -
     <div class="toast-header">
       <i class="bi bi-bell me-2"></i>
       <strong class="me-auto">Varsler</strong> <!-- "Notifications" in Norwegian -->
       <small class="text-muted">nå</small> <!-- "now" timestamp -->
-      <!-- Close button for dismissing toast -->
+      <!-- Close button for dismissing toast -
       <button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
-    <!-- Toast body containing notification list -->
+    <!-- Toast body containing notification list 
     <div class="toast-body">
-      <!-- List of notifications (empty state shows "No notifications") -->
+      <!-- List of notifications (empty state shows "No notifications") 
       <ul id="notifList" class="list-unstyled mb-0 small">
-        <li class="text-muted">Ingen varsler…</li> <!-- "No notifications..." -->
+        <li class="text-muted">Ingen varsler…</li> <!-- "No notifications..." 
       </ul>
+    </div>
+  </div> --->
+</div>
+
+Toasts: <div class="toast-container position-fixed top-0 end-0 p-3">
+  <div id="alarmToast" class="toast align-items-center text-bg-danger border-0" role="status" aria-live="polite" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">Calling the home-care service…</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+
+  @*<div id="notifToast" class="toast align-items-center text-bg-primary border-0" role="status" aria-live="polite" aria-atomic="true" hidden>*@
+    <div class="d-flex">
+      <div class="toast-body" id="notifToastBody"></div>  @* no default text *@
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+
+  <div id="deskToast" class="toast align-items-center text-bg-light border" role="status" aria-live="polite" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        Phone number to home-care service: <strong id="deskPhoneText"></strong>
+        <button class="btn btn-sm btn-outline-secondary ms-2" id="copyBtn">Copy</button>
+      </div>
+      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+
+      @* NOTIFICATION TOAST *@
+    <div id="notifToast"
+     class="toast notif-toast"
+     role="status" aria-live="polite" aria-atomic="true"
+     data-bs-autohide="true"
+     hidden>
+      <div class="toast-header">
+      <i class="bi bi-bell me-2"></i>
+      <strong class="me-auto">Varsler</strong>
+      <small class="text-muted">nå</small>
+      <button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+      @* <div class="toast-body">
+      <ul id="notifList" class="list-unstyled mb-0 small">
+      <li class="text-muted">Ingen varsler…</li>
+    </ul> *@
+  </div>
+</div>
     </div>
   </div>
 </div>
